@@ -4,6 +4,8 @@ namespace API.Contracts
 {
     public class Country
     {
+        // Temporary constructor. Remove #TODO
+        
         public required string Code { get; set; }
         public required string Name { get; set; }
         public string? Continent { get; set; }
