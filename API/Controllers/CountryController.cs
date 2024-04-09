@@ -3,7 +3,7 @@ using API.Contracts;
 namespace API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("[controller]/[action]")]
     public class CountryController : ControllerBase
     {
         private readonly ILogger<CountryController> _logger;
@@ -13,22 +13,23 @@ namespace API.Controllers
             _logger = logger;
         }
         // Returns bogus object
-        [HttpGet(Name = "GetAllCountries")]
-        public IEnumerable<Country> Get()
+        [HttpGet()]
+        public IEnumerable<Country> GetAllCountries()
         {
             return new List<Country>();
         }
         // Returns bogus object
-        [HttpGet(Name = "GetCountryOfTheDay")]
+        [HttpGet()]
         public Country GetCountryOfTheDay()
         {
-            return new Country { Code = "0", Name = "Land1"};
+
+            return new Country { Code = "0", Name = "Land1" };
         }
         // Returns bogus object
-        [HttpGet(Name = "GetCountryFromID")]
+        [HttpGet("{id}")]
         public Country GetCountry(int id)
         {
             return new Country { Code = "0", Name = "Land1" };
-        }        
+        }
     }
 }
