@@ -17,10 +17,12 @@ namespace Client.Components
 
 
         public float OriginCountryValue { get; set; } = 1.0f;
-        public float ComparisonCountryValue { get; set; } = 1.0f;
+        public float ComparisonCountryValue { get; set; } = 2.0f;
         public string Unit { get; set; } = "NaN";
         public string OriginCountryName { get; set; } = "Sweden";
         public string ComparisonCountryName { get; set; } = "Nauru";
+
+        public string ComparisonValueStyle = "width: 10rem;";
         
         private Data? GetCountryData(Country country)
         {
@@ -41,6 +43,7 @@ namespace Client.Components
             //TODO: remove once country is made required, 
             if(CountryComparison != null && CountryOrigin != null)
             {
+
                 OriginCountryName = CountryOrigin.Name;
                 var resource1 = GetCountryData(CountryOrigin);
                 ComparisonCountryName = CountryComparison.Name;
@@ -59,14 +62,17 @@ namespace Client.Components
             
             
             
-            
+            float relativeDifference = (ComparisonCountryValue / OriginCountryValue) - 1;
+            // Sets width of comparison value bar
+            ComparisonValueStyle = "width:" + (relativeDifference + 1) * 10 + "rem;";
+
             if (ComparisonCountryValue > OriginCountryValue)
             {
-                return ((ComparisonCountryValue - OriginCountryValue) / OriginCountryValue * 100).ToString("n2") + "% more";
+                return (relativeDifference * 100).ToString("n2") + "% more";
             }
             else if (ComparisonCountryValue < OriginCountryValue)
             {
-                return ((OriginCountryValue - ComparisonCountryValue) / OriginCountryValue * 100).ToString("n2") + "% less";
+                return (relativeDifference * 100).ToString("n2") + "% less";
             }
             else
             {
