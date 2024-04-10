@@ -6,7 +6,7 @@ CREATE TABLE Countries (
 );
 
 CREATE TABLE Data (
-    id INT PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     name TEXT NOT NULL,
     country TEXT NOT NULL,
     description TEXT,
