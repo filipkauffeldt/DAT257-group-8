@@ -15,7 +15,7 @@ CREATE TABLE Data (
 );
 
 CREATE TABLE DataPoints (
-    id INT PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     data_id INT NOT NULL,
     key TEXT NOT NULL,
     value FLOAT NOT NULL,
