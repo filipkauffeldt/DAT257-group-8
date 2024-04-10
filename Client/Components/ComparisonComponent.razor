@@ -1,38 +1,9 @@
-﻿<div>
+﻿
+<div>
     <h3>Use @DifferencePercentage() @ResourceType </h3>
-    @*@DifferencePercentage*@
     <p>@OriginCountry: @OriginCountryValue@Unit</p>
     <p>@ComparisonCountry: @ComparisonCountryValue@Unit</p>
 </div>
 
-@code {
-    [Parameter]
-    public float OriginCountryValue { get; set; }
-    [Parameter]
-    public float ComparisonCountryValue { get; set; }
-    [Parameter]
-    public string? ResourceType { get; set; }
-    [Parameter]
-    public string? Unit { get; set; }
-    [Parameter]
-    public string? OriginCountry { get; set; } = "Sweden";
-    [Parameter]
-    public string? ComparisonCountry { get; set; } = "Nauru";
-
-    private string DifferencePercentage()
-    {
-        if (ComparisonCountryValue > OriginCountryValue) {
-            return ((ComparisonCountryValue - OriginCountryValue) / OriginCountryValue * 100).ToString("n2") + "% more";
-        }
-        else if (ComparisonCountryValue < OriginCountryValue)
-        {
-            return ((OriginCountryValue - ComparisonCountryValue)/OriginCountryValue * 100).ToString("n2") + "% less";
-        }
-        else
-        {
-            return "the same amount of";
-        }
-    }
-}
 
 
