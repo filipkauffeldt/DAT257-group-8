@@ -51,7 +51,10 @@ namespace Client.Components
 
                 if (resource1 != null && resource2 != null)
                 {
-                    //TODO Find resource data and add
+                // Supposed to get the data from the year 2023, assuming that the key is "2023"
+                    OriginCountryValue = (float)resource1.Points.Where(dp=>dp.Key == "2023").FirstOrDefault().Value;
+                    ComparisonCountryValue = (float)resource2.Points.Where(dp=>dp.Key == "2023").FirstOrDefault().Value;
+                    Unit = resource1.Unit;
                 }
                 else
                 {
