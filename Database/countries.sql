@@ -10,7 +10,7 @@ CREATE TABLE Data (
     name TEXT NOT NULL,
     country TEXT NOT NULL,
     description TEXT,
-    FOREIGN KEY (country) REFERENCES Countries (code),
+    FOREIGN KEY (country) REFERENCES Countries (code) ON UPDATE CASCADE ON DELETE CASCADE,
     UNIQUE (name, country)
 );
 
@@ -20,5 +20,5 @@ CREATE TABLE DataPoints (
     key TEXT NOT NULL,
     value FLOAT NOT NULL,
     UNIQUE (data_id, key),
-    FOREIGN KEY (data_id) REFERENCES Data (id)
+    FOREIGN KEY (data_id) REFERENCES Data (id) ON UPDATE CASCADE ON DELETE CASCADE
 );
