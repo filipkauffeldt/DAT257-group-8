@@ -7,25 +7,59 @@ namespace Client.Components
 {
     public partial class ComparisonComponent
     {
-        //Using API.Contracts
+        //TODO: Make them required 
         [Parameter]
-        public required List<Country> Countries { get; set; }
+        public Country? CountryOrigin { get; set; } 
         [Parameter]
-        public required string ResourceType { get; set; }
+        public Country? CountryComparison{get; set;}
+        [Parameter]
+        public string ResourceType { get; set; } = "NaN";
 
-        
-        public required float OriginCountryValue { get; set; }
-        public required float ComparisonCountryValue { get; set; }
-        public required string Unit { get; set; }
-        public required string OriginCountry { get; set; } = "Sweden";
-        public required string ComparisonCountry { get; set; } = "Nauru";
-        
 
+        public float OriginCountryValue { get; set; } = 1.0f;
+        public float ComparisonCountryValue { get; set; } = 1.0f;
+        public string Unit { get; set; } = "NaN";
+        public string OriginCountryName { get; set; } = "Sweden";
+        public string ComparisonCountryName { get; set; } = "Nauru";
+        
+        private Data? GetCountryData(Country country)
+        {
+            if (country != null)
+            {
+                var countryData = country.Data;
+                if (countryData != null)
+                {
+                    return countryData.Where(d => d.Name == ResourceType).First();
+                }
+            }
+            return null;
+        }
+        
         private string DifferencePercentage()
         {
-            OriginCountryValue = Countries[0].Data.Points.Value
-            var data = Countries.Where(c => c.Code == "SWE").FirstOrDefault()?.Data;
-            var resource = Countries[0].Data.Where(d => d.Name == ResourceType);
+            
+            //TODO: remove once country is made required, 
+            if(CountryComparison != null && CountryOrigin != null)
+            {
+                OriginCountryName = CountryOrigin.Name;
+                var resource1 = GetCountryData(CountryOrigin);
+                ComparisonCountryName = CountryComparison.Name;
+                var resource2 = GetCountryData(CountryComparison);
+
+                if (resource1 != null && resource2 != null)
+                {
+                    //TODO Find resource data and add
+                }
+                else
+                {
+                    return "No data available";
+                }
+            }
+            
+            
+            
+            
+            
             if (ComparisonCountryValue > OriginCountryValue)
             {
                 return ((ComparisonCountryValue - OriginCountryValue) / OriginCountryValue * 100).ToString("n2") + "% more";
