@@ -10,6 +10,7 @@ CREATE TABLE Data (
     name TEXT NOT NULL,
     country TEXT NOT NULL,
     description TEXT,
+    unit TEXT NOT NULL,
     FOREIGN KEY (country) REFERENCES Countries (code) ON UPDATE CASCADE ON DELETE CASCADE,
     UNIQUE (name, country)
 );
