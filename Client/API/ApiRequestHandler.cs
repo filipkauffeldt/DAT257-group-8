@@ -8,12 +8,14 @@ namespace Client.API
 {
     public static class ApiRequestHandler
     {
+        private static string apiUrl = "https://localhost:7262";
+
         private static readonly HttpClient _httpClient = new();
         public static async Task<Country> FetchCountryOfTheDay()
         {
             try
             {
-                return await _httpClient.GetFromJsonAsync<Country>("https://localhost:7262/Country/GetCountryOfTheDay");
+                return await _httpClient.GetFromJsonAsync<Country>($"{apiUrl}/Country/GetCountryOfTheDay");
             }
             catch (Exception e)
             {
@@ -26,7 +28,7 @@ namespace Client.API
         {
             try
             {
-                return await _httpClient.GetFromJsonAsync<Country>($"https://localhost:7262/Country/GetCountry/{id}");
+                return await _httpClient.GetFromJsonAsync<Country>($"{apiUrl}/Country/GetCountry/{id}");
 
             }
             catch (Exception e)
@@ -40,7 +42,7 @@ namespace Client.API
         {
             try
             {
-                return await _httpClient.GetFromJsonAsync<List<Country>>("https://localhost:7262/Country/GetAllCountries");
+                return await _httpClient.GetFromJsonAsync<List<Country>>($"{apiUrl}/Country/GetAllCountries");
 
             }
             catch (Exception e)
