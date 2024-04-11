@@ -1,6 +1,18 @@
 ﻿@page "/dashboard"
 
+@inject HttpClient httpClient
+
+
 <div class="dash-board">
-    <div class="data-card"></div>
+    <div class="data-card">
+        @if (@countryOfTheDay == null) {
+            <div>Loading...</div>
+        }
+        else
+        {
+            <div>Country of the day: @countryOfTheDay.Name</div>
+            
+        }
+    </div>
 </div>
 
