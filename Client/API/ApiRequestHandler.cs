@@ -23,11 +23,11 @@ namespace Client.API
             }
         }
 
-        public async Task<Country> FetchCountry(int id, HttpClient httpClient)
+        public async Task<Country> FetchCountry(string iso, HttpClient httpClient)
         {
             try
             {
-                return await httpClient.GetFromJsonAsync<Country>($"{apiUrl}/Country/GetCountry/{id}");
+                return await httpClient.GetFromJsonAsync<Country>($"{apiUrl}/Country/GetCountry/{iso}");
 
             }
             catch (Exception e)

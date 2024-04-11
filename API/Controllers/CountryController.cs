@@ -26,8 +26,8 @@ namespace API.Controllers
             return new Country { Code = "0", Name = "Land1" };
         }
         // Returns bogus object
-        [HttpGet("{id}")]
-        public Country GetCountry(int id)
+        [HttpGet("{iso}")]
+        public Country GetCountry(string iso)
         {
             return new Country { Code = "0", Name = "Land1" };
         }
