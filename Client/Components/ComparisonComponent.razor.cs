@@ -19,8 +19,6 @@ namespace Client.Components
         public float OriginCountryValue { get; set; } = 1.0f;
         public float ComparisonCountryValue { get; set; } = 3.0f;
         public string Unit { get; set; } = "NaN";
-        public string OriginCountryName { get; set; }
-        public string ComparisonCountryName { get; set; } 
 
         public string ComparisonValueStyle = "width: 10rem;";
         
@@ -38,39 +36,41 @@ namespace Client.Components
             return null;
         }
         
-        private string DifferencePercentage()
+        private string SetComparisonValues()
         {
-            
+
             //TODO: remove once country is made required, 
-            if(CountryComparison != null && CountryOrigin != null)
+            if (CountryComparison != null && CountryOrigin != null)
             {
-               
-                OriginCountryName = CountryOrigin.Name;
+
+
                 var resource1 = GetCountryData(CountryOrigin);
-                ComparisonCountryName = CountryComparison.Name;
+
                 var resource2 = GetCountryData(CountryComparison);
 
                 if (resource1 != null && resource2 != null)
                 {
-                // Supposed to get the data from the year 2023, assuming that the key is "2023"
-                    OriginCountryValue = (float)resource1.Points.Where(dp=>dp.Key == "2023").FirstOrDefault().Value;
-                    ComparisonCountryValue = (float)resource2.Points.Where(dp=>dp.Key == "2023").FirstOrDefault().Value;
+                    // Supposed to get the data from the year 2023, assuming that the key is "2023". #TODO make it better, autonomous,dependency liksom
+                    OriginCountryValue = (float)resource1.Points.Where(dp => dp.Key == "2023").FirstOrDefault().Value;
+                    ComparisonCountryValue = (float)resource2.Points.Where(dp => dp.Key == "2023").FirstOrDefault().Value;
                     Unit = resource1.Unit;
-                    
+
                 }
                 else
                 {
                     return "No data available";
                 }
             }
-            
-            
-            
-            
+
+            return GetComparisonPercentage();
+        }
+
+        private string GetComparisonPercentage()
+        {
             float relativeDifference = (ComparisonCountryValue / OriginCountryValue) - 1;
             // Sets width of comparison value bar
-            ComparisonValueStyle = ("width:" + (relativeDifference + 1) * 10 + "rem;").Replace(',','.');
-           
+            ComparisonValueStyle = ("width:" + (relativeDifference + 1) * 10 + "rem;").Replace(',', '.');
+
 
             if (ComparisonCountryValue > OriginCountryValue)
             {
