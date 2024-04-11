@@ -9,6 +9,5 @@ namespace API
         public string? Continent { get; init; }
         public string? Description { get; init; }
         public Collection<Data>? Data { get; init; }
-
     }
 }
