@@ -17,6 +17,7 @@
         @foreach (string label in dataLabels)
         {
             <div id="@label-data" class="data-card">
+                <h3>@label</h3>
                 @if (countryOfTheDay == null || comparedCountries == null)
                 {
                     <div>Loading...</div>

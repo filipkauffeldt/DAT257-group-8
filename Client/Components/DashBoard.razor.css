@@ -18,8 +18,9 @@
 .data-card {
     width: 90%;
     height: 200px;
+    padding: 15px;
     border-radius: 25px;
-    background-color: #f9f9f9;
+    background-color: #fcfcfc;
     box-shadow: 0px 2px 5px 1px rgba(0,0,0,0.44);
     -webkit-box-shadow: 0px 2px 5px 1px rgba(0,0,0,0.44);
     -moz-box-shadow: 0px 2px 5px 1px rgba(0,0,0,0.44);
