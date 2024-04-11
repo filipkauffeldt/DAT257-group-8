@@ -1,5 +1,9 @@
 ﻿using System.Net.Http.Json;
-using API.Contracts;
+using System.Reflection.Metadata.Ecma335;
+using API;
+using Client.API;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using Radzen.Blazor;
 
 
@@ -8,18 +12,16 @@ namespace Client.Components
     public partial class DashBoard
     {
         private Country? countryOfTheDay;
-        private List<Country> data = new List<Country>(); 
+        private List<Country> comparedCountries = new List<Country>();
+
+        // Dummy labels
+        private readonly string[] dataLabels = { "Water", "Electricity", "CO2" };
+
         protected override async Task OnInitializedAsync()
         {
-            try
-            {
-                countryOfTheDay = await httpClient.GetFromJsonAsync<Country>("https://localhost:7262/Country/GetCountryOfTheDay");
-                Country baseCountry = await httpClient.GetFromJsonAsync<Country>("https://localhost:7262/Country/GetCountry?id=sweden");
-                data.Add(baseCountry);
-            }
-            catch (Exception e) { 
-                Console.WriteLine(e);
-            }
+            countryOfTheDay = await ApiRequestHandler.FetchCountryOfTheDay();
+            var homeCountry = await ApiRequestHandler.FetchCountry(1);
+            comparedCountries.Add(homeCountry);
         }
     }
 }
