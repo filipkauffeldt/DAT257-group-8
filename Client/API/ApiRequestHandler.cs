@@ -6,16 +6,15 @@ using System.Net.Http.Json;
 
 namespace Client.API
 {
-    public static class ApiRequestHandler
+    public class ApiRequestHandler : IApiHandler
     {
-        private static string apiUrl = "https://localhost:7262";
+        private string apiUrl = "https://localhost:7262";
 
-        private static readonly HttpClient _httpClient = new();
-        public static async Task<Country> FetchCountryOfTheDay()
+        public async Task<Country> FetchCountryOfTheDay(HttpClient httpClient)
         {
             try
             {
-                return await _httpClient.GetFromJsonAsync<Country>($"{apiUrl}/Country/GetCountryOfTheDay");
+                return await httpClient.GetFromJsonAsync<Country>($"{apiUrl}/Country/GetCountryOfTheDay");
             }
             catch (Exception e)
             {
@@ -24,11 +23,11 @@ namespace Client.API
             }
         }
 
-        public static async Task<Country> FetchCountry(int id)
+        public async Task<Country> FetchCountry(int id, HttpClient httpClient)
         {
             try
             {
-                return await _httpClient.GetFromJsonAsync<Country>($"{apiUrl}/Country/GetCountry/{id}");
+                return await httpClient.GetFromJsonAsync<Country>($"{apiUrl}/Country/GetCountry/{id}");
 
             }
             catch (Exception e)
@@ -38,11 +37,11 @@ namespace Client.API
             }
         }
 
-        public static async Task<List<Country>> FetchAllCountries()
+        public async Task<List<Country>> FetchAllCountries(HttpClient httpClient)
         {
             try
             {
-                return await _httpClient.GetFromJsonAsync<List<Country>>($"{apiUrl}/Country/GetAllCountries");
+                return await httpClient.GetFromJsonAsync<List<Country>>($"{apiUrl}/Country/GetAllCountries");
 
             }
             catch (Exception e)

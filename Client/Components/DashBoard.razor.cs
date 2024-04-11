@@ -13,14 +13,14 @@ namespace Client.Components
     {
         private Country? countryOfTheDay;
         private List<Country> comparedCountries = new List<Country>();
-
+        
         // Dummy labels
         private readonly string[] dataLabels = { "Water", "Electricity", "CO2" };
 
         protected override async Task OnInitializedAsync()
         {
-            countryOfTheDay = await ApiRequestHandler.FetchCountryOfTheDay();
-            var homeCountry = await ApiRequestHandler.FetchCountry(1);
+            countryOfTheDay = await apiHandler.FetchCountryOfTheDay(httpClient);
+            var homeCountry = await apiHandler.FetchCountry(1, httpClient);
             comparedCountries.Add(homeCountry);
         }
     }
