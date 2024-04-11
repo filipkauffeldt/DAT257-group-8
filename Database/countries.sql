@@ -18,8 +18,8 @@ CREATE TABLE Data (
 CREATE TABLE DataPoints (
     id BIGSERIAL PRIMARY KEY,
     data_id INT NOT NULL,
-    key TEXT NOT NULL,
+    date DATE NOT NULL,
     value FLOAT NOT NULL,
-    UNIQUE (data_id, key),
+    UNIQUE (data_id, date),
     FOREIGN KEY (data_id) REFERENCES Data (id) ON UPDATE CASCADE ON DELETE CASCADE
 );
