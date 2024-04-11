@@ -9,23 +9,24 @@ namespace Client.Components
     {
         //TODO: Make them required 
         [Parameter]
-        public Country? CountryOrigin { get; set; } 
+        public Country CountryOrigin { get; set; } 
         [Parameter]
-        public Country? CountryComparison{get; set;}
+        public Country CountryComparison{get; set;}
         [Parameter]
         public string ResourceType { get; set; } = "NaN";
 
 
         public float OriginCountryValue { get; set; } = 1.0f;
-        public float ComparisonCountryValue { get; set; } = 2.0f;
+        public float ComparisonCountryValue { get; set; } = 3.0f;
         public string Unit { get; set; } = "NaN";
-        public string OriginCountryName { get; set; } = "Sweden";
-        public string ComparisonCountryName { get; set; } = "Nauru";
+        public string OriginCountryName { get; set; }
+        public string ComparisonCountryName { get; set; } 
 
         public string ComparisonValueStyle = "width: 10rem;";
         
         private Data? GetCountryData(Country country)
         {
+
             if (country != null)
             {
                 var countryData = country.Data;
@@ -43,7 +44,7 @@ namespace Client.Components
             //TODO: remove once country is made required, 
             if(CountryComparison != null && CountryOrigin != null)
             {
-
+               
                 OriginCountryName = CountryOrigin.Name;
                 var resource1 = GetCountryData(CountryOrigin);
                 ComparisonCountryName = CountryComparison.Name;
@@ -55,6 +56,7 @@ namespace Client.Components
                     OriginCountryValue = (float)resource1.Points.Where(dp=>dp.Key == "2023").FirstOrDefault().Value;
                     ComparisonCountryValue = (float)resource2.Points.Where(dp=>dp.Key == "2023").FirstOrDefault().Value;
                     Unit = resource1.Unit;
+                    
                 }
                 else
                 {
@@ -67,7 +69,8 @@ namespace Client.Components
             
             float relativeDifference = (ComparisonCountryValue / OriginCountryValue) - 1;
             // Sets width of comparison value bar
-            ComparisonValueStyle = "width:" + (relativeDifference + 1) * 10 + "rem;";
+            ComparisonValueStyle = ("width:" + (relativeDifference + 1) * 10 + "rem;").Replace(',','.');
+           
 
             if (ComparisonCountryValue > OriginCountryValue)
             {
