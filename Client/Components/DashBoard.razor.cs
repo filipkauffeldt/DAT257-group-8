@@ -13,6 +13,8 @@ namespace Client.Components
     {
         private Country? countryOfTheDay;
         private List<Country> comparedCountries = new List<Country>();
+
+        // Dummy labels
         private readonly string[] dataLabels = { "Water", "Electricity", "CO2" };
 
         protected override async Task OnInitializedAsync()
