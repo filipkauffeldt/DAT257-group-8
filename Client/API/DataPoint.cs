@@ -1,4 +1,4 @@
-﻿namespace API.Contracts
+﻿namespace API
 {
     public class DataPoint
     {

@@ -4,15 +4,25 @@
 
 
 <div class="dash-board">
-    <div class="data-card">
-        @if (@countryOfTheDay == null) {
-            <div>Loading...</div>
-        }
-        else
-        {
-            <div>Country of the day: @countryOfTheDay.Name</div>
-            
-        }
-    </div>
-</div>
+    
 
+    @foreach (string label in dataLabels)
+    {
+
+        <div class="data-card">
+            @if (countryOfTheDay == null || comparedCountries == null)
+            {
+                <div>Loading...</div>
+            }
+            else
+            {
+                // TODO: Change to data component
+                <div>Country of the day: @countryOfTheDay.Name</div>
+                @foreach (var country in comparedCountries)
+                {
+                    <div>Compared country: @country.Name</div>
+                }
+            }
+        </div>
+    }
+</div>

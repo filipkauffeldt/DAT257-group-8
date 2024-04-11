@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace API.Contracts
+namespace API
 {
     public class Data
     {
