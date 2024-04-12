@@ -1,6 +1,5 @@
 ﻿
 .main{
-
     display:flex;
     align-content: center;
     flex-direction: column;
@@ -19,10 +18,7 @@
     
 }
 .ComparisonCountry{
-    
     background-color: rebeccapurple;
-    
-    
 }
 .Country{
     padding: 10px;
@@ -31,5 +27,4 @@
 }
 .text{
     font-size:20px;
-    
 }

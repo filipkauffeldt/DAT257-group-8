@@ -7,7 +7,6 @@ namespace Client.Components
 {
     public partial class ComparisonComponent
     {
-        //TODO: Make them required 
         [Parameter]
         public required Country CountryOrigin { get; set; } 
         [Parameter]
@@ -26,7 +25,6 @@ namespace Client.Components
         
         private Data? GetCountryData(Country country)
         {
-
             if (country != null)
             {
                 var countryData = country.Data;
@@ -40,10 +38,6 @@ namespace Client.Components
         
         private string SetComparisonValues()
         {
-
-           
-
-
                 var resource1 = GetCountryData(CountryOrigin);
 
                 var resource2 = GetCountryData(CountryComparison);
@@ -60,7 +54,6 @@ namespace Client.Components
                 {
                     return "No data available";
                 }
-            
 
             return GetComparisonPercentage(ComparisonCountryValue, OriginCountryValue);
         }
