@@ -9,9 +9,9 @@ namespace Client.Components
     {
         //TODO: Make them required 
         [Parameter]
-        public Country CountryOrigin { get; set; } 
+        public required Country CountryOrigin { get; set; } 
         [Parameter]
-        public Country CountryComparison{get; set;}
+        public required Country CountryComparison{get; set;}
         [Parameter]
         public string ResourceType { get; set; } = "NaN";
 
@@ -39,9 +39,7 @@ namespace Client.Components
         private string SetComparisonValues()
         {
 
-            //TODO: remove once country is made required, 
-            if (CountryComparison != null && CountryOrigin != null)
-            {
+           
 
 
                 var resource1 = GetCountryData(CountryOrigin);
@@ -51,8 +49,8 @@ namespace Client.Components
                 if (resource1 != null && resource2 != null)
                 {
                     // Supposed to get the data from the year 2023, assuming that the key is "2023". #TODO make it better, autonomous,dependency liksom
-                    OriginCountryValue = (float)resource1.Points.Where(dp => dp.Key == "2023").FirstOrDefault().Value;
-                    ComparisonCountryValue = (float)resource2.Points.Where(dp => dp.Key == "2023").FirstOrDefault().Value;
+                    OriginCountryValue = (float)resource1.Points.Where(dp => dp.DateTime == "2023").FirstOrDefault().Value;
+                    ComparisonCountryValue = (float)resource2.Points.Where(dp => dp.DateTime == "2023").FirstOrDefault().Value;
                     Unit = resource1.Unit;
 
                 }
@@ -60,7 +58,7 @@ namespace Client.Components
                 {
                     return "No data available";
                 }
-            }
+            
 
             return GetComparisonPercentage();
         }
