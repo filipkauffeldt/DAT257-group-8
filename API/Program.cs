@@ -1,3 +1,5 @@
+using API.Model;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -13,6 +15,11 @@ builder.Services.AddSwaggerGen(c => {
     c.CustomSchemaIds(type => type.FullName);
 });
 
+
+builder.Services.AddDbContext<CountryDbContext>();
+        
+    builder.Services.AddScoped<CountryRepository>();
+    builder.Services.AddControllers();
 
 var app = builder.Build();
 
