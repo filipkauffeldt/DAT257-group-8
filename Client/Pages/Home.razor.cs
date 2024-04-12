@@ -1,4 +1,4 @@
-﻿using API.Contracts;
+﻿using API;
 
 namespace Client.Pages
 {

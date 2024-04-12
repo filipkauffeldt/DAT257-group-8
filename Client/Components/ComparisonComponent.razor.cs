@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-using API.Contracts;
+using API;
 using System.Linq;
 
 namespace Client.Components
@@ -16,7 +16,7 @@ namespace Client.Components
         public string ResourceType { get; set; } = "NaN";
 
         [Parameter]
-        public DateOnly Date {  get; set; }
+        public DateOnly date {  get; set; }
 
         public float OriginCountryValue { get; set; } = 1.0f;
         public float ComparisonCountryValue { get; set; } = 3.0f;
@@ -51,8 +51,8 @@ namespace Client.Components
                 if (resource1 != null && resource2 != null)
                 {
                     // Supposed to get the data from the year 2023, assuming that the key is "2023". #TODO make it better, autonomous,dependency liksom
-                    OriginCountryValue = (float)resource1.Points.Where(dp => dp.DateTime == "2023").FirstOrDefault().Value;
-                    ComparisonCountryValue = (float)resource2.Points.Where(dp => dp.DateTime == "2023").FirstOrDefault().Value;
+                    OriginCountryValue = (float)resource1.Points.Where(dp => dp.Date.Year == date.Year).FirstOrDefault().Value;
+                    ComparisonCountryValue = (float)resource2.Points.Where(dp => dp.Date.Year == date.Year).FirstOrDefault().Value;
                     Unit = resource1.Unit;
 
                 }
@@ -74,11 +74,11 @@ namespace Client.Components
 
             if (ComparisonCountryValue > OriginCountryValue)
             {
-                return (relativeDifference * 100).ToString("n2") + "% more";
+                return (Math.Abs(relativeDifference) * 100).ToString("n2") + "% more";
             }
             else if (ComparisonCountryValue < OriginCountryValue)
             {
-                return (relativeDifference * 100).ToString("n2") + "% less";
+                return (Math.Abs(relativeDifference) * 100).ToString("n2") + "% less";
             }
             else
             {
