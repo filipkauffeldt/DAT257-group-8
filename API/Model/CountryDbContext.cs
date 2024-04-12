@@ -15,7 +15,7 @@ namespace API.Model
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
             options
-                .UseNpgsql("Host=127.0.0.1; Database=countries; Username=postgres; Password=docker;")
+                .UseNpgsql("Host=127.0.0.1; Port=8001; Database=countries; Username=postgres; Password=docker")
                 .UseLowerCaseNamingConvention();
         }
 
