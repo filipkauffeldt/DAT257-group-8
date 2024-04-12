@@ -1,6 +1,5 @@
 ﻿
-.main{
-
+.main {
     display:flex;
     align-content: center;
     flex-direction: column;
@@ -11,25 +10,21 @@
     border-radius: 20px;
     border: 2px solid gray;
     max-width: 30rem;
-
 }
 .OriginCountry {
     width: 10rem;
     background-color: rgb(189, 189, 55);
-    
 }
-.ComparisonCountry{
-    
+
+.ComparisonCountry {
     background-color: rebeccapurple;
-    
-    
 }
-.Country{
+
+.Country {
     padding: 10px;
     border-radius: 10px;
-   
 }
-.text{
+
+.text {
     font-size:20px;
-    
 }

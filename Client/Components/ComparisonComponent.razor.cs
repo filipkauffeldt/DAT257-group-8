@@ -25,7 +25,6 @@ namespace Client.Components
         
         private Data? GetCountryData(Country country)
         {
-
             if (country != null)
             {
                 var countryData = country.Data;
@@ -54,7 +53,6 @@ namespace Client.Components
                 {
                     return "No data available";
                 }
-            
 
             return GetComparisonPercentage(ComparisonCountryValue, OriginCountryValue);
         }
