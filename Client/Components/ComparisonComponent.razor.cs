@@ -7,7 +7,6 @@ namespace Client.Components
 {
     public partial class ComparisonComponent
     {
-        //TODO: Make them required 
         [Parameter]
         public required Country CountryOrigin { get; set; } 
         [Parameter]
@@ -40,17 +39,12 @@ namespace Client.Components
         
         private string SetComparisonValues()
         {
-
-           
-
-
                 var resource1 = GetCountryData(CountryOrigin);
 
                 var resource2 = GetCountryData(CountryComparison);
 
                 if (resource1 != null && resource2 != null)
                 {
-                    // Supposed to get the data from the year 2023, assuming that the key is "2023". #TODO make it better, autonomous,dependency liksom
                     OriginCountryValue = (float)resource1.Points.Where(dp => dp.Date.Year == date.Year).FirstOrDefault().Value;
                     ComparisonCountryValue = (float)resource2.Points.Where(dp => dp.Date.Year == date.Year).FirstOrDefault().Value;
                     Unit = resource1.Unit;
