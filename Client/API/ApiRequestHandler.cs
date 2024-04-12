@@ -41,7 +41,7 @@ namespace Client.API
         {
             try
             {
-                return await httpClient.GetFromJsonAsync<List<Country>>($"{apiUrl}/Country/GetAllCountries");
+                return await httpClient.GetFromJsonAsync<IEnumerable<Country>>($"{apiUrl}/Country/GetAllCountries");
 
             }
             catch (Exception e)
