@@ -43,9 +43,9 @@ namespace TestClient.Components
         };
 
         [Fact]
-        public void Test()
+        public void TestGetComparisonPercentage()
         {
-            
+            Assert.True(comp.);
         }
     }
 }

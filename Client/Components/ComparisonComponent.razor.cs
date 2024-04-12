@@ -15,6 +15,8 @@ namespace Client.Components
         [Parameter]
         public string ResourceType { get; set; } = "NaN";
 
+        [Parameter]
+        public DateOnly Date {  get; set; }
 
         public float OriginCountryValue { get; set; } = 1.0f;
         public float ComparisonCountryValue { get; set; } = 3.0f;
@@ -60,12 +62,12 @@ namespace Client.Components
                 }
             
 
-            return GetComparisonPercentage();
+            return GetComparisonPercentage(ComparisonCountryValue, OriginCountryValue);
         }
 
-        private string GetComparisonPercentage()
+        private string GetComparisonPercentage(float comparisonValue, float originValue)
         {
-            float relativeDifference = (ComparisonCountryValue / OriginCountryValue) - 1;
+            float relativeDifference = (comparisonValue / originValue) - 1;
             // Sets width of comparison value bar
             ComparisonValueStyle = ("width:" + (relativeDifference + 1) * 10 + "rem;").Replace(',', '.');
 
