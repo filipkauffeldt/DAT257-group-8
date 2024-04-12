@@ -44,15 +44,15 @@ namespace TestClient
         [Fact]
         public async Task TestFetchAllCountriesCorrectType()
         {
-            List<Country> countries = await _apiHandler.FetchAllCountries(_httpClient);
+            IEnumerable<Country> countries = await _apiHandler.FetchAllCountries(_httpClient);
             Assert.True(countries != null && countries.GetType() == typeof(List<Country>));
         }
 
         [Fact]
         public async Task TestFetchAllCountriesCorrectEndpoint()
         {
-            List<Country> apiHandlerCountry = await _apiHandler.FetchAllCountries(_httpClient);
-            List<Country> rawFetchCountry = await _httpClient.GetFromJsonAsync<List<Country>>($"{_url}/Country/GetAllCountries/");
+            IEnumerable<Country> apiHandlerCountry = await _apiHandler.FetchAllCountries(_httpClient);
+            IEnumerable<Country> rawFetchCountry = await _httpClient.GetFromJsonAsync<List<Country>>($"{_url}/Country/GetAllCountries/");
             Assert.Equal(apiHandlerCountry, rawFetchCountry);
         }
     }

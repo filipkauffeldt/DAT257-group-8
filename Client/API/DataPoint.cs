@@ -2,7 +2,7 @@
 {
     public class DataPoint
     {
-        public required string Key { get; init; }
+        public required DateOnly Date { get; init; }
         public required double Value { get; init; }
 
         public override bool Equals(object? obj)
@@ -13,7 +13,7 @@
             }
             DataPoint other = (DataPoint)obj;
             return (
-                this.Key == other.Key &&
+                this.Date == other.Date &&
                 this.Value == other.Value
             );
         }

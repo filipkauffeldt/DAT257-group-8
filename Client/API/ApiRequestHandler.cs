@@ -37,7 +37,7 @@ namespace Client.API
             }
         }
 
-        public async Task<List<Country>> FetchAllCountries(HttpClient httpClient)
+        public async Task<IEnumerable<Country>> FetchAllCountries(HttpClient httpClient)
         {
             try
             {
