@@ -10,7 +10,7 @@ namespace TestClient.Components
 {
     public class ComparisonComponentTest
     {
-        // Used for simple test, XUnit does not exist yet in the project
+   
         public static Country GenerateRandomCountryTyp(String countryName,float dataValue)
         {
             DataPoint point = new DataPoint
@@ -45,7 +45,7 @@ namespace TestClient.Components
         [Fact]
         public void TestGetComparisonPercentage()
         {
-            Assert.True(comp.);
+            
         }
     }
 }
