@@ -1,4 +1,4 @@
-﻿using API.Contracts;
+﻿using API;
 using Client.Components;
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ namespace TestClient.Components
         {
             DataPoint point = new DataPoint
             {
-                DateTime = "2023",
+                Date = new DateOnly(2022, 1, 1),
                 Value = dataValue,
             };
 
@@ -43,9 +43,15 @@ namespace TestClient.Components
         };
 
         [Fact]
-        public void TestGetComparisonPercentage()
+        public void TestGetComparisonResourceType()
         {
-            
+            Assert.True(comp.ResourceType != null && comp.ResourceType != "Nan");
+        }
+
+        [Fact]
+        public void TestCountriesNotEqual()
+        {
+            Assert.NotEqual(comp.CountryOrigin, comp.CountryComparison);
         }
     }
 }
