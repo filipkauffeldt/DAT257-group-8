@@ -53,7 +53,7 @@ namespace Client.Components
             {
                 OriginValueList.Clear();
                 ComparisonValueList.Clear();
-                OriginValueList.Add(resource1.Points.Where(dp => dp.Date.Year == date.Year).First())
+                OriginValueList.Add(resource1.Points.Where(dp => dp.Date.Year == date.Year).First());
                 ComparisonValueList.Add(resource2.Points.Where(dp => dp.Date.Year == date.Year).First());
                 OriginCountryValue = (float)OriginValueList[0].Value;
                 this.ComparisonCountryValue = (float)ComparisonValueList[0].Value;
@@ -65,9 +65,6 @@ namespace Client.Components
         {
             float relativeDifference = (comparisonValue / originValue) - 1;
             // Sets width of comparison value bar
-            ComparisonValueStyle = ("width:" + (relativeDifference + 1) * 10 + "rem;").Replace(',', '.');
-
-
             if (comparisonValue > originValue)
             {
                 return ((int)(Math.Abs(relativeDifference) * 100)).ToString() + "% more";
