@@ -18,14 +18,11 @@ namespace Client.Components
         [Parameter]
         public required DateOnly date {  get; set; }
 
-        
-        
-  
         public float OriginCountryValue { get; set; } = 1.0f;
-        public List<DataPoint> OriginValueList = [new DataPoint() { Date = new DateOnly(2023, 1, 1), Value = 1.0 }];
+        public List<DataPoint> OriginValueList = new List<DataPoint>();//  = [new DataPoint() { Date = new DateOnly(2023, 1, 1), Value = 1.0 }];
         
         public float ComparisonCountryValue { get; set; } = 3.0f;
-        public List<DataPoint> ComparisonValueList = [new DataPoint() { Date = new DateOnly(2023, 1, 1), Value = 2.0 }];
+        public List<DataPoint> ComparisonValueList = new List<DataPoint>(); //= [new DataPoint() { Date = new DateOnly(2023, 1, 1), Value = 2.0 }];
 
         public string Unit { get; set; } = "NaN";
 
@@ -56,12 +53,12 @@ namespace Client.Components
             {
                 OriginValueList.Clear();
                 ComparisonValueList.Clear();
-                OriginValueList.Add(resource1.Points.Where(dp => dp.Date.Year == date.Year).First());
+                OriginValueList.Add(resource1.Points.Where(dp => dp.Date.Year == date.Year).First())
                 ComparisonValueList.Add(resource2.Points.Where(dp => dp.Date.Year == date.Year).First());
                 OriginCountryValue = (float)OriginValueList[0].Value;
                 this.ComparisonCountryValue = (float)ComparisonValueList[0].Value;
+                Unit = resource1.Unit;
             }
-            
         }
 
         public string GetComparisonPercentage(float comparisonValue, float originValue)
