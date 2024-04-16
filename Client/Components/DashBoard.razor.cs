@@ -31,9 +31,9 @@ namespace Client.Components
 
         protected override async Task OnInitializedAsync()
         {
-            countryOfTheDay = await apiHandler.FetchCountryOfTheDay(httpClient);
-            var homeCountry = await apiHandler.FetchCountry("swe", httpClient);
-            comparedCountries.Add(homeCountry);
+            //countryOfTheDay = await apiHandler.FetchCountryOfTheDay(httpClient);
+            //var homeCountry = await apiHandler.FetchCountry("swe", httpClient);
+            //comparedCountries.Add(homeCountry);
         }
     }
 }

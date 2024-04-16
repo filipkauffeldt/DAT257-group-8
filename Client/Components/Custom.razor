@@ -6,15 +6,30 @@
 <div class="custom">
     <nav class="table-of-contents">
         <h3>Statistics</h3>
-        <InputSelect @bind-Value="homeCountry" class="form-control">
+    </nav>
+    <div class="content">
+        <h1>Custom</h1>
+    </div>
+
+    <menu class="menu-row">
+        <span>Compare</span>
+        <InputSelect @bind-Value="selectedHome" @oninput="((e) => UpdateHomeCountry((string)e.Value))" class="drop-down">
+            @foreach (var country in availableCountries)
+            {
+                <option value="@country">@country</option>
+            }
+        </InputSelect>
+        <span>with</span>
+        <InputSelect @bind-Value="selectedOther" @oninput="((e) => UpdateOtherCountry((string)e.Value))" class="drop-down">
                 @foreach (var country in availableCountries)
                 {
                     <option value="@country">@country</option>
                 }
         </InputSelect>
-    </nav>
+    </menu>
+    
     <div class="card-container">
-        <ComparisonComponent CountryComparison="@otherCountry" CountryOrigin="@homeCountry" date="@dateOnlyLol" ResourceType="Water"></ComparisonComponent>
+        <ComparisonComponent @key="@($"{homeCountry}-{otherCountry}")" CountryComparison="@otherCountry" CountryOrigin="@homeCountry" date="@dateOnlyLol" ResourceType="Water"></ComparisonComponent>
     </div>
 </div>
 

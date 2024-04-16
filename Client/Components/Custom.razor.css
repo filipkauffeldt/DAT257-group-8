@@ -5,6 +5,28 @@
     padding: 25px;
     border-radius: 25px;
     display: flex;
+    flex-direction: column;
+}
+
+.menu-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    max-width: 400px;
+}
+
+.drop-down {
+    width: 150%;
+    height: 50px;
+    border-radius: 25px;
+    background-color: #ffffff;
+    padding: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
 }
 
 .card-container {
