@@ -22,7 +22,12 @@ namespace API.Utils
         {
             var countryContracts = new Collection<CountryContract>();
 
-            foreach (Country c in countries)
+            if (countries is null)
+            {
+                return countryContracts;
+            }
+
+            foreach (var c in countries)
             {
                 countryContracts.Add(MapCountry(c));
             }
@@ -34,7 +39,12 @@ namespace API.Utils
         {
             var countryContracts = new Collection<CountryContract>();
 
-            foreach (Country c in countries)
+            if (countries is null)
+            {
+                return countryContracts;
+            }
+
+            foreach (var c in countries)
             {
                 countryContracts.Add(MapCountry(c));
             }
@@ -46,7 +56,12 @@ namespace API.Utils
         {
             var countryContracts = new List<CountryContract>();
 
-            foreach (Country c in countries)
+            if (countries is null)
+            {
+                return countryContracts;
+            }
+
+            foreach (var c in countries)
             {
                 countryContracts.Add(MapCountry(c));
             }
@@ -58,7 +73,12 @@ namespace API.Utils
         {
             var dataContracts = new Collection<DataContract>();
 
-            foreach (Data d in data)
+            if (data is null)
+            {
+                return dataContracts;
+            }
+
+            foreach (var d in data)
             {
                 dataContracts.Add(MapData(d));
             }
@@ -70,7 +90,12 @@ namespace API.Utils
         {
             var dataContracts = new Collection<DataContract>();
 
-            foreach (Data d in data)
+            if (data is null)
+            {
+                return dataContracts;
+            }
+
+            foreach (var d in data)
             {
                 dataContracts.Add(MapData(d));
             }
@@ -82,7 +107,12 @@ namespace API.Utils
         {
             var dataContracts = new List<DataContract>();
 
-            foreach (Data d in data)
+            if (data is null)
+            {
+                return dataContracts;
+            }
+
+            foreach (var d in data)
             {
                 dataContracts.Add(MapData(d));
             }
@@ -97,7 +127,7 @@ namespace API.Utils
                 Name = data.Name,
                 Description = data.Description,
                 Unit = data.Unit,
-                Points = MapDataPointCollection(data.Points)
+                Points = data.Points != null ? MapDataPointCollection(data.Points) : new Collection<DataPointContract>()
             };
         }
 
@@ -105,7 +135,12 @@ namespace API.Utils
         {
             var dataPointContracts = new Collection<DataPointContract>();
 
-            foreach (DataPoint dp in dataPoints)
+            if (dataPoints is null)
+            {
+                return dataPointContracts;
+            }
+
+            foreach (var dp in dataPoints)
             {
                 dataPointContracts.Add(MapDataPoint(dp));
             }
@@ -117,7 +152,7 @@ namespace API.Utils
         {
             var dataPointContracts = new Collection<DataPointContract>();
 
-            foreach (DataPoint dp in dataPoints)
+            foreach (var dp in dataPoints)
             {
                 dataPointContracts.Add(MapDataPoint(dp));
             }
