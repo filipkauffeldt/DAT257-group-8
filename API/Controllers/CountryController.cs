@@ -70,13 +70,13 @@ namespace API.Controllers
                         {
                             new DataPoint
                             {
-                                Value = Random.Shared.Next(0, 100),
+                                Value = 80,
                                 Date = new DateOnly(2000, 1, 1)
                             },
 
                             new DataPoint
                             {
-                                Value = Random.Shared.Next(0, 100),
+                                Value = 30,
                                 Date = new DateOnly(2023, 1, 1)
                             }
                         }
@@ -90,13 +90,13 @@ namespace API.Controllers
                         {
                             new DataPoint
                             {
-                                Value = Random.Shared.Next(0, 100),
+                                Value = 65,
                                 Date = new DateOnly(2000, 1, 1)
                             },
 
                             new DataPoint
                             {
-                                Value = Random.Shared.Next(0, 100),
+                                Value = 25,
                                 Date = new DateOnly(2023, 1, 1)
                             }
                         }

@@ -1,5 +1,6 @@
 using API;
 using Client.API;
+using System.Collections.ObjectModel;
 using System.Net.Http.Json;
 
 namespace TestClient
@@ -54,6 +55,20 @@ namespace TestClient
             IEnumerable<Country> apiHandlerCountry = await _apiHandler.FetchAllCountries(_httpClient);
             IEnumerable<Country> rawFetchCountry = await _httpClient.GetFromJsonAsync<List<Country>>($"{_url}/Country/GetAllCountries/");
             Assert.Equal(apiHandlerCountry, rawFetchCountry);
+        }
+
+        [Fact]
+        public async Task FetchCountryDataByTimeSpanCorrectEndpoint()
+        {
+            var minDate = new DateOnly(2020, 1, 1);
+            var maxDate = new DateOnly(2024, 1, 1);
+            string code = "swe";
+
+            var apiHandlerData = await _apiHandler.FetchCountryDataByTimeSpan(_httpClient, code, minDate, maxDate);
+            var rawFetchData = await _httpClient.GetFromJsonAsync<Collection<Data>>($"{_url}/Country/GetCountryDataForTimeSpan?code={code}&minDate{minDate}&maxDate={maxDate}");
+
+            var dataDiff = apiHandlerData.Intersect(rawFetchData);
+            Assert.True(dataDiff.Count() == 0);
         }
     }
 }

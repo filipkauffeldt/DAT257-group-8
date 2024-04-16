@@ -64,6 +64,5 @@ namespace Client.API
                 throw new Exception($"Api call failed, {e}");
             }
         }
-
     }
 }
