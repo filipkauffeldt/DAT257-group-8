@@ -1,4 +1,5 @@
 ﻿using API;
+using System.Collections.ObjectModel;
 using System.Net.Http;
 
 namespace Client.API
@@ -11,6 +12,6 @@ namespace Client.API
 
         Task<IEnumerable<Country>> FetchAllCountries(HttpClient httpClient);
 
-        Task<Country> FetchCountryDataByTimeSpan(HttpClient httpClient, string code, DateOnly minDate, DateOnly maxDate);
+        Task<Collection<Data>> FetchCountryDataByTimeSpan(HttpClient httpClient, string code, DateOnly minDate, DateOnly maxDate);
     }
 }

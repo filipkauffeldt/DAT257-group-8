@@ -52,7 +52,7 @@ namespace API.Controllers
             // var country = _countryRepository.GetCountryByCode(code);
             //if (country == null) return NotFound($"No country with code = '{code}' found.");
 
-            // Fake country
+            // Fake country, should use country from database instead
             var country = new Country
             {
                 Code = code,
@@ -105,7 +105,7 @@ namespace API.Controllers
             };
 
 
-            // Remove all DataPoints that is outside the given span
+            // Remove all DataPoints that is outside the given timespan
             var filteredData = country.Data.Select(data =>
                 new Data
                 {
@@ -118,18 +118,9 @@ namespace API.Controllers
                 }
             ).ToList();
 
-            var filteredCountry = new Country
-            {
-                Code = country.Code,
-                Name = country.Name,
-                Continent = country.Continent,
-                Description = country.Description,
-                Data = filteredData
-            };
+            var dataCountract = Mapper.MapDataCollection(filteredData);
 
-            var countryContract = Mapper.MapCountry(filteredCountry);
-
-            return countryContract.Data != null ? Ok(countryContract) : NotFound("No data found for given time span.");
+            return dataCountract != null ? Ok(dataCountract) : NotFound("No data found for given time span.");
         }
 
         [HttpPost()]
