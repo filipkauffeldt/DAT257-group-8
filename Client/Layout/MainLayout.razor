@@ -1,14 +1,19 @@
 ﻿@inherits LayoutComponentBase
 <div class="page">
-    <div class="sidebar">
-        <NavMenu />
+    <div class="app_bar">
+        <AppBar />
     </div>
 
     <main>
-        <div class = "app_bar">
-            <AppBar/>
-        </div>
-
+        <nav>
+            <!-- Add the "nav_links" class to the ul element -->
+            <ul class="nav_links">
+                <li><NavLink href="/">Home</NavLink></li>
+                <li><NavLink href="/about">About</NavLink></li>
+                <!-- Add more page links here as needed -->
+            </ul>
+        </nav>
+        
         <article class="content px-4">
             @Body
         </article>

@@ -1,0 +1,32 @@
+
+.nav_links {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav_links li {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.nav_links li:last-child {
+    margin-right: 0;
+}
+
+/* Remove underline and add animation */
+.nav_links li a {
+    text-decoration: none; 
+    color: #000; 
+    transition: color 0.3s; 
+}
+
+/* Add animation on hover */
+.nav_links li a:hover {
+    color: blue; 
+}
+
+/* Add animation on click */
+.nav_links li a:active {
+    color: red; 
+}
