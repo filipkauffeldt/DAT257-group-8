@@ -45,6 +45,93 @@ namespace API.Controllers
             return country != null ? Ok(Mapper.MapCountry(country)) : NotFound("The specified country could not be found.");
         }
 
+        [HttpGet]
+        public IActionResult GetCountryDataForTimeSpan(string code, DateOnly minDate, DateOnly maxDate)
+        {
+            // TODO: Get actual data from database
+            // var country = _countryRepository.GetCountryByCode(code);
+            //if (country == null) return NotFound($"No country with code = '{code}' found.");
+
+            // Fake country
+            var country = new Country
+            {
+                Code = code,
+                Name = "Fake Country",
+                Continent = "Fake Continent",
+                Description = "Fake Description",
+                Data = new List<Data>
+                {
+                    new Data
+                    {
+                        Name = "Fake Data",
+                        Description = "Fake Description",
+                        Unit = "Fake Unit",
+                        Points = new List<DataPoint>
+                        {
+                            new DataPoint
+                            {
+                                Value = Random.Shared.Next(0, 100),
+                                Date = new DateOnly(2000, 1, 1)
+                            },
+
+                            new DataPoint
+                            {
+                                Value = Random.Shared.Next(0, 100),
+                                Date = new DateOnly(2023, 1, 1)
+                            }
+                        }
+                    },
+                    new Data
+                    {
+                        Name = "More Fake Data",
+                        Description = "More Fake Data",
+                        Unit = "More Fake Data",
+                        Points = new List<DataPoint>
+                        {
+                            new DataPoint
+                            {
+                                Value = Random.Shared.Next(0, 100),
+                                Date = new DateOnly(2000, 1, 1)
+                            },
+
+                            new DataPoint
+                            {
+                                Value = Random.Shared.Next(0, 100),
+                                Date = new DateOnly(2023, 1, 1)
+                            }
+                        }
+                    }
+                }
+            };
+
+
+            // Remove all DataPoints that is outside the given span
+            var filteredData = country.Data.Select(data =>
+                new Data
+                {
+                    Name = data.Name,
+                    Description = data.Description,
+                    Unit = data.Unit,
+                    Points = data.Points?.Where(point =>
+                        point.Date >= minDate && point.Date <= maxDate
+                    ).ToList() 
+                }
+            ).ToList();
+
+            var filteredCountry = new Country
+            {
+                Code = country.Code,
+                Name = country.Name,
+                Continent = country.Continent,
+                Description = country.Description,
+                Data = filteredData
+            };
+
+            var countryContract = Mapper.MapCountry(filteredCountry);
+
+            return countryContract.Data != null ? Ok(countryContract) : NotFound("No data found for given time span.");
+        }
+
         [HttpPost()]
         public IActionResult CreateRandomCountry()
         {

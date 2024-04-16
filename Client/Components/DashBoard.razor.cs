@@ -36,6 +36,10 @@ namespace Client.Components
         {
             //countryOfTheDay = await apiHandler.FetchCountryOfTheDay(httpClient);
             //var homeCountry = await apiHandler.FetchCountry("swe", httpClient);
+            var minDate = new DateOnly(2022, 1, 1);
+            var maxDate = new DateOnly(2024, 1, 1);
+            countryComp = await apiHandler.FetchCountryDataByTimeSpan(httpClient, countryComp.Code, minDate, maxDate);
+            countryCompTwo = await apiHandler.FetchCountryDataByTimeSpan(httpClient, countryCompTwo.Code, minDate, maxDate);
             //comparedCountries.Add(homeCountry);
             dataMetrics = GetSharedMetrics();
         }
@@ -54,7 +58,7 @@ namespace Client.Components
             return sharedMetrics;
         }
 
-        private string FormatLabel(string label)
+        private static string FormatLabel(string label)
         {
             return $"{label.Replace(" ", "-")}-statistic";
         }

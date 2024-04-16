@@ -50,5 +50,19 @@ namespace Client.API
                 throw new Exception($"Api call failed, {e}");
             }
         }
+
+        public async Task<Country> FetchCountryDataByTimeSpan(HttpClient httpClient, string code, DateOnly minDate, DateOnly maxDate)
+        {
+            try
+            {
+                return await httpClient.GetFromJsonAsync<Country>($"{apiUrl}/Country/GetCountryDataForTimeSpan?code={code}&minDate{minDate}&maxDate={maxDate}");
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e);
+                throw new Exception($"Api call failed, {e}");
+            }
+        }
+
     }
 }
