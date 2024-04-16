@@ -1,0 +1,57 @@
+
+.nav_links {
+    list-style-type: none;
+    margin: 0;
+    padding-top: 20px;
+    padding-left: 20px;
+}
+
+.nav_links li {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.nav_links li:last-child {
+    margin-right: 0;
+}
+
+/* Remove underline and add animation */
+.nav_links li a {
+    text-decoration: none;
+    color: #000;
+    transition: color 0.3s, border-bottom 0.3s;
+    font-size: 25px;
+    padding: 5px 10px 10px;
+    border-bottom: 2px solid transparent;
+}
+
+/* Add animation on hover */
+.nav_links li a:hover {
+    border-bottom: 2px solid navy;
+    color: navy; 
+}
+
+/* Add animation on click */
+.nav_links li a:active {
+    color: red; 
+}
+
+.title {
+    margin-right: 20px;
+    font-size: 25px;
+    text-align: center;
+    padding-top: 26px;
+    padding-left: 20px;
+    padding-right: 100px;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    width: 80px; /* Adjust the width of the logo */
+    height: auto; /* Maintain aspect ratio */
+    margin-right: 10px; /* Add spacing between the logo and the title text */
+}
