@@ -45,9 +45,11 @@ namespace TestClient.Components
 
         [Fact]
 
-        public void TestCreateNewCountryWorks()
+        public void TestGetComparisonPercentage()
         {
-            
+            Assert.Equal("the same amount of", comp.GetComparisonPercentage(100f, 100f));
+            Assert.Equal("100% more", comp.GetComparisonPercentage(200f, 100f));
+            Assert.Equal("50% less", comp.GetComparisonPercentage(50f, 100f));
         }
 
         [Fact]

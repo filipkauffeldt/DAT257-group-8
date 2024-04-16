@@ -71,13 +71,13 @@ namespace Client.Components
             ComparisonValueStyle = ("width:" + (relativeDifference + 1) * 10 + "rem;").Replace(',', '.');
 
 
-            if (ComparisonCountryValue > OriginCountryValue)
+            if (comparisonValue > originValue)
             {
-                return (Math.Abs(relativeDifference) * 100).ToString("n2") + "% more";
+                return ((int)(Math.Abs(relativeDifference) * 100)).ToString() + "% more";
             }
-            else if (ComparisonCountryValue < OriginCountryValue)
+            else if (comparisonValue < originValue)
             {
-                return (Math.Abs(relativeDifference) * 100).ToString("n2") + "% less";
+                return ((int)(Math.Abs(relativeDifference) * 100)).ToString() + "% less";
             }
             else
             {
