@@ -2,6 +2,7 @@
 using API.Utils;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -121,6 +122,16 @@ namespace TestApi.Utils
         }
 
         [Fact]
+        public static void MapCountryCollection_Null_ReturnsEmptyCollection()
+        {
+            Collection<Country> countries = null;
+
+            var actual = Mapper.MapCountryCollection(countries);
+
+            Assert.Empty(actual);
+        }
+
+        [Fact]
         public static void MapCountryList()
         {
             var countries = new List<Country>
@@ -188,7 +199,17 @@ namespace TestApi.Utils
                 Assert.Equal(countries[i].Data.First().Points.First().Date, countryContracts[i].Data.First().Points.First().Date);
                 Assert.Equal(countries[i].Data.First().Points.First().Value, countryContracts[i].Data.First().Points.First().Value);
             }
-        }   
+        }
+
+        [Fact]
+        public static void MapCountryList_Null_ReturnsEmptyList()
+        {
+            List<Country> list = null;
+
+            var actual = Mapper.MapCountryList(list);
+
+            Assert.Empty(actual);
+        }
 
         [Fact]
         public static void MapDataCollection()
@@ -237,6 +258,16 @@ namespace TestApi.Utils
         }
 
         [Fact]
+        public static void MapDataCollection_Null_ReturnsEmtyCollection()
+        {
+            Collection<Data> data = null;
+
+            var actual = Mapper.MapDataCollection(data);
+
+            Assert.Empty(actual);
+        }
+
+        [Fact]
         public void MapDataList()
         {
             var data = new List<Data>
@@ -280,6 +311,16 @@ namespace TestApi.Utils
                 Assert.Equal(data[i].Points.First().Date, dataContracts[i].Points.First().Date);
                 Assert.Equal(data[i].Points.First().Value, dataContracts[i].Points.First().Value);
             }
+        }
+
+        [Fact]
+        public static void MapDataList_Null_ReturnsEmptyList()
+        {
+            List<Data> data = null;
+
+            var actual = Mapper.MapDataList(data);
+
+            Assert.Empty(actual);
         }
 
         [Fact]
@@ -333,6 +374,16 @@ namespace TestApi.Utils
                 Assert.Equal(dataPoints[i].Date, dataPointContracts[i].Date);
                 Assert.Equal(dataPoints[i].Value, dataPointContracts[i].Value);
             }
+        }
+
+        [Fact]
+        public static void MapDataPointCollection_Null_ReturnsEmptyCollection()
+        {
+            Collection<DataPoint> dataPoints = null;
+
+            var actual = Mapper.MapDataPointCollection(dataPoints);
+
+            Assert.Empty(actual);
         }
 
         [Fact]
