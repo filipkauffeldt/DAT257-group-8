@@ -39,8 +39,16 @@ namespace TestClient.Components
         ComparisonComponent comp = new ComparisonComponent() {
             CountryComparison = GenerateRandomCountryTyp("Sweden",100f),
             CountryOrigin = GenerateRandomCountryTyp("BOlibompa",200f),
-            ResourceType = "Water"
+            ResourceType = "Water",
+            date = new DateOnly(2022,1,1)
         };
+
+        [Fact]
+
+        public void TestCreateNewCountryWorks()
+        {
+            
+        }
 
         [Fact]
         public void TestGetComparisonResourceType()

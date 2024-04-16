@@ -1,8 +1,19 @@
 ﻿
+
 <div class="main">
-    <h3>@CountryComparison.Name uses @SetComparisonValues() @ResourceType </h3>
-    <p class="text">@CountryOrigin.Name: </p>
-    <div class="OriginCountry Country">@OriginCountryValue@Unit</div>
-    <p class="text">@CountryComparison.Name: </p>
-    <div class="ComparisonCountry Country" style="@ComparisonValueStyle">@ComparisonCountryValue@Unit</div>
+    <h4>@CountryComparison.Name uses @GetComparisonPercentage(ComparisonCountryValue, OriginCountryValue) @ResourceType than @CountryOrigin.Name </h4>
+    <RadzenChart>
+        <RadzenBarSeries Fill="@Colors.Warning" Data="@OriginValueList" CategoryProperty="Date" Title="@CountryOrigin.Name" LineType="LineType.Dashed" ValueProperty="Value">
+            <RadzenSeriesDataLabels Visible="true" />
+        </RadzenBarSeries>
+        <RadzenBarSeries Data="@ComparisonValueList" CategoryProperty="Date" Title="@CountryComparison.Name" LineType="LineType.Dashed" ValueProperty="Value">
+            <RadzenSeriesDataLabels Visible="true" />
+        </RadzenBarSeries>
+        <RadzenValueAxis Min="0" Max="@setBarWidth()">
+            <RadzenGridLines Visible="true" />
+            <RadzenAxisTitle Text="Consumption" />
+        </RadzenValueAxis>
+        <RadzenBarOptions Radius="10" Height="40" Margin="10" />
+    </RadzenChart>
 </div>
+
