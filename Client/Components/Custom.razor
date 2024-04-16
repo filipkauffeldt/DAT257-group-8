@@ -1,0 +1,20 @@
+﻿@page "/custom"
+
+@inject HttpClient httpClient
+@inject API.IApiHandler apiHandler;
+
+<div class="custom">
+    <nav class="table-of-contents">
+        <h3>Statistics</h3>
+        <InputSelect @bind-Value="homeCountry" class="form-control">
+                @foreach (var country in availableCountries)
+                {
+                    <option value="@country">@country</option>
+                }
+        </InputSelect>
+    </nav>
+    <div class="card-container">
+        <ComparisonComponent CountryComparison="@otherCountry" CountryOrigin="@homeCountry" date="@dateOnlyLol" ResourceType="Water"></ComparisonComponent>
+    </div>
+</div>
+
