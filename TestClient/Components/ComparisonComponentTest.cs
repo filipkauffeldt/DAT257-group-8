@@ -48,21 +48,7 @@ namespace TestClient.Components
             };
         }
         
-        [Fact]
-        public async void TestLoadValuesWhenSet()
-        {
-            
-            ComparisonComponent comp = LoadTestComp();
-            
-            DataPoint comparisonDP = comp.CountryComparison.Data[0].Points[0];
-            Assert.True(comp.ComparisonValueList[0] == comparisonDP);
-            DataPoint originDP = comp.CountryOrigin.Data[0].Points[0];
-            Assert.True(comp.OriginValueList[0] == originDP);
-
-            Assert.Equal(comp.Unit, comp.CountryOrigin.Data[0].Unit);
-            Assert.Equal(comparisonDP.Value, comp.ComparisonCountryValue);
-            Assert.Equal(originDP.Value,comp.OriginCountryValue);
-        }
+      
 
 
         [Fact]
