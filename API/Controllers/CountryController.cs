@@ -49,60 +49,60 @@ namespace API.Controllers
         public IActionResult GetCountryDataForYear(string code, DateOnly year)
         {
             // TODO: Get actual data from database
-            // var country = _countryRepository.GetCountryByCode(code);
-            //if (country == null) return NotFound($"No country with code = '{code}' found.");
+            var country = _countryRepository.GetCountryWithYear(code, year);
+            if (country == null) return NotFound($"No country with code = '{code}' found.");
 
             // Fake country, should use country from database instead
-            var country = new Country
-            {
-                Code = code,
-                Name = "Fake Country",
-                Continent = "Fake Continent",
-                Description = "Fake Description",
-                Data = new List<Data>
-                {
-                    new Data
-                    {
-                        Name = "Fake Data",
-                        Description = "Fake Description",
-                        Unit = "Fake Unit",
-                        Points = new List<DataPoint>
-                        {
-                            new DataPoint
-                            {
-                                Value = 80,
-                                Date = new DateOnly(2000, 1, 1)
-                            },
+            //var country = new Country
+            //{
+            //    Code = code,
+            //    Name = "Fake Country",
+            //    Continent = "Fake Continent",
+            //    Description = "Fake Description",
+            //    Data = new List<Data>
+            //    {
+            //        new Data
+            //        {
+            //            Name = "Fake Data",
+            //            Description = "Fake Description",
+            //            Unit = "Fake Unit",
+            //            Points = new List<DataPoint>
+            //            {
+            //                new DataPoint
+            //                {
+            //                    Value = 80,
+            //                    Date = new DateOnly(2000, 1, 1)
+            //                },
 
-                            new DataPoint
-                            {
-                                Value = 30,
-                                Date = new DateOnly(2023, 1, 1)
-                            }
-                        }
-                    },
-                    new Data
-                    {
-                        Name = "More Fake Data",
-                        Description = "More Fake Data",
-                        Unit = "More Fake Data",
-                        Points = new List<DataPoint>
-                        {
-                            new DataPoint
-                            {
-                                Value = 65,
-                                Date = new DateOnly(2000, 1, 1)
-                            },
+            //                new DataPoint
+            //                {
+            //                    Value = 30,
+            //                    Date = new DateOnly(2023, 1, 1)
+            //                }
+            //            }
+            //        },
+            //        new Data
+            //        {
+            //            Name = "More Fake Data",
+            //            Description = "More Fake Data",
+            //            Unit = "More Fake Data",
+            //            Points = new List<DataPoint>
+            //            {
+            //                new DataPoint
+            //                {
+            //                    Value = 65,
+            //                    Date = new DateOnly(2000, 1, 1)
+            //                },
 
-                            new DataPoint
-                            {
-                                Value = 25,
-                                Date = new DateOnly(2023, 1, 1)
-                            }
-                        }
-                    }
-                }
-            };
+            //                new DataPoint
+            //                {
+            //                    Value = 25,
+            //                    Date = new DateOnly(2023, 1, 1)
+            //                }
+            //            }
+            //        }
+            //    }
+            //};
 
 
             // Remove all DataPoints that is outside the given timespan

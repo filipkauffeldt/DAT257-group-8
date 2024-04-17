@@ -2,6 +2,7 @@ using API.Contracts;
 using API.Model;
 using API.Model.ObjectModels;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.Metrics;
 
 namespace API.Model
 {
@@ -60,6 +61,53 @@ namespace API.Model
                 _dbContext.Countries.Remove(country);
                 _dbContext.SaveChanges();
             }
+        }
+
+        public Country? GetCountryWithYear(string code, DateOnly date)
+        {
+            // Put temp country in db with points for the year and the year before, only for testing
+            //FIXME: Remove this when actual data is in the database
+            var tempCountry = new Country {
+                Code = code,
+                Name = "Test Country",
+                Description = $"Input date: {date.ToString()}",
+                Data = new List<Data> {
+                    new Data {
+                        Name = "Test Data",
+                        Unit = "Test Unit",
+                        Points = new List<DataPoint> {
+                            new DataPoint {
+                                Date = new DateOnly(2022, 1, 1),
+                                Value = 1
+                            },
+                            new DataPoint {
+                                Date = new DateOnly(2023, 1, 1),
+                                Value = 2
+                            }
+                        }
+                    }
+                }
+            };
+
+            _dbContext.Countries.Add(tempCountry);
+
+            var fetchedCountry = _dbContext.Countries
+                .Where(c => c.Code == code)
+                .Include(c => c.Data)
+                .ThenInclude(d => d.Points)
+                .FirstOrDefault();
+
+            if (fetchedCountry != null)
+            {
+                foreach (var data in fetchedCountry.Data)
+                {
+                    data.Points = data.Points?
+                        .Where(p => p.Date.Year == date.Year)
+                        .ToList();
+                }
+            }
+
+            return fetchedCountry;
         }
     }
 }
