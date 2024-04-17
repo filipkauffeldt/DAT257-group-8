@@ -22,7 +22,7 @@ namespace TestClient.Components
             Data data = new Data()
             {
                 Name = "Water",
-                Unit = "L",
+                Unit = "Liters",
                 Points = [point]
             };
 
@@ -36,21 +36,42 @@ namespace TestClient.Components
 
             return country;
         }
-        ComparisonComponent comp = new ComparisonComponent() {
-            CountryComparison = GenerateRandomCountryTyp("Sweden",100f),
-            CountryOrigin = GenerateRandomCountryTyp("BOlibompa",200f),
-            ResourceType = "Water"
-        };
+        
+        ComparisonComponent LoadTestComp()
+        {
+            return new ComparisonComponent()
+            {
+                CountryComparison = GenerateRandomCountryTyp("Sweden", 100f),
+                CountryOrigin = GenerateRandomCountryTyp("BOlibompa", 200f),
+                ResourceType = "Water",
+                date = new DateOnly(2022, 1, 1)
+            };
+        }
+        
+      
+
+
+        [Fact]
+
+        public void TestGetComparisonPercentage()
+        {
+            ComparisonComponent comp = LoadTestComp();
+            Assert.Equal("the same amount of", comp.GetComparisonPercentage(100f, 100f));
+            Assert.Equal("100% more", comp.GetComparisonPercentage(200f, 100f));
+            Assert.Equal("50% less", comp.GetComparisonPercentage(50f, 100f));
+        }
 
         [Fact]
         public void TestGetComparisonResourceType()
         {
+            ComparisonComponent comp = LoadTestComp();
             Assert.True(comp.ResourceType != null && comp.ResourceType != "Nan");
         }
 
         [Fact]
         public void TestCountriesNotEqual()
         {
+            ComparisonComponent comp = LoadTestComp();
             Assert.NotEqual(comp.CountryOrigin, comp.CountryComparison);
         }
     }
