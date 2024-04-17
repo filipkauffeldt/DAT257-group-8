@@ -1,6 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <PackageReference Include="ZetaLongPaths" Version="1.0.17" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\API.csproj" />
   </ItemGroup>
 
