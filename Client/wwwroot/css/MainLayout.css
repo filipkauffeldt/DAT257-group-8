@@ -25,12 +25,12 @@
 }
 
 .nav_links li a:hover {
-    border-bottom: 2px solid navy;
+    border-bottom: 2px solid #e14177;
     color: navy; 
 }
 
 .nav_links li a:active {
-    color: red; 
+    color: #e14177
 }
 
 
@@ -74,7 +74,7 @@
 .search-container button {
     padding: 10px 40px;
     border: 2px;
-    background: #43B0F1;
+    background: #058dcd;
     color: white;
     border-radius: 20px;
     cursor: pointer;
@@ -83,7 +83,7 @@
 }
 
 .search-container button:hover {
-    background: #057DCD; 
+    background: #4daeef; 
 }
 
 .search-container button:active {
