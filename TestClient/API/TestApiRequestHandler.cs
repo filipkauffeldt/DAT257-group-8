@@ -60,15 +60,14 @@ namespace TestClient
         [Fact]
         public async Task FetchCountryDataByTimeSpanCorrectEndpoint()
         {
-            var minDate = new DateOnly(2020, 1, 1);
-            var maxDate = new DateOnly(2024, 1, 1);
+            var year = new DateOnly(2020, 1, 1);
             string code = "swe";
 
-            var apiHandlerData = await _apiHandler.FetchCountryByTimeSpan(_httpClient, code, minDate, maxDate);
-            var rawFetchData = await _httpClient.GetFromJsonAsync<Collection<Data>>($"{_url}/Country/GetCountryDataForTimeSpan?code={code}&minDate{minDate}&maxDate={maxDate}");
+            var apiHandlerData = await _apiHandler.FetchCountryByYear(_httpClient, code, year);
+            var rawFetchData = await _httpClient.GetFromJsonAsync<Country>($"{_url}/Country/GetCountryDataForYear?code={code}&year={year}");
 
-            var dataDiff = apiHandlerData.Intersect(rawFetchData);
-            Assert.True(dataDiff.Count() == 0);
+            var dataDiff = apiHandlerData.Data?.Intersect(rawFetchData.Data);
+            Assert.True(dataDiff != null && !dataDiff.Any());
         }
     }
 }

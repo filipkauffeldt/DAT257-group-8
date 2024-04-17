@@ -46,7 +46,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetCountryDataForTimeSpan(string code, DateOnly minDate, DateOnly maxDate)
+        public IActionResult GetCountryDataForYear(string code, DateOnly year)
         {
             // TODO: Get actual data from database
             // var country = _countryRepository.GetCountryByCode(code);
@@ -113,7 +113,7 @@ namespace API.Controllers
                     Description = data.Description,
                     Unit = data.Unit,
                     Points = data.Points?.Where(point =>
-                        point.Date >= minDate && point.Date <= maxDate
+                        point.Date.Year == year.Year
                     ).ToList() 
                 }
             ).ToList();

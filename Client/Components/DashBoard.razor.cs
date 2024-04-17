@@ -34,10 +34,9 @@ namespace Client.Components
 
         protected override async Task OnInitializedAsync()
         {
-            var minDate = new DateOnly(2022, 1, 1);
-            var maxDate = new DateOnly(2024, 1, 1);
-            countryComp = await apiHandler.FetchCountryByTimeSpan(httpClient, countryComp.Code, minDate, maxDate);
-            countryCompTwo = await apiHandler.FetchCountryByTimeSpan(httpClient, countryCompTwo.Code, minDate, maxDate);
+            var year = new DateOnly(2023, 1, 1);
+            countryComp = await apiHandler.FetchCountryByYear(httpClient, countryComp.Code, year);
+            countryCompTwo = await apiHandler.FetchCountryByYear(httpClient, countryCompTwo.Code, year);
             dataMetrics = GetSharedMetrics();
         }
 

@@ -52,11 +52,11 @@ namespace Client.API
             }
         }
 
-        public async Task<Country> FetchCountryByTimeSpan(HttpClient httpClient, string code, DateOnly minDate, DateOnly maxDate)
+        public async Task<Country> FetchCountryByYear(HttpClient httpClient, string code, DateOnly year)
         {
             try
             {
-                return await httpClient.GetFromJsonAsync<Country>($"{apiUrl}/Country/GetCountryDataForTimeSpan?code={code}&minDate{minDate}&maxDate={maxDate}");
+                return await httpClient.GetFromJsonAsync<Country>($"{apiUrl}/Country/GetCountryDataForYear?code={code}&year={year}");
             }
             catch(Exception e)
             {

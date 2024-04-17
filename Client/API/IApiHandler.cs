@@ -12,6 +12,6 @@ namespace Client.API
 
         Task<IEnumerable<Country>> FetchAllCountries(HttpClient httpClient);
 
-        Task<Country> FetchCountryByTimeSpan(HttpClient httpClient, string code, DateOnly minDate, DateOnly maxDate);
+        Task<Country> FetchCountryByYear(HttpClient httpClient, string code, DateOnly year);
     }
 }
