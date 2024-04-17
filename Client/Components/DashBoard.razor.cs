@@ -36,8 +36,8 @@ namespace Client.Components
         {
             var minDate = new DateOnly(2022, 1, 1);
             var maxDate = new DateOnly(2024, 1, 1);
-            countryComp.Data = await apiHandler.FetchCountryDataByTimeSpan(httpClient, countryComp.Code, minDate, maxDate);
-            countryCompTwo.Data = await apiHandler.FetchCountryDataByTimeSpan(httpClient, countryCompTwo.Code, minDate, maxDate);
+            countryComp = await apiHandler.FetchCountryByTimeSpan(httpClient, countryComp.Code, minDate, maxDate);
+            countryCompTwo = await apiHandler.FetchCountryByTimeSpan(httpClient, countryCompTwo.Code, minDate, maxDate);
             dataMetrics = GetSharedMetrics();
         }
 

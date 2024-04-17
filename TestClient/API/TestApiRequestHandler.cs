@@ -64,7 +64,7 @@ namespace TestClient
             var maxDate = new DateOnly(2024, 1, 1);
             string code = "swe";
 
-            var apiHandlerData = await _apiHandler.FetchCountryDataByTimeSpan(_httpClient, code, minDate, maxDate);
+            var apiHandlerData = await _apiHandler.FetchCountryByTimeSpan(_httpClient, code, minDate, maxDate);
             var rawFetchData = await _httpClient.GetFromJsonAsync<Collection<Data>>($"{_url}/Country/GetCountryDataForTimeSpan?code={code}&minDate{minDate}&maxDate={maxDate}");
 
             var dataDiff = apiHandlerData.Intersect(rawFetchData);

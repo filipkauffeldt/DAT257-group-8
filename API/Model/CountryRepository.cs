@@ -24,11 +24,14 @@ namespace API.Model
 
         public Country? GetCountryByCode(string code)
         {
-            return _dbContext.Countries
+            var country = _dbContext.Countries
                     .Where(c => c.Code == code)
                     .Include(c => c.Data)
                     .ThenInclude(d => d.Points)
                     .FirstOrDefault();
+
+            if (country == null) return country;
+            else return country.Copy();
         }
 
         public Country? GetCountryOfTheDay()

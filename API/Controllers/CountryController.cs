@@ -106,7 +106,7 @@ namespace API.Controllers
 
 
             // Remove all DataPoints that is outside the given timespan
-            var filteredData = country.Data.Select(data =>
+            country.Data = country.Data.Select(data =>
                 new Data
                 {
                     Name = data.Name,
@@ -117,10 +117,11 @@ namespace API.Controllers
                     ).ToList() 
                 }
             ).ToList();
+            
 
-            var dataCountract = Mapper.MapDataCollection(filteredData);
+            var countryContract = Mapper.MapCountry(country);
 
-            return dataCountract != null ? Ok(dataCountract) : NotFound("No data found for given time span.");
+            return Ok(countryContract);
         }
 
         [HttpPost()]
