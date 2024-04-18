@@ -9,7 +9,7 @@ namespace API
         public required string Name { get; set; }
         public string? Continent { get; set; }
         public string? Description { get; set; }
-        public Collection<Data>? Data { get; set; }
+        public IList<Data>? Data { get; set; }
 
         public override bool Equals(object? obj)
         {

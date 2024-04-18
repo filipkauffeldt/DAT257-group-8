@@ -53,8 +53,12 @@ namespace Client.Components
             {
                 OriginValueList.Clear();
                 ComparisonValueList.Clear();
-                OriginValueList.Add(resource1.Points.Where(dp => dp.Date.Year == date.Year).First());
-                ComparisonValueList.Add(resource2.Points.Where(dp => dp.Date.Year == date.Year).First());
+                OriginValueList.Add(resource1.Points.Where(dp => dp.Date.Year == date.Year).FirstOrDefault() ??
+                    new DataPoint { Date = date, Value = 1});
+                //OriginValueList.ForEach(dp => dp = (dp != null) ? dp : new DataPoint{Date = date, Value = 0});
+                ComparisonValueList.Add(resource2.Points.Where(dp => dp.Date.Year == date.Year).FirstOrDefault() ??
+                    new DataPoint { Date = date, Value = 1});
+                //ComparisonValueList.ForEach(dp => dp = (dp != null) ? dp : new DataPoint { Date = date, Value = 0 });
                 OriginCountryValue = (float)OriginValueList[0].Value;
                 this.ComparisonCountryValue = (float)ComparisonValueList[0].Value;
                 Unit = resource1.Unit;

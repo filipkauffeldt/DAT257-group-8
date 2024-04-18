@@ -14,10 +14,17 @@
         </ul>
     </nav>
     <div class="card-container">
-        @foreach (var metric in dataMetrics)
+        @for (int i = 0; i < dataMetrics.Count(); i++) @* //foreach (var metric in dataMetrics) *@
         {
-            <div id="@FormatLabel(metric)" class="data-card">
-                <ComparisonComponent CountryComparison="@countryComp" CountryOrigin="@countryCompTwo" date="@date" ResourceType="@metric"></ComparisonComponent>
+            // Make sure that the data is available for both countries
+            if (countryComp.Data?.Where(d => d.Name == dataMetrics[i]).FirstOrDefault()?.Points.Count == 0 ||
+            countryCompTwo.Data?.Where(d => d.Name == dataMetrics[i]).FirstOrDefault()?.Points.Count == 0)
+            {
+                continue;
+            }
+
+            <div id="@FormatLabel(dataMetrics[i])" class="data-card">
+                <ComparisonComponent CountryComparison="@countryComp" CountryOrigin="@countryCompTwo" date="@date" ResourceType="@dataMetrics[i]"></ComparisonComponent>
             </div>
         }
     </div>
