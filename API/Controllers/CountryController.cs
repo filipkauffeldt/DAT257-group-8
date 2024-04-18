@@ -45,9 +45,19 @@ namespace API.Controllers
             return country != null ? Ok(Mapper.MapCountry(country)) : NotFound("The specified country could not be found.");
         }
 
-        [HttpGet]
+        [HttpGet("{code}/{year}")]
         public IActionResult GetCountryDataForYear(string code, DateOnly year)
         {
+            if (string.IsNullOrEmpty(code))
+            {
+                return BadRequest("Code is required");
+            }
+
+            if (year.Year < 1 || year.Year > 2022)
+            {
+                return BadRequest("Year must be a valid year");
+            }
+
             var country = _countryRepository.GetCountryWithYear(code, year);
             if (country == null) return NotFound($"No country with code = '{code}' found.");
 
