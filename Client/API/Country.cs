@@ -16,13 +16,15 @@ namespace API
             if (obj == null || obj.GetType() != typeof(Country))
                 return false;
             Country other = (Country)obj;
-            if (this.Data == null && other.Data != null ||
-                this.Data != null && other.Data == null)
+            if ((this.Data == null && other.Data != null) ||
+                (this.Data != null && other.Data == null))
             {
                 return false;
             }
-            else if (this.Data != null && other.Data != null && !this.Data.Equals(other.Data))
+            else if (this.Data != null && other.Data != null && !this.Data.SequenceEqual(other.Data))
+            {
                 return false;
+            }
             return (
                 this.Code == other.Code &&
                 this.Name == other.Name &&

@@ -61,20 +61,6 @@ namespace API.Controllers
             var country = _countryRepository.GetCountryWithYear(code, year);
             if (country == null) return NotFound($"No country with code = '{code}' found.");
 
-            // Remove all DataPoints that is outside the given timespan
-            country.Data = country.Data.Select(data =>
-                new Data
-                {
-                    Name = data.Name,
-                    Description = data.Description,
-                    Unit = data.Unit,
-                    Points = data.Points?.Where(point =>
-                        point.Date.Year == year.Year
-                    ).ToList() ?? new List<DataPoint>()
-                }
-            ).ToList();
-            
-
             var countryContract = Mapper.MapCountry(country);
 
             return Ok(countryContract);

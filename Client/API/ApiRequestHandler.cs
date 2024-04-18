@@ -56,7 +56,7 @@ namespace Client.API
         {
             try
             {
-                return await httpClient.GetFromJsonAsync<Country>($"{apiUrl}/Country/GetCountryDataForYear?code={code}&year={year}");
+                return await httpClient.GetFromJsonAsync<Country>($"{apiUrl}/Country/GetCountryDataForYear/{code}/{year}");
             }
             catch(Exception e)
             {

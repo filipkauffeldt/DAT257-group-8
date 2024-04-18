@@ -7,15 +7,11 @@
 
         public override bool Equals(object? obj)
         {
-            if (obj == null ||  obj.GetType() != typeof(DataPoint))
+            if (obj == null || !(obj is DataPoint other))
             {
                 return false;
             }
-            DataPoint other = (DataPoint)obj;
-            return (
-                this.Date == other.Date &&
-                this.Value == other.Value
-            );
+            return Date.Equals(other.Date) && Value.Equals(other.Value);
         }
     }
 }
