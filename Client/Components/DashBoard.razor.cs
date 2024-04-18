@@ -7,36 +7,27 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Radzen.Blazor;
 
-
 namespace Client.Components
 {
     public partial class DashBoard
     {
-        private Country? countryOfTheDay;
-        private List<Country> comparedCountries = new List<Country>();
-        private Country countryComp = new Country()
-        {
-            Name = "Bulgaria",
-            Code = "BGR",
-            Data = [new Data() { Name = "Water", Unit = "L", Points = [new DataPoint() { Date = new DateOnly(2023,1,1), Value = 100}] },
-                    new Data() {Name = "CO2 Emissions", Unit = "Kg", Points = [new DataPoint() { Date = new DateOnly(2023, 1, 1), Value = 200 }]}]
-        };
-        private Country countryCompTwo = new Country()
-        {
-            Name = "Sweden",
-            Code = "SWE",
-            Data = [new Data() { Name = "Water", Unit = "L", Points = [new DataPoint() { Date = new DateOnly(2023, 1, 1), Value = 200 }] },
-                    new Data() {Name = "CO2 Emissions", Unit = "Kg", Points = [new DataPoint() { Date = new DateOnly(2023, 1, 1), Value = 200 }]}]
-        };
-        DateOnly date = new DateOnly(2020, 1, 1);
-        // Dummy labels
-        private readonly string[] dataLabels = { "Water", "Electricity", "CO2" };
+        [Inject]
+        private HttpClient httpClient { get; set; }
+
+        [Inject]
+        private IApiHandler apiHandler { get; set; }
+
+        private Country countryComp { get; set; }
+        
+        private Country countryCompTwo { get; set; }
+        
+        DateOnly date = new DateOnly(2022, 1, 1);
         private IList<string> dataMetrics = new List<string>();
 
         protected override async Task OnInitializedAsync()
         {
-            countryComp = await apiHandler.FetchCountryByYear(httpClient, countryComp.Code, date);
-            countryCompTwo = await apiHandler.FetchCountryByYear(httpClient, countryCompTwo.Code, date);
+            countryComp = await apiHandler.FetchCountryByYear(httpClient, "SWE", date); // Sweden
+            countryCompTwo = await apiHandler.FetchCountryByYear(httpClient, "BGR", date); // Bulgaria
             dataMetrics = GetValidMetrics();
         }
 
