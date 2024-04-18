@@ -9,13 +9,13 @@ namespace CSVReader
         static void Main(string[] args)
         {
             var repository = new CountryRepository(new CountryDbContext());
-            var path = new ZlpDirectoryInfo(@""); // Add path to file with countries
-            var basePath = new ZlpDirectoryInfo(@""); // Add path to directory with files containing data
+            var pathToCountryFile = new ZlpDirectoryInfo(@""); // Add path to csv file with countries, eg allcountries.csv
+            var basePathForData = new ZlpDirectoryInfo(@""); // Add path to directory with csv files containing data, eg /Data
 
-            var countryFile = path.GetFiles(SearchOption.TopDirectoryOnly);
+            var countryFile = pathToCountryFile.GetFiles(SearchOption.TopDirectoryOnly);
             var countries = CSVReader.ReadCountries(countryFile.First().ToString());
 
-            var dataFiles = basePath.GetFiles(SearchOption.AllDirectories).ToList();
+            var dataFiles = basePathForData.GetFiles(SearchOption.AllDirectories).ToList();
 
             foreach (var df in dataFiles) 
             {

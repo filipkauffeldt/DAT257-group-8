@@ -53,7 +53,6 @@ namespace CSVReader
                     {
                         try
                         {
-
                             string line = reader.ReadLine();
 
                             var values = Regex.Split(line, ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
