@@ -37,71 +37,29 @@ namespace Client.Components
         {
             countryComp = await apiHandler.FetchCountryByYear(httpClient, countryComp.Code, date);
             countryCompTwo = await apiHandler.FetchCountryByYear(httpClient, countryCompTwo.Code, date);
-            dataMetrics = GetSharedMetrics();
+            dataMetrics = GetValidMetrics();
         }
 
-        private IList<string> GetSharedMetrics()
+        private IList<string> GetValidMetrics()
         {
             if (countryComp == null || countryComp.Data == null ||
                 countryCompTwo == null || countryCompTwo.Data == null) {
                 return new List<string>();
             }
 
-            //var countryComp2Metrics = new HashSet<Tuple<string, int>>(
-            //    countryComp.Data.Select(d => d.Points.)    
-            //);
+            var validMetrics = new List<string>();
+            foreach (var metric in countryComp.Data.Select(d => d.Name).ToList())
+            {
+                var countryCompDataExists = countryComp.Data?.Any(d => d.Name == metric && d.Points.Any()) ?? false;
+                var countryCompTwoDataExists = countryCompTwo.Data?.Any(d => d.Name == metric && d.Points.Any()) ?? false;
 
-            //var sharedMetrics = countryComp.Data
-            //    .Select(data => data.Name)
-            //    .Intersect(countryCompTwo.Data.Select(data => data.Name))
-            //    .ToList();
+                if (countryCompDataExists && countryCompTwoDataExists)
+                {
+                    validMetrics.Add(metric);
+                }
+            }
 
-            //return sharedMetrics;
-
-            //var sharedMetrics = countryComp.Data
-            //    .Where(data => countryCompTwo.Data.Any(d => d.Name == data.Name))
-            //    .Select(data => new Data
-            //    {
-            //        Name = data.Name,
-            //        Unit = data.Unit,
-            //        Points = data.Points.Where(point => countryCompTwo.Data.Any(d => d.Name == data.Name && d.Points.Any(p => p.Date.Year == point.Date.Year))).ToList()
-            //    })
-            //    .ToList();
-
-            //var sharedMetrics = new Dictionary<string, HashSet<int>>();
-            //foreach (var data in countryCompTwo.Data)
-            //{
-            //    var points = new HashSet<int>(data.Points.Select(p => p.Date.Year));
-            //    sharedMetrics.Add(data.Name, points);
-            //}
-
-            //foreach (var data in countryComp.Data)
-            //{
-            //    if (sharedMetrics.ContainsKey(data.Name))
-            //    {
-            //        sharedMetrics[data.Name].IntersectWith(data.Points.Select(p => p.Date.Year));
-            //    }
-            //}
-
-            //countryComp.Data = countryComp.Data
-            //    .Select(data => new Data
-            //    {
-            //        Name = data.Name,
-            //        Unit = data.Unit,
-            //        Points = data.Points.Where(p => sharedMetrics.ContainsKey(data.Name) && sharedMetrics[data.Name].Contains(p.Date.Year)).ToList()
-            //    })
-            //    .ToList();
-
-            //countryCompTwo.Data = countryCompTwo.Data
-            //    .Select(data => new Data
-            //    {
-            //        Name = data.Name,
-            //        Unit = data.Unit,
-            //        Points = data.Points.Where(p => sharedMetrics.ContainsKey(data.Name) && sharedMetrics[data.Name].Contains(p.Date.Year)).ToList()
-            //    })
-            //    .ToList();
-
-            return countryComp.Data.Select(d => d.Name).ToList();
+            return validMetrics;
         }
 
         private static string FormatLabel(string label)
