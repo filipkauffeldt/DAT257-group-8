@@ -22,7 +22,7 @@ namespace Client.Components
         };
         private Country countryCompTwo = new Country()
         {
-            Name = "BOgusland",
+            Name = "Bogusland",
             Code = "BO",
             Data = [new Data() { Name = "Water", Unit = "L", Points = [new DataPoint() { Date = new DateOnly(2023, 1, 1), Value = 200 }] },
                     new Data() {Name = "CO2 Emissions", Unit = "Kg", Points = [new DataPoint() { Date = new DateOnly(2023, 1, 1), Value = 200 }]}]

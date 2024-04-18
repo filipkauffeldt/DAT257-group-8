@@ -9,7 +9,7 @@ namespace API.Model.ObjectModels
         public required string Name { get; set; }
         public string? Continent { get; set; }
         public string? Description { get; set; }
-        public required IEnumerable<Data> Data { get; set; }
+        public required IList<Data> Data { get; set; }
 
         public Country Copy()
         {
@@ -22,5 +22,6 @@ namespace API.Model.ObjectModels
                 Data = this.Data
             };
         }
+        
     }
 }
