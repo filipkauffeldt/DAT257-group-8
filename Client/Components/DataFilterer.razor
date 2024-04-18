@@ -1,4 +1,5 @@
-﻿@using API
+﻿@inject HttpClient httpClient
+@inject API.IApiHandler apiHandler;
 
 <div class="rz-p-sm-12 rz-text-align-center">
     <RadzenLabel Text="Select Data" Component="DropDownMultipleChips" Style="margin-right: 8px; vertical-align: middle;" Visible=true></RadzenLabel>
