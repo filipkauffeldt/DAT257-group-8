@@ -1,5 +1,4 @@
 ﻿using API;
-using System.Collections.ObjectModel;
 using System.Net.Http;
 
 namespace Client.API

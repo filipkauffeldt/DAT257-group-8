@@ -1,6 +1,5 @@
 using API;
 using Client.API;
-using System.Collections.ObjectModel;
 using System.Net.Http.Json;
 
 namespace TestClient
