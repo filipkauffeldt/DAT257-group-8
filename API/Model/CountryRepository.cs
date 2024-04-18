@@ -91,23 +91,25 @@ namespace API.Model
 
             _dbContext.Countries.Add(tempCountry);
 
-            var fetchedCountry = _dbContext.Countries
+            return _dbContext.Countries
                 .Where(c => c.Code == code)
                 .Include(c => c.Data)
-                .ThenInclude(d => d.Points)
+                .ThenInclude(d => d.Points
+                    .Where(p => p.Date.Year == date.Year))
                 .FirstOrDefault();
 
-            if (fetchedCountry != null)
-            {
-                foreach (var data in fetchedCountry.Data)
-                {
-                    data.Points = data.Points?
-                        .Where(p => p.Date.Year == date.Year)
-                        .ToList();
-                }
-            }
+            //fetchedCountry?.Data
 
-            return fetchedCountry;
+            //if (fetchedCountry != null)
+            //{
+            //    foreach (var data in fetchedCountry.Data)
+            //    {
+            //        data.Points = data.Points?
+            //            .Where(p => p.Date.Year == date.Year)
+            //            .ToList();
+            //    }
+            //}
+
         }
     }
 }
