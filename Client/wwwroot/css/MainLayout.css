@@ -37,41 +37,6 @@
     margin-bottom: 30px;
 }
 
-
-
-/* Search bar settings */
-.search-container {
-    margin-top: 20px; 
-    text-align: center;
-}
-
-.search-container input[type=text] {
-    padding: 10px;
-    border: 2px solid #ccc;
-    border-radius: 20px;
-    width: 1000px; 
-}
-
-.search-container button {
-    padding: 10px 40px;
-    border: 2px;
-    background: #058dcd;
-    color: white;
-    border-radius: 20px;
-    cursor: pointer;
-    margin-left: 10px;
-    transition: background-color 0.3s ease;
-}
-
-.search-container button:hover {
-    background: #4daeef; 
-}
-
-.search-container button:active {
-    background: #003366; 
-}
-
-
 /* Grid settings */
 .grid-container {
     display: grid;
