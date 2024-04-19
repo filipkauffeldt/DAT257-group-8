@@ -24,11 +24,14 @@ namespace API.Model
 
         public Country? GetCountryByCode(string code)
         {
-            return _dbContext.Countries
+            var country = _dbContext.Countries
                     .Where(c => c.Code == code)
                     .Include(c => c.Data)
                     .ThenInclude(d => d.Points)
                     .FirstOrDefault();
+
+            if (country == null) return country;
+            else return country.Copy();
         }
 
         public Country? GetCountryOfTheDay()
@@ -60,6 +63,16 @@ namespace API.Model
                 _dbContext.Countries.Remove(country);
                 _dbContext.SaveChanges();
             }
+        }
+
+        public Country? GetCountryWithYear(string code, DateOnly date)
+        {
+            return _dbContext.Countries
+                .Where(c => c.Code == code)
+                .Include(c => c.Data)
+                .ThenInclude(d => d.Points
+                    .Where(p => p.Date.Year == date.Year))
+                .FirstOrDefault();
         }
     }
 }

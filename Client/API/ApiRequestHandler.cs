@@ -1,4 +1,5 @@
 ﻿using API;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -45,6 +46,19 @@ namespace Client.API
 
             }
             catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw new Exception($"Api call failed, {e}");
+            }
+        }
+
+        public async Task<Country> FetchCountryByYear(HttpClient httpClient, string code, DateOnly year)
+        {
+            try
+            {
+                return await httpClient.GetFromJsonAsync<Country>($"{apiUrl}/Country/GetCountryDataForYear/{code}/{year}");
+            }
+            catch(Exception e)
             {
                 Console.WriteLine(e);
                 throw new Exception($"Api call failed, {e}");

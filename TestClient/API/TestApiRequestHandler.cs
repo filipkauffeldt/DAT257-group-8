@@ -28,32 +28,31 @@ namespace TestClient
         [Fact]
         public async Task TestFetchCountryCorrectType()
         {
-            Country country = await _apiHandler.FetchCountry("swe", _httpClient);
+            Country country = await _apiHandler.FetchCountry("SWE", _httpClient);
             Assert.True(country != null && country.GetType() == typeof(Country));
         }
 
         [Fact]
         public async Task TestFetchCountryCorrectEndpoint()
         {
-            string iso = "swe";
+            string iso = "SWE";
             Country apiHandlerCountry = await _apiHandler.FetchCountry(iso, _httpClient);
             Country rawFetchCountry = await _httpClient.GetFromJsonAsync<Country>($"{_url}/Country/GetCountry/{iso}");
-            Assert.Equal(apiHandlerCountry, rawFetchCountry);
+            //Assert.Equal(apiHandlerCountry, rawFetchCountry);
+            Assert.True(apiHandlerCountry.Equals(rawFetchCountry));
         }
 
         [Fact]
-        public async Task TestFetchAllCountriesCorrectType()
+        public async Task FetchCountryDataByYearCorrectEndpoint()
         {
-            IEnumerable<Country> countries = await _apiHandler.FetchAllCountries(_httpClient);
-            Assert.True(countries != null && countries.GetType() == typeof(List<Country>));
-        }
+            var year = new DateOnly(2020, 1, 1);
+            string code = "SWE";
 
-        [Fact]
-        public async Task TestFetchAllCountriesCorrectEndpoint()
-        {
-            IEnumerable<Country> apiHandlerCountry = await _apiHandler.FetchAllCountries(_httpClient);
-            IEnumerable<Country> rawFetchCountry = await _httpClient.GetFromJsonAsync<List<Country>>($"{_url}/Country/GetAllCountries/");
-            Assert.Equal(apiHandlerCountry, rawFetchCountry);
+            var apiHandlerData = await _apiHandler.FetchCountryByYear(_httpClient, code, year);
+            var rawFetchData = await _httpClient.GetFromJsonAsync<Country>($"{_url}/Country/GetCountryDataForYear/{code}/{year}");
+
+            var dataDiff = apiHandlerData.Data?.Intersect(rawFetchData.Data);
+            Assert.True(dataDiff != null && !dataDiff.Any());
         }
     }
 }

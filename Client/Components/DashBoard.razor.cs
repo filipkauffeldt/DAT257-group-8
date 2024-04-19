@@ -1,53 +1,17 @@
 ﻿using System.Net.Http.Json;
 using System.Reflection.Metadata.Ecma335;
 using System.Runtime.InteropServices;
-using System.Xml.Linq;
 using API;
 using Client.API;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using Radzen.Blazor;
-
 
 namespace Client.Components
 {
     public partial class DashBoard
     {
         public string test;
-        private Country? countryOfTheDay;
         private HomeCountryDropDown dropDown;
         private ComparisonComponent comparisonComponent;
-        //private List<ComparisonComponent> comparisonComponents;
-        private List<String> CountryNames = new List<string> { "Water", "Electricity", "Grub"};
-        private List<Country> comparedCountries = new List<Country>();
-        private Country? countryOrigin { get; set; }
-        private Country countryComp = new Country()
-        {
-            Name = "Bulgaria",
-            Code = "BU",
-            Data = [new Data() { Name = "Water", Unit = "L", Points = [new DataPoint() { Date = new DateOnly(2023,1,1), Value = 50}] }, new Data() { Name = "Electricity", Unit = "W", Points = [new DataPoint() { Date = new DateOnly(2023, 1, 1), Value = 50 }] }]
-        };
-        private Country countryCompTwo = new Country()
-        {
-            Name = "Bogusland",
-            Code = "BO",
-            Data = [new Data() { Name = "Water", Unit = "L", Points = [new DataPoint() { Date = new DateOnly(2023, 1, 1), Value = 200 }] }, new Data() { Name = "Electricity", Unit = "W", Points = [new DataPoint() { Date = new DateOnly(2023, 1, 1), Value = 30 }] }]
-        };
-        DateOnly dateOnlyLol = new DateOnly(2023, 1, 1);
-       
-
-        protected override async Task OnInitializedAsync()
-        {
-            countryOfTheDay = await apiHandler.FetchCountryOfTheDay(httpClient);
-            var homeCountry = await apiHandler.FetchCountry("swe", httpClient);
-            comparedCountries.Add(homeCountry);
-            countryOrigin = new Country()
-            {
-                Name = "Bulgaria",
-                Code = "BU",
-                Data = [new Data() { Name = "Water", Unit = "L", Points = [new DataPoint() { Date = new DateOnly(2023, 1, 1), Value = 100 }] }, new Data() { Name = "Electricity", Unit = "W", Points = [new DataPoint() { Date = new DateOnly(2023, 1, 1), Value = 50 }] }]
-            };
-        }
 
         private async void HomeCountryChange(string CountryCode)
         {
@@ -89,6 +53,51 @@ namespace Client.Components
             {
                 comparisonComponent.LoadValues();
             }*/
+        [Inject]
+        private HttpClient httpClient { get; set; }
+
+        [Inject]
+        private IApiHandler apiHandler { get; set; }
+
+        private Country countryComp { get; set; }
+        
+        private Country countryCompTwo { get; set; }
+        
+        DateOnly date = new DateOnly(2022, 1, 1);
+        private IList<string> dataMetrics = new List<string>();
+
+        protected override async Task OnInitializedAsync()
+        {
+            countryComp = await apiHandler.FetchCountryByYear(httpClient, "SWE", date); // Sweden
+            countryCompTwo = await apiHandler.FetchCountryByYear(httpClient, "BGR", date); // Bulgaria
+            dataMetrics = GetValidMetrics();
+        }
+
+        private IList<string> GetValidMetrics()
+        {
+            if (countryComp == null || countryComp.Data == null ||
+                countryCompTwo == null || countryCompTwo.Data == null) {
+                return new List<string>();
+            }
+
+            var validMetrics = new List<string>();
+            foreach (var metric in countryComp.Data.Select(d => d.Name).ToList())
+            {
+                var countryCompDataExists = countryComp.Data?.Any(d => d.Name == metric && d.Points.Any()) ?? false;
+                var countryCompTwoDataExists = countryCompTwo.Data?.Any(d => d.Name == metric && d.Points.Any()) ?? false;
+
+                if (countryCompDataExists && countryCompTwoDataExists)
+                {
+                    validMetrics.Add(metric);
+                }
+            }
+
+            return validMetrics;
+        }
+
+        private static string FormatLabel(string label)
+        {
+            return $"{label.Replace(" ", "-")}-statistic";
         }
     }
 }
