@@ -3,9 +3,12 @@
 @inject HttpClient httpClient
 @inject API.IApiHandler apiHandler;
 
+
+@test
+<HomeCountryDropDown @ref="dropDown" CountryChanged="HomeCountryChange"/>
 <div class="dash-board">
     <nav class="table-of-contents">
-        <h3>Statistics</h3>
+        <h3>Statistics</h3> 
     </nav>
     <div class="card-container">
         <ComparisonComponent CountryComparison="@countryComp" CountryOrigin="@countryCompTwo" date="@dateOnlyLol" ResourceType="Water"></ComparisonComponent>
