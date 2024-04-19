@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "API.csproj", "{FF1B4
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApi", "..\TestApi\TestApi.csproj", "{8BBFA4C4-2B5F-4622-B8E5-0E46038C72E8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSVReader", "CSVReader\CSVReader.csproj", "{8F38F402-50D7-4706-B831-CED5C0AFCBC2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{8BBFA4C4-2B5F-4622-B8E5-0E46038C72E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8BBFA4C4-2B5F-4622-B8E5-0E46038C72E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8BBFA4C4-2B5F-4622-B8E5-0E46038C72E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F38F402-50D7-4706-B831-CED5C0AFCBC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F38F402-50D7-4706-B831-CED5C0AFCBC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F38F402-50D7-4706-B831-CED5C0AFCBC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F38F402-50D7-4706-B831-CED5C0AFCBC2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

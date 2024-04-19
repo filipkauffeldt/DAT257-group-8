@@ -34,7 +34,10 @@ namespace API.Model
         public Country? GetCountryOfTheDay()
         {
             // TODO: Implement logic to get country of the day
-            return _dbContext.Countries.FirstOrDefault();
+            return _dbContext.Countries
+                .Include (c => c.Data)
+                .ThenInclude(d => d.Points)
+                .FirstOrDefault();
         }
 
         public void AddCountry(Country country)

@@ -27,13 +27,12 @@ namespace Client.Components
         };
         private Country countryCompTwo = new Country()
         {
-            Name = "BOgusland",
+            Name = "Bogusland",
             Code = "BO",
             Data = [new Data() { Name = "Water", Unit = "L", Points = [new DataPoint() { Date = new DateOnly(2023, 1, 1), Value = 200 }] }, new Data() { Name = "Electricity", Unit = "W", Points = [new DataPoint() { Date = new DateOnly(2023, 1, 1), Value = 30 }] }]
         };
         DateOnly dateOnlyLol = new DateOnly(2023, 1, 1);
-        // Dummy labels
-        private readonly string[] dataLabels = { "Water", "Electricity", "CO2" };
+       
 
         protected override async Task OnInitializedAsync()
         {
