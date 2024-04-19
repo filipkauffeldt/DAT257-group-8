@@ -2,8 +2,8 @@
 @inject API.IApiHandler apiHandler;
 
 <div class="rz-p-sm-12 rz-text-align-center">
-    <RadzenLabel Text="Select Data" Component="DropDownMultipleChips" Style="margin-right: 8px; vertical-align: middle;" Visible=true></RadzenLabel>
-    @if(data.Count() == 0)
+    <RadzenLabel Text="Filter Data" Component="DropDownMultipleChips" Style="margin-right: 8px; vertical-align: middle;" Visible=true></RadzenLabel>
+    @if(data.Count() == 0 || data == null)
     {
         <RadzenDropDown TValue=string
                         Data=null
@@ -13,12 +13,11 @@
                         Multiple=true
                         AllowClear=true
                         Placeholder="Loading data..."
-                        Chips=false>
+                        Chips=true>
         </RadzenDropDown>
     }
     else
     {
-        <p>Should display data @data</p>
         <RadzenDropDown 
                         TValue="string"
                         Data=@data
@@ -27,7 +26,7 @@
                         Multiple=true
                         AllowClear=false
                         Placeholder="Select data"
-                        Chips=false>
+                        Chips=true>
         </RadzenDropDown>
     }
 </div>
