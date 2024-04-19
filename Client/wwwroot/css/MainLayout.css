@@ -37,3 +37,38 @@
     margin-bottom: 30px;
 }
 
+/* Navigation settings */
+.nav_links {
+    list-style-type: none;
+    margin: 0;
+    padding: 20px 20px 0 0;
+    text-align: 1fr;
+}
+
+.nav_links li {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.nav_links li:last-child {
+    margin-right: 0;
+}
+
+.nav_links li a {
+    text-decoration: none;
+    color: #000;
+    transition: color 0.3s, border-bottom 0.3s;
+    font-size: 25px;
+    padding: 5px 10px 10px;
+    border-bottom: 2px solid transparent;
+}
+
+.nav_links li a:hover {
+    border-bottom: 2px solid #e14177;
+    color: navy; 
+}
+
+.nav_links li a:active {
+    color: #e14177
+}
+
