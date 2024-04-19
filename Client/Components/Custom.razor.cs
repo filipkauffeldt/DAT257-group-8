@@ -4,81 +4,81 @@ using System.Runtime.InteropServices;
 using API;
 using Client.API;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using Radzen.Blazor;
-
 
 namespace Client.Components
 {
     public partial class Custom
     {
-        private List<string> availableCountries = new List<string>() { "SE", "NO", "DK"};
+        [Inject]
+        private HttpClient httpClient { get; set; }
 
-        private string selectedHome = "SE";
-        private string selectedOther = "NO";
+        [Inject]
+        private IApiHandler apiHandler { get; set; }
 
-        private Country homeCountry = new Country()
-        {
-            Name = "Sweden",
-            Code = "SE",
-            Data = [new Data() { Name = "Water", Unit = "L", Points = [new DataPoint() { Date = new DateOnly(2023, 1, 1), Value = 100 }] }]
-        };
+        private string selectedHome = "";
 
-        private Country otherCountry = new Country()
-        {
-            Name = "Norway",
-            Code = "NO",
-            Data = [new Data() { Name = "Water", Unit = "L", Points = [new DataPoint() { Date = new DateOnly(2023, 1, 1), Value = 200 }] }]
-        };
+        private string selectedOther = "";
 
-        private Dictionary<String, Country> countries = new Dictionary<String, Country>()
-        {
-            {"SE", new Country()
-            {
-                Name = "Sweden",
-                Code = "SE",
-                Data = [new Data() { Name = "Water", Unit = "L", Points = [new DataPoint() { Date = new DateOnly(2023, 1, 1), Value = 100 }] }]
-            }
-            },
-            {"NO", new Country()
-            {
-                Name = "Norway",
-                Code = "NO",
-                Data = [new Data() { Name = "Water", Unit = "L", Points = [new DataPoint() { Date = new DateOnly(2023, 1, 1), Value = 200 }] }]
-            }
-            },
-            {"DK", new Country()
-            {
-                Name = "Denmark",
-                Code = "DK",
-                Data = [new Data() { Name = "Water", Unit = "L", Points = [new DataPoint() { Date = new DateOnly(2023, 1, 1), Value = 300 }] }]
-            }
-            }
-        };
+        private Country countryComp { get; set; }
+        
+        private Country countryCompTwo { get; set; }
 
-        DateOnly dateOnlyLol = new DateOnly(2023, 1, 1);
-        // Dummy labels
-        private readonly string[] dataLabels = { "Water", "Electricity", "CO2" };
+        private IList<string> availableCountries = new List<string>() {"SWE", "BGR", "NOR", "DNK", "FIN", "ISL"};
+        
+        DateOnly date = new DateOnly(2022, 1, 1);
+        private IList<string> dataMetrics = new List<string>();
 
         protected override async Task OnInitializedAsync()
         {
-            //otherCountry = await apiHandler.FetchCountryOfTheDay(httpClient);
-            //homeCountry = await apiHandler.FetchCountry("swe", httpClient);
+            countryComp = await apiHandler.FetchCountryByYear(httpClient, "SWE", date); // Sweden
+            countryCompTwo = await apiHandler.FetchCountryByYear(httpClient, "BGR", date); // Bulgaria
+            selectedHome = countryComp.Code;
+            selectedOther = countryCompTwo.Code;
+            dataMetrics = GetValidMetrics();
         }
 
-        private async Task UpdateHomeCountry(string code)
+        private IList<string> GetValidMetrics()
         {
-            //homeCountry = await apiHandler.FetchCountry(selectedHome.ToLower(), httpClient);
-            homeCountry = countries[code];
+            if (countryComp == null || countryComp.Data == null ||
+                countryCompTwo == null || countryCompTwo.Data == null) {
+                return new List<string>();
+            }
+
+            var validMetrics = new List<string>();
+            foreach (var metric in countryComp.Data.Select(d => d.Name).ToList())
+            {
+                var countryCompDataExists = countryComp.Data?.Any(d => d.Name == metric && d.Points.Any()) ?? false;
+                var countryCompTwoDataExists = countryCompTwo.Data?.Any(d => d.Name == metric && d.Points.Any()) ?? false;
+
+                if (countryCompDataExists && countryCompTwoDataExists)
+                {
+                    validMetrics.Add(metric);
+                }
+            }
+
+            return validMetrics;
+        }
+
+        private async void UpdateHomeCountry(string code)
+        {
+            selectedHome = code;
+            countryComp = await apiHandler.FetchCountryByYear(httpClient, code, date);
+            dataMetrics = GetValidMetrics();
             StateHasChanged();
         }
 
-        private async Task UpdateOtherCountry(string code)
+        private async void UpdateOtherCountry(string code)
         {
-            //homeCountry = await apiHandler.FetchCountry(selectedHome.ToLower(), httpClient);
-            otherCountry = countries[code];
+            selectedOther = code;
+            countryCompTwo = await apiHandler.FetchCountryByYear(httpClient, code, date);
+            dataMetrics = GetValidMetrics();
             StateHasChanged();
+        }
+
+        private static string FormatLabel(string label)
+        {
+            return $"{label.Replace(" ", "-")}-statistic";
         }
     }
 }
-    
+
