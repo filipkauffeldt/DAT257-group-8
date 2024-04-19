@@ -1,3 +1,11 @@
+:root {
+    --main-bg-color: #e8eef1;
+    --accent-color: #e14177;
+    --main-dark-blue: #1E3D58;
+    --lighter-blue: #057dcd;
+    --lightest-blue: #43b0f1;
+}
+
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }

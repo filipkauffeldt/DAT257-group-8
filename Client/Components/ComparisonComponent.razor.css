@@ -1,22 +1,10 @@
 ﻿.main {
-    display:flex;
-    align-content: center;
+    display: flex;
+    align-content: flex-end;
     flex-direction: column;
-    justify-content:space-evenly;
+    justify-content: space-evenly;
     padding: 20px;
     margin: 20px;
-    background-color: whitesmoke;
-    border-radius: 20px;
-    border: 2px solid gray;
-    max-width: 30rem;
-}
-.OriginCountry {
-    width: 10rem;
-    background-color: rgb(189, 189, 55);
-}
-
-.ComparisonCountry {
-    background-color: rebeccapurple;
 }
 
 .Country {

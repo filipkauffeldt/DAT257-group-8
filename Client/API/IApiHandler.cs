@@ -10,5 +10,7 @@ namespace Client.API
         Task<Country> FetchCountry(string iso, HttpClient httpClient);
 
         Task<IEnumerable<Country>> FetchAllCountries(HttpClient httpClient);
+
+        Task<Country> FetchCountryByYear(HttpClient httpClient, string code, DateOnly year);
     }
 }
