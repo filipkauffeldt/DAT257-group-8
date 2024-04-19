@@ -1,14 +1,30 @@
 ﻿@page "/dashboard"
 
-@inject HttpClient httpClient
-@inject API.IApiHandler apiHandler;
+
 
 <div class="dash-board">
-    <nav class="table-of-contents">
-        <h3>Statistics</h3>
-    </nav>
-    <DataFilterer></DataFilterer>
-    <div class="card-container">
-        <ComparisonComponent CountryComparison="@countryComp" CountryOrigin="@countryCompTwo" date="@dateOnlyLol" ResourceType="Water"></ComparisonComponent>
-    </div>
+    @if (dataMetrics.Count() == 0)
+    {
+        <p>Loading...</p>
+    }
+    else
+    {
+        <nav class="table-of-contents">
+            <h3>Statistics</h3>
+            <ul>
+                @foreach (var metric in dataMetrics)
+                {
+                    <li><a href="#@FormatLabel(metric)">@metric</a></li>
+                }
+            </ul>
+        </nav>
+        <div class="card-container">
+            @foreach (var metric in dataMetrics)
+            {
+                <div id="@FormatLabel(metric)" class="data-card">
+                    <ComparisonComponent CountryComparison="@countryComp" CountryOrigin="@countryCompTwo" date="@date" ResourceType="@metric"></ComparisonComponent>
+                </div>
+            }
+        </div>
+    }
 </div>
