@@ -1,35 +1,51 @@
 ﻿@page "/custom"
 
-@inject HttpClient httpClient
-@inject API.IApiHandler apiHandler;
-
 <div class="custom">
     <nav class="table-of-contents">
         <h3>Statistics</h3>
     </nav>
-    <div class="content">
-        <h1>Custom</h1>
-    </div>
 
-    <menu class="menu-row">
-        <span>Compare</span>
-        <InputSelect @bind-Value="selectedHome" @oninput="((e) => UpdateHomeCountry((string)e.Value))" class="drop-down">
-            @foreach (var country in availableCountries)
-            {
-                <option value="@country">@country</option>
-            }
-        </InputSelect>
-        <span>with</span>
-        <InputSelect @bind-Value="selectedOther" @oninput="((e) => UpdateOtherCountry((string)e.Value))" class="drop-down">
+    @if (dataMetrics.Count() == 0)
+    {
+        <p>Loading...</p>
+    }
+    else
+    {
+        <nav class="table-of-contents">
+            <h3>Statistics</h3>
+            <ul>
+                @foreach (var metric in dataMetrics)
+                {
+                    <li><a href="#@FormatLabel(metric)">@metric</a></li>
+                }
+            </ul>
+        </nav>
+
+        <menu class="menu-row">
+            <span>Compare</span>
+            <InputSelect @bind-Value="selectedHome" @oninput="((e) => UpdateHomeCountry((string)e.Value))" class="drop-down">
                 @foreach (var country in availableCountries)
                 {
                     <option value="@country">@country</option>
                 }
-        </InputSelect>
-    </menu>
-    
-    <div class="card-container">
-        <ComparisonComponent @key="@($"{homeCountry}-{otherCountry}")" CountryComparison="@otherCountry" CountryOrigin="@homeCountry" date="@dateOnlyLol" ResourceType="Water"></ComparisonComponent>
-    </div>
+            </InputSelect>
+            <span>with</span>
+            <InputSelect @bind-Value="selectedOther" @oninput="((e) => UpdateOtherCountry((string)e.Value))" class="drop-down">
+                    @foreach (var country in availableCountries)
+                    {
+                        <option value="@country">@country</option>
+                    }
+            </InputSelect>
+        </menu>
+
+        <div class="card-container">
+            @foreach (var metric in dataMetrics)
+            {
+                <div id="@FormatLabel(metric)" class="data-card">
+                    <ComparisonComponent CountryComparison="@countryComp" CountryOrigin="@countryCompTwo" date="@date" ResourceType="@metric"></ComparisonComponent>
+                </div>
+            }
+        </div>
+    }
 </div>
 
