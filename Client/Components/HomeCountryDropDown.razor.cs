@@ -15,7 +15,7 @@ namespace Client.Components
         [Parameter]
         public EventCallback<String> CountryChanged { get; set; }
 
-        private string? HomeCountry;
+        private string? HomeCountry = "Choose your home country";
 
 
         protected override async Task OnInitializedAsync()

@@ -16,6 +16,8 @@ namespace Client.Components
         public string test;
         private Country? countryOfTheDay;
         private HomeCountryDropDown dropDown;
+        private ComparisonComponent comparisonComponent;
+        //private List<ComparisonComponent> comparisonComponents;
         private List<String> CountryNames = new List<string> { "Water", "Electricity", "Grub"};
         private List<Country> comparedCountries = new List<Country>();
         private Country? countryOrigin { get; set; }
@@ -78,10 +80,15 @@ namespace Client.Components
                 {
                     Name = "Norway",
                     Code = "no",
-                    Data = [new Data() { Name = "Water", Unit = "L", Points = [new DataPoint() { Date = new DateOnly(2023, 1, 1), Value = 31 }] }, new Data() { Name = "Electricity", Unit = "W", Points = [new DataPoint() { Date = new DateOnly(2023, 1, 1), Value = 22 }] }]
+                    Data = [new Data() { Name = "Water", Unit = "L", Points = [new DataPoint() { Date = new DateOnly(2023, 1, 1), Value = 301 }] }, new Data() { Name = "Electricity", Unit = "W", Points = [new DataPoint() { Date = new DateOnly(2023, 1, 1), Value = 22 }] }]
                 };
             }
             StateHasChanged();
+            comparisonComponent.LoadValues();
+            /*foreach (var comparisonComponent in comparisonComponents)
+            {
+                comparisonComponent.LoadValues();
+            }*/
         }
     }
 }

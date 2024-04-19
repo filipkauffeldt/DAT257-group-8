@@ -45,7 +45,7 @@ namespace Client.Components
             LoadValues();
 
         }
-        private void LoadValues()
+        public void LoadValues()
         {
             var resource1 = GetCountryData(CountryOrigin);  
             var resource2 = GetCountryData(CountryComparison);
