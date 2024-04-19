@@ -3,30 +3,24 @@
 
 <div class="rz-p-sm-12 rz-text-align-center">
     <RadzenLabel Text="Filter Data" Component="DropDownMultipleChips" Style="margin-right: 8px; vertical-align: middle;" Visible=true></RadzenLabel>
-    @if(data.Count() == 0 || data == null)
+    @if(Data.Count() == 0 || Data == null)
     {
         <RadzenDropDown TValue=string
                         Data=null
-                        TextProperty="."
-                        ValueProperty="."
                         Name="DropDownMultiple"
-                        Multiple=true
-                        AllowClear=true
-                        Placeholder="Loading data..."
-                        Chips=true>
+                        Placeholder="Loading data...">
         </RadzenDropDown>
     }
     else
     {
         <RadzenDropDown 
-                        TValue="string"
-                        Data=@data
-                        TextProperty="Name"
+                        @bind-Value=@values
+                        Data=@Data
                         Name="DropDownMultiple"
                         Multiple=true
-                        AllowClear=false
+                        AllowClear=true
                         Placeholder="Select data"
-                        Chips=true>
+                        Chips=false>
         </RadzenDropDown>
     }
 </div>

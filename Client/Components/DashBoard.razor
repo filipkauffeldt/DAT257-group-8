@@ -18,6 +18,9 @@
                 }
             </ul>
         </nav>
+        <div class="data-filter">
+            <DataFilterer Data="@dataMetrics"></DataFilterer>
+        </div>
         <div class="card-container">
             @foreach (var metric in dataMetrics)
             {
