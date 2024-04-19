@@ -18,13 +18,23 @@
                 }
             </ul>
         </nav>
-        <div class="card-container">
+        <div class="grid-container">
             @foreach (var metric in dataMetrics)
             {
-                <div id="@FormatLabel(metric)" class="data-card">
+                <div id="@FormatLabel(metric)" class="grid-item">
                     <ComparisonComponent CountryComparison="@countryComp" CountryOrigin="@countryCompTwo" date="@date" ResourceType="@metric"></ComparisonComponent>
                 </div>
             }
+
+            @* <div class="grid-container">
+            <div class="grid-item">Water Info Grid</div>
+            <div class="grid-item">Food Info Grid</div>
+            <div class="grid-item">Energy Info Grid</div>
+            <div class="grid-item">Gas Emissions Info Grid</div>
+            <div class="grid-item">Other Features</div>
+            <div class="grid-item">Other Features</div>
+            </div> *@
+
         </div>
     }
 </div>
