@@ -3,7 +3,7 @@
 
 <div class="rz-p-sm-12 rz-text-align-center">
     <RadzenLabel Text="Filter Data" Component="DropDownMultipleChips" Style="margin-right: 8px; vertical-align: middle;" Visible=true></RadzenLabel>
-    @if(Data.Count() == 0 || Data == null)
+    @if(Data == null)
     {
         <RadzenDropDown TValue=string
                         Data=null
@@ -13,12 +13,11 @@
     }
     else
     {
-        <RadzenDropDown 
-                        @bind-Value=@_values
+        <RadzenDropDown @bind-Value=@_values
                         Data=@_data
                         Name="DropDownMultiple"
                         Multiple=true
-                        AllowClear=true
+                        AllowClear=false
                         Placeholder="Select data"
                         Chips=false
                         Change="@((args) => OnValueChanged((IEnumerable<string>)args))">
