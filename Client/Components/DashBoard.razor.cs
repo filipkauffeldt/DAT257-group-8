@@ -59,6 +59,8 @@ namespace Client.Components
         private void HandleFilterChange(IEnumerable<string> selectedValues)
         {
             dataMetrics = selectedValues.ToList();
+
+            // Makes sure that when you select unselected values, they end up in the same order as before
             dataMetrics = dataMetrics.OrderBy(d => GetValidMetrics().IndexOf(d)).ToList();
         }
     }
