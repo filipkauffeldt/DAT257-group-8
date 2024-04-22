@@ -14,12 +14,30 @@ namespace Client.Components
         [Parameter]
         public required IEnumerable<string> Data { get; set; }
 
-        private IList<string> values;
+        [Parameter]
+        public EventCallback<IEnumerable<string>> OnChange { get; set; }
+
+        private IEnumerable<string> _data;
+
+        private bool _initialized = false;
+
+        private IList<string> _values;
 
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
-            values = Data.ToList();
+            if (!_initialized)
+            {
+                _values = Data.ToList();
+                _data = Data;
+                _initialized = true;
+            }
         }
+
+        private async Task OnValueChanged(IEnumerable<string> selectedValues)
+        {
+            await OnChange.InvokeAsync(selectedValues);
+        }
+
     }
 }

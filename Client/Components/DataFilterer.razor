@@ -14,13 +14,14 @@
     else
     {
         <RadzenDropDown 
-                        @bind-Value=@values
-                        Data=@Data
+                        @bind-Value=@_values
+                        Data=@_data
                         Name="DropDownMultiple"
                         Multiple=true
                         AllowClear=true
                         Placeholder="Select data"
-                        Chips=false>
+                        Chips=false
+                        Change="@((args) => OnValueChanged((IEnumerable<string>)_values))">
         </RadzenDropDown>
     }
 </div>

@@ -55,5 +55,10 @@ namespace Client.Components
         {
             return $"{label.Replace(" ", "-")}-statistic";
         }
+
+        private void HandleFilterChange(IEnumerable<string> selectedValues)
+        {
+            dataMetrics = selectedValues.ToList();
+        }
     }
 }
