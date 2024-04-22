@@ -17,9 +17,10 @@
                         Data=@_data
                         Name="DropDownMultiple"
                         Multiple=true
-                        AllowClear=false
+                        AllowClear=true
                         Placeholder="Select data"
                         Chips=false
+                        MaxSelectedLabels="1"
                         Change="@((args) => OnValueChanged((IEnumerable<string>)args))">
         </RadzenDropDown>
     }
