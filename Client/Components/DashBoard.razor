@@ -21,10 +21,10 @@
         <div class="data-filter">
             <DataFilterer Data="@dataMetrics" OnChange="HandleFilterChange"></DataFilterer>
         </div>
-        <div class="card-container">
+        <div class="grid-container">
             @foreach (var metric in dataMetrics)
             {
-                <div id="@FormatLabel(metric)" class="data-card">
+                <div id="@FormatLabel(metric)" class="grid-item">
                     <ComparisonComponent CountryComparison="@countryComp" CountryOrigin="@countryCompTwo" date="@date" ResourceType="@metric"></ComparisonComponent>
                 </div>
             }
