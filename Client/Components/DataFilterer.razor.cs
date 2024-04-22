@@ -16,15 +16,10 @@ namespace Client.Components
 
         private IList<string> values;
 
-
-        //[Parameter]
-        //public required Country Country { get; set; }
-
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
             values = Data.ToList();
         }
-
     }
 }
