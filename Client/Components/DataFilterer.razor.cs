@@ -25,5 +25,6 @@ namespace Client.Components
             await base.OnInitializedAsync();
             values = Data.ToList();
         }
+
     }
 }
