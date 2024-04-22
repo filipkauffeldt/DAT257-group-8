@@ -11,7 +11,6 @@ namespace Client.API
     public class ApiRequestHandler : IApiHandler
     {
         private string apiUrl = "https://localhost:7262";
-        private string IPAddress { get; set; }
 
         public async Task<Country> FetchCountryOfTheDay(HttpClient httpClient)
         {
@@ -66,25 +65,6 @@ namespace Client.API
                 throw new Exception($"Api call failed, {e}");
             }
         }
-
-        //private async Task<string> GetIPAsync(HttpClient httpClient)
-        //{
-        //    if (IPAddress != null)
-        //    {
-        //        return IPAddress;
-        //    }
-        //    var apiAddress = await httpClient.GetStringAsync("https://api.ipify.org");
-        //    if (apiAddress != null)
-        //    {
-        //        IPAddress = apiAddress;
-        //        return IPAddress;
-        //    }
-        //    else
-        //    {
-        //        throw new Exception("Failed to get IP address");
-        //    }
-        //}
-
         public async Task<Country> FetchHomeCountry(HttpClient httpClient)
         {
             var geoLocator = new GeoLocatorHandler();
