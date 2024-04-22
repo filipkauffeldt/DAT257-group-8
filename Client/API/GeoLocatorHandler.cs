@@ -9,22 +9,9 @@ namespace Client.API
         {
             try
             {
-                var ip = await GetIPAddressAsync(httpClient);
+                var ip = await ApiGlobal.GetClientIPAsync(httpClient);
                 var iso = await httpClient.GetStringAsync($"{apiUrl}/{ip}/country_code_iso3/");
                 return iso;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw new Exception($"Api call failed, {e}");
-            }
-        }
-
-        private async Task<string> GetIPAddressAsync(HttpClient httpClient)
-        {
-            try
-            {
-                return await httpClient.GetStringAsync("https://api.ipify.org/");
             }
             catch (Exception e)
             {
