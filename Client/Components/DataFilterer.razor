@@ -21,7 +21,7 @@
                         AllowClear=true
                         Placeholder="Select data"
                         Chips=false
-                        Change="@((args) => OnValueChanged((IEnumerable<string>)_values))">
+                        Change="@((args) => OnValueChanged((IEnumerable<string>)args))">
         </RadzenDropDown>
     }
 </div>

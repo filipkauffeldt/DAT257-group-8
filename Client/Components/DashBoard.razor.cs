@@ -59,6 +59,7 @@ namespace Client.Components
         private void HandleFilterChange(IEnumerable<string> selectedValues)
         {
             dataMetrics = selectedValues.ToList();
+            dataMetrics = dataMetrics.OrderBy(d => GetValidMetrics().IndexOf(d)).ToList();
         }
     }
 }
