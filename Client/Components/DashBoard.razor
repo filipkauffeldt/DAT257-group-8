@@ -9,6 +9,9 @@
     }
     else
     {
+        <div class="data-filter">
+            <DataFilterer Data="@dataMetrics" OnChange="HandleFilterChange"></DataFilterer>
+        </div>
         <nav class="table-of-contents">
             <h3>Statistics</h3>
             <ul>
@@ -18,9 +21,6 @@
                 }
             </ul>
         </nav>
-        <div class="data-filter">
-            <DataFilterer Data="@dataMetrics" OnChange="HandleFilterChange"></DataFilterer>
-        </div>
         <div class="grid-container">
             @foreach (var metric in dataMetrics)
             {
