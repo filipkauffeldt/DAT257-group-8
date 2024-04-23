@@ -2,6 +2,7 @@ using API.Contracts;
 using API.Model;
 using API.Model.ObjectModels;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
 
 namespace API.Model
 {
@@ -36,9 +37,19 @@ namespace API.Model
 
         public Country? GetCountryOfTheDay()
         {
+            DateTime today = DateTime.Today;
+            string stringToBeHashed = today.Month.ToString() + today.Day.ToString();
+            int hashed = stringToBeHashed.GetHashCode();
+
+
+            List<Country> Countries = _dbContext.Countries.ToList();
+            int AmountOfCountries = Countries.Count();
+            string CountryCode = Countries[hashed % AmountOfCountries].Code;
+            
             // TODO: Implement logic to get country of the day
             return _dbContext.Countries
-                .Include (c => c.Data)
+                .Where(c => c.Code.Equals(CountryCode))
+                .Include(c => c.Data)
                 .ThenInclude(d => d.Points)
                 .FirstOrDefault();
         }
