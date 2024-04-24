@@ -3,7 +3,15 @@
 
 
 <div class="dash-board">
-    @if (_country == null || _countryToCompareWith == null)
+    
+    @if (_homeCountryError)
+    {
+        <div>
+            <p>Home country not found</p>
+            @* Add manual country selection component *@
+        </div>
+    }
+    else if (_country == null || _countryToCompareWith == null)
     {
         <p>Loading...</p>
     }
@@ -25,7 +33,6 @@
         {
             <div>
                 <p>No data available for @_country.Name</p>
-                @* Add manual country selection component *@
             </div>
         }
         else
