@@ -3,7 +3,7 @@
 
 
 <div class="dash-board">
-    @if (country == null || countryToCompareWith == null)
+    @if (_country == null || _countryToCompareWith == null)
     {
         <p>Loading...</p>
     }
@@ -25,7 +25,7 @@
             @foreach (var metric in _dataMetrics)
             {
                 <div id="@FormatLabel(metric)" class="grid-item">
-                    <ComparisonComponent CountryComparison="@country" CountryOrigin="@countryToCompareWith" date="@date" ResourceType="@metric"></ComparisonComponent>
+                    <ComparisonComponent CountryComparison="@_country" CountryOrigin="@_countryToCompareWith" date="@_date" ResourceType="@metric"></ComparisonComponent>
                 </div>
             }
         </div>

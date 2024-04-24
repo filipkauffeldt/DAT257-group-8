@@ -15,34 +15,34 @@ namespace Client.Components
         [Inject]
         private IApiHandler apiHandler { get; set; }
 
-        private Country country { get; set; }
+        private Country _country;
         
-        private Country countryToCompareWith { get; set; }
+        private Country _countryToCompareWith { get; set; }
         
-        DateOnly date = new DateOnly(2022, 1, 1);
+        private DateOnly _date = new DateOnly(2022, 1, 1);
         private IList<string> _dataMetrics = new List<string>();
         private IList<string> _availableMetrics = new List<string>();
 
         protected override async Task OnInitializedAsync()
         {
-            country = await apiHandler.FetchCountryByYear(httpClient, "SWE", date); // Sweden
-            countryToCompareWith = await apiHandler.FetchCountryByYear(httpClient, "BGR", date); // Bulgaria
+            _country = await apiHandler.FetchCountryByYear(httpClient, "SWE", _date); // Sweden
+            _countryToCompareWith = await apiHandler.FetchCountryByYear(httpClient, "BGR", _date); // Bulgaria
             _dataMetrics = GetValidMetrics();
             _availableMetrics = _dataMetrics;
         }
 
         private IList<string> GetValidMetrics()
         {
-            if (country == null || country.Data == null ||
-                countryToCompareWith == null || countryToCompareWith.Data == null) {
+            if (_country == null || _country.Data == null ||
+                _countryToCompareWith == null || _countryToCompareWith.Data == null) {
                 return new List<string>();
             }
 
             var validMetrics = new List<string>();
-            foreach (var metric in country.Data.Select(d => d.Name).ToList())
+            foreach (var metric in _country.Data.Select(d => d.Name).ToList())
             {
-                var countryCompDataExists = country.Data?.Any(d => d.Name == metric && d.Points.Any()) ?? false;
-                var countryCompTwoDataExists = countryToCompareWith.Data?.Any(d => d.Name == metric && d.Points.Any()) ?? false;
+                var countryCompDataExists = _country.Data?.Any(d => d.Name == metric && d.Points.Any()) ?? false;
+                var countryCompTwoDataExists = _countryToCompareWith.Data?.Any(d => d.Name == metric && d.Points.Any()) ?? false;
 
                 if (countryCompDataExists && countryCompTwoDataExists)
                 {
