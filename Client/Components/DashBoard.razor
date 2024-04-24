@@ -3,26 +3,29 @@
 
 
 <div class="dash-board">
-    @if (dataMetrics.Count() == 0)
+    @if (_country == null || _countryToCompareWith == null)
     {
         <p>Loading...</p>
     }
     else
     {
+        <div class="data-filter">
+            <DataFilterer Data="@_dataMetrics" OnChange="HandleFilterChange"></DataFilterer>
+        </div>
         <nav class="table-of-contents">
             <h3>Statistics</h3>
             <ul>
-                @foreach (var metric in dataMetrics)
+                @foreach (var metric in _dataMetrics)
                 {
                     <li><a href="#@FormatLabel(metric)">@metric</a></li>
                 }
             </ul>
         </nav>
-        <div class="card-container">
-            @foreach (var metric in dataMetrics)
+        <div class="grid-container">
+            @foreach (var metric in _dataMetrics)
             {
-                <div id="@FormatLabel(metric)" class="data-card">
-                    <ComparisonComponent CountryComparison="@countryComp" CountryOrigin="@countryCompTwo" date="@date" ResourceType="@metric"></ComparisonComponent>
+                <div id="@FormatLabel(metric)" class="grid-item">
+                    <ComparisonComponent CountryComparison="@_country" CountryOrigin="@_countryToCompareWith" date="@_date" ResourceType="@metric"></ComparisonComponent>
                 </div>
             }
         </div>
