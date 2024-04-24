@@ -1,6 +1,8 @@
-﻿using System.Net.Http.Json;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Net.Http.Json;
 using System.Reflection.Metadata.Ecma335;
 using System.Runtime.InteropServices;
+using System.Security.AccessControl;
 using API;
 using Client.API;
 using Microsoft.AspNetCore.Components;
@@ -12,47 +14,14 @@ namespace Client.Components
         public string test;
         private HomeCountryDropDown dropDown;
         private ComparisonComponent comparisonComponent;
+        private List<ComparisonComponent> comparisonComponents = new();
+        private List<string> countryNames;
 
-        private async void HomeCountryChange(string CountryCode)
-        {
-            //comparedCountries.RemoveAt(0);
-            //var homeCountry = await apiHandler.FetchCountry(Country, httpClient);
-            //comparedCountries.Insert(0, homeCountry);
-            //countryCompTwo = await apiHandler.FetchCountry(CountryCode, httpClient);
-            test = CountryCode;
-            if(CountryCode == "swe")
-            {
-                countryCompTwo = new Country()
-                {
-                    Name = "Sweden",
-                    Code = "swe",
-                    Data = [new Data() { Name = "Water", Unit = "L", Points = [new DataPoint() { Date = new DateOnly(2023, 1, 1), Value = 20 }] }, new Data() { Name = "Electricity", Unit = "W", Points = [new DataPoint() { Date = new DateOnly(2023, 1, 1), Value = 22 }] }]
-                };
-            }
-            else if(CountryCode == "den")
-            {
-                countryCompTwo = new Country()
-                {
-                    Name = "Denmark",
-                    Code = "den",
-                    Data = [new Data() { Name = "Water", Unit = "L", Points = [new DataPoint() { Date = new DateOnly(2023, 1, 1), Value = 15 }] }, new Data() { Name = "Electricity", Unit = "W", Points = [new DataPoint() { Date = new DateOnly(2023, 1, 1), Value = 22 }] }]
-                };
-            }
-            else if(CountryCode == "no")
-            {
-                countryCompTwo = new Country()
-                {
-                    Name = "Norway",
-                    Code = "no",
-                    Data = [new Data() { Name = "Water", Unit = "L", Points = [new DataPoint() { Date = new DateOnly(2023, 1, 1), Value = 301 }] }, new Data() { Name = "Electricity", Unit = "W", Points = [new DataPoint() { Date = new DateOnly(2023, 1, 1), Value = 22 }] }]
-                };
-            }
-            StateHasChanged();
-            comparisonComponent.LoadValues();
-            /*foreach (var comparisonComponent in comparisonComponents)
-            {
-                comparisonComponent.LoadValues();
-            }*/
+        private List<ComparisonComponent> _refs = new();
+        //public CompareAttribute Ref { set => _refs.Add(value); }
+        private Dictionary<string, ComparisonComponent> compComp = new Dictionary<string, ComparisonComponent>();
+        private Dictionary<string, string> countryCodeDict = new();
+
         [Inject]
         private HttpClient httpClient { get; set; }
 
@@ -60,17 +29,42 @@ namespace Client.Components
         private IApiHandler apiHandler { get; set; }
 
         private Country countryComp { get; set; }
-        
+
         private Country countryCompTwo { get; set; }
-        
+
         DateOnly date = new DateOnly(2022, 1, 1);
         private IList<string> dataMetrics = new List<string>();
+
+
+
 
         protected override async Task OnInitializedAsync()
         {
             countryComp = await apiHandler.FetchCountryByYear(httpClient, "SWE", date); // Sweden
             countryCompTwo = await apiHandler.FetchCountryByYear(httpClient, "BGR", date); // Bulgaria
             dataMetrics = GetValidMetrics();
+            var allCountries = await apiHandler.FetchAllCountries(httpClient);
+            foreach(Country country in allCountries)
+            {
+                countryCodeDict.Add(country.Name, country.Code);
+            }
+            var countryTest = await apiHandler.FetchCountryByYear(httpClient, "URY", date);
+            var DataTest = countryTest.Data.Where(d => d.Name == "el-coal").First();
+            test = DataTest.Points.Where(dp => dp.Date.Year == date.Year).FirstOrDefault().Value.ToString();
+            countryNames = countryCodeDict.Keys.ToList();
+        }
+
+
+        private async void HomeCountryChange(string CountryCode)
+        {
+            countryCompTwo = await apiHandler.FetchCountry(CountryCode, httpClient);
+
+            StateHasChanged();
+            foreach (var cC in compComp.Values)
+            {
+                cC.LoadValues();
+            }
+            StateHasChanged();
         }
 
         private IList<string> GetValidMetrics()

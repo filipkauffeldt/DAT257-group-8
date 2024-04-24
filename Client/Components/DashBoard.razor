@@ -5,7 +5,7 @@
 
 
 @*@test*@
-<HomeCountryDropDown @ref="dropDown" CountryChanged="HomeCountryChange" />
+<HomeCountryDropDown @ref="dropDown" CountryChanged="HomeCountryChange" CountryNames ="@countryNames" CountryCodeDict="@countryCodeDict"/>
 <div class="dash-board">
     @if (dataMetrics.Count() == 0)
     {
@@ -26,7 +26,7 @@
             @foreach (var metric in dataMetrics)
             {
                 <div id="@FormatLabel(metric)" class="data-card">
-                    <ComparisonComponent CountryComparison="@countryComp" CountryOrigin="@countryCompTwo" date="@date" ResourceType="@metric"></ComparisonComponent>
+                    <ComparisonComponent @ref="@compComp[metric]" CountryComparison="@countryComp" CountryOrigin="@countryCompTwo" date="@date" ResourceType="@metric"></ComparisonComponent>
                 </div>
             }
         </div>

@@ -4,13 +4,16 @@ namespace Client.Components
 {
     public partial class HomeCountryDropDown
     {
-        private List<String>? CountryNames { get; set; }
+        [Parameter]
+        public List<String> CountryNames { get; set; }
 
-        private Dictionary<string, string> CountryCodeDict =
+        /*private Dictionary<string, string> CountryCodeDict =
               new Dictionary<string, string>(){
-                                  {"Sweden", "swe"},
-                                  {"Norway", "no"},
-                                  {"Denmark", "den"} };
+                                  {"Sweden", "SWE"},
+                                  {"Norway", "NOR"},
+                                  {"Denmark", "DNK"} };*/
+        [Parameter]
+        public Dictionary<string, string> CountryCodeDict { get; set; }
 
         [Parameter]
         public EventCallback<String> CountryChanged { get; set; }
@@ -22,11 +25,13 @@ namespace Client.Components
         {
             await base.OnInitializedAsync();
 
-            CountryNames = new List<string> { "Sweden", "Norway", "Denmark" };
+            //CountryNames = CountryCodeDict.Keys.ToList();
+            //StateHasChanged();
         }
 
         private async Task HomeCountryChange()
         {
+            StateHasChanged();
             var HomeCountryCode = CountryCodeDict[HomeCountry];
             await CountryChanged.InvokeAsync(HomeCountryCode);
             StateHasChanged();
