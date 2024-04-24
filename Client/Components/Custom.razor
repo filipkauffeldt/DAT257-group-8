@@ -42,7 +42,7 @@
             @foreach (var metric in dataMetrics)
             {
                 <div id="@FormatLabel(metric)" class="data-card">
-                    <ComparisonComponent CountryComparison="@countryComp" CountryOrigin="@countryCompTwo" date="@date" ResourceType="@metric"></ComparisonComponent>
+                    <ComparisonComponent @key="@($"{countryComp}-{countryCompTwo}")" CountryComparison="@countryComp" CountryOrigin="@countryCompTwo" date="@date" ResourceType="@metric"></ComparisonComponent>
                 </div>
             }
         </div>
