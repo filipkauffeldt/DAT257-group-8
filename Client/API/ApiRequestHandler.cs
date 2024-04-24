@@ -9,7 +9,7 @@ namespace Client.API
 {
     public class ApiRequestHandler : IApiHandler
     {
-        private string apiUrl = "https://localhost:7262";
+        private string apiUrl = "http://localhost:5016";
 
         public async Task<Country> FetchCountryOfTheDay(HttpClient httpClient)
         {
@@ -52,11 +52,11 @@ namespace Client.API
             }
         }
 
-        public async Task<Country> FetchCountryByYear(HttpClient httpClient, string code, DateOnly year)
+        public async Task<Country> FetchCountryByYear(HttpClient httpClient, string code, DateOnly date)
         {
             try
             {
-                return await httpClient.GetFromJsonAsync<Country>($"{apiUrl}/Country/GetCountryDataForYear/{code}/{year}");
+                return await httpClient.GetFromJsonAsync<Country>($"{apiUrl}/Country/GetCountryDataForYear/{code}/{date.Year}-{date.Month}-{date.Day}");
             }
             catch(Exception e)
             {
