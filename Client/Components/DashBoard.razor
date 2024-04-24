@@ -21,13 +21,24 @@
                 }
             </ul>
         </nav>
-        <div class="grid-container">
-            @foreach (var metric in _dataMetrics)
-            {
-                <div id="@FormatLabel(metric)" class="grid-item">
-                    <ComparisonComponent CountryComparison="@_country" CountryOrigin="@_countryToCompareWith" date="@_date" ResourceType="@metric"></ComparisonComponent>
-                </div>
-            }
-        </div>
+        @if (_dataMetrics.Count == 0)
+        {
+            <div>
+                <p>No data available for @_country.Name</p>
+                @* Add manual country selection component *@
+            </div>
+        }
+        else
+        {
+            <div class="grid-container">
+                @foreach (var metric in _dataMetrics)
+                {
+                    <div id="@FormatLabel(metric)" class="grid-item">
+                        <ComparisonComponent CountryComparison="@_country" CountryOrigin="@_countryToCompareWith" date="@_date" ResourceType="@metric"></ComparisonComponent>
+                    </div>
+                }
+            </div>
+        }
+        
     }
 </div>
