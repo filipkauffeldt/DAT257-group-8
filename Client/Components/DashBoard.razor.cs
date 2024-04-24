@@ -16,8 +16,8 @@ namespace Client.Components
         private IApiHandler apiHandler { get; set; }
 
         private Country _country;
-        
-        private Country _countryToCompareWith { get; set; }
+
+        private Country _countryToCompareWith;
         
         private DateOnly _date = new DateOnly(2022, 1, 1);
         private IList<string> _dataMetrics = new List<string>();
