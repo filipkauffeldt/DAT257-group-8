@@ -20,15 +20,15 @@ namespace Client.Components
         private Country countryCompTwo { get; set; }
         
         DateOnly date = new DateOnly(2022, 1, 1);
-        private IList<string> dataMetrics = new List<string>();
-        private IList<string> availableMetrics = new List<string>();
+        private IList<string> _dataMetrics = new List<string>();
+        private IList<string> _availableMetrics = new List<string>();
 
         protected override async Task OnInitializedAsync()
         {
             countryComp = await apiHandler.FetchCountryByYear(httpClient, "SWE", date); // Sweden
             countryCompTwo = await apiHandler.FetchCountryByYear(httpClient, "BGR", date); // Bulgaria
-            dataMetrics = GetValidMetrics();
-            availableMetrics = dataMetrics;
+            _dataMetrics = GetValidMetrics();
+            _availableMetrics = _dataMetrics;
         }
 
         private IList<string> GetValidMetrics()
@@ -60,10 +60,10 @@ namespace Client.Components
 
         private void HandleFilterChange(IEnumerable<string> selectedValues)
         {
-            dataMetrics = selectedValues.ToList();
+            _dataMetrics = selectedValues.ToList();
 
             // Makes sure that when you select unselected values, they end up in the same order as before
-            dataMetrics = dataMetrics.OrderBy(d => availableMetrics.IndexOf(d)).ToList();
+            _dataMetrics = _dataMetrics.OrderBy(d => _availableMetrics.IndexOf(d)).ToList();
         }
     }
 }
