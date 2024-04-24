@@ -1,4 +1,5 @@
 ﻿using API;
+using Microsoft.AspNetCore.Components;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Net;
@@ -11,6 +12,12 @@ namespace Client.API
     public class ApiRequestHandler : IApiHandler
     {
         private string apiUrl = "https://localhost:7262";
+        private readonly IGeoLocator geoLocator;
+
+        public ApiRequestHandler(IGeoLocator geoLocator)
+        {
+            this.geoLocator = geoLocator;
+        }
 
         public async Task<Country> FetchCountryOfTheDay(HttpClient httpClient)
         {
@@ -67,7 +74,6 @@ namespace Client.API
         }
         public async Task<Country> FetchHomeCountry(HttpClient httpClient)
         {
-            var geoLocator = new GeoLocatorHandler();
             var iso = await geoLocator.GetHomeISOAsync(httpClient);
             return await FetchCountry(iso, httpClient);
         }

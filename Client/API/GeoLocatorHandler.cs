@@ -1,8 +1,6 @@
-﻿using System.Net.Http.Json;
-
-namespace Client.API
+﻿namespace Client.API
 {
-    public class GeoLocatorHandler
+    public class GeoLocatorHandler : IGeoLocator
     {
         private readonly string apiUrl = "https://ipapi.co/";
         public async Task<string> GetHomeISOAsync(HttpClient httpClient)
