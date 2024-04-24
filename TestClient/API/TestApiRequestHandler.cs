@@ -2,11 +2,11 @@ using API;
 using Client.API;
 using System.Net.Http.Json;
 
-namespace TestClient
+namespace TestClient.API
 {
     public class TestApiRequestHandler
     {
-        private readonly ApiRequestHandler _apiHandler = new ApiRequestHandler();
+        private readonly ApiRequestHandler _apiHandler = new ApiRequestHandler(new GeoLocatorHandler());
         private readonly HttpClient _httpClient = new HttpClient();
         private readonly string _url = "https://localhost:7262";
 
