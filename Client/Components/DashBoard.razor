@@ -17,16 +17,24 @@
     }
     else
     {
-        <div class="data-filter">
-            <DataFilterer Data="@_dataMetrics" OnChange="HandleFilterChange"></DataFilterer>
+        <div class="country-of-the-day">
+            <h2>
+                The country of the day is @_country.Name
+            </h2>
         </div>
-        <nav class="table-of-contents">
-            <h3>Statistics</h3>
-            <ul>
-                @foreach (var metric in _dataMetrics)
-                {
-                    <li><a href="#@FormatLabel(metric)">@metric</a></li>
-                }
+        <div class="container"> 
+
+            <div class="header"> 
+                <div class="data-filter">
+                    <DataFilterer Data="@_dataMetrics" OnChange="HandleFilterChange"></DataFilterer>
+                </div>
+                <nav class="table-of-contents">
+                    <ul>
+                        @foreach (var metric in _dataMetrics)
+                        {
+                            <li><a href="#@FormatLabel(metric)">@metric</a></li>
+                        }
+                    
             </ul>
         </nav>
         @if (_dataMetrics.Count == 0)
@@ -47,5 +55,7 @@
             </div>
         }
         
+            </div>
+        </div>
     }
 </div>
