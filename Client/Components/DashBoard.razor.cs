@@ -11,7 +11,7 @@ namespace Client.Components
 {
     public partial class DashBoard
     {
-        public HomeCountryDropDown dropDown;
+        private HomeCountryDropDown dropDown;
         private Dictionary<string, ComparisonComponent> compComp = new();
         private Dictionary<string, string> countryCodeDict = new();
         private List<string> countryNames;
