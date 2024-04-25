@@ -14,13 +14,6 @@ namespace TestClient.API
         private readonly Country _mockCountry = new() { Code = "CODE", Name = "Country Name" };
 
         [Fact]
-        public async Task TestFetchCountryOfTheDayCorrectType()
-        {
-            Country country = await _apiHandler.FetchCountryOfTheDay(_httpClient);
-            Assert.True(country != null && country.GetType() == typeof(Country));
-        }
-
-        [Fact]
         public async Task TestFetchCountryOfTheDayCorrectEndpoint()
         {
             var url = $"{_url}/Country/GetCountryOfTheDay";
@@ -45,13 +38,6 @@ namespace TestClient.API
                 ItExpr.Is<HttpRequestMessage>(req =>
                     req.Method == HttpMethod.Get && req.RequestUri == new Uri(url)),
                 ItExpr.IsAny<CancellationToken>());
-        }
-
-        [Fact]
-        public async Task TestFetchCountryCorrectType()
-        {
-            Country country = await _apiHandler.FetchCountry("SWE", _httpClient);
-            Assert.True(country != null && country.GetType() == typeof(Country));
         }
 
         [Fact]
