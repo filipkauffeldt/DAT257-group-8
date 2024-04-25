@@ -64,5 +64,46 @@ namespace Client.API
                 throw new Exception($"Api call failed, {e}");
             }
         }
+
+        public async Task<IEnumerable<string>> FetchAllCountryNames(HttpClient httpClient)
+        {
+            try
+            {
+                return await httpClient.GetFromJsonAsync<IEnumerable<string>>($"{apiUrl}/Country/GetAllCountryNames");
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw new Exception($"Api call failed, {e}");
+            }
+        }
+
+        public async Task<IEnumerable<string>> FetchAllCountryCodes(HttpClient httpClient)
+        {
+            try
+            {
+                return await httpClient.GetFromJsonAsync<IEnumerable<string>>($"{apiUrl}/Country/GetAllCountryCodes");
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw new Exception($"Api call failed, {e}");
+            }
+        }
+        public async Task<IDictionary<string,string>> FetchAllCountryNamesDict(HttpClient httpClient)
+        {
+            try
+            {
+                return await httpClient.GetFromJsonAsync<IDictionary<string,string>>($"{apiUrl}/Country/GetAllCountryNamesDict");
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw new Exception($"Api call failed, {e}");
+            }
+        }
     }
 }
