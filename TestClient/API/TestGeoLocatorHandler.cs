@@ -13,7 +13,6 @@ namespace TestClient.API
     {
         private readonly IGeoLocator _geoLocator = new GeoLocatorHandler();
         private readonly string _apiUrl = "https://ipapi.co";
-        private string? _clientIp;
 
         [Fact]
         public async Task GetHomeISOAsync_CorrectEndpoint()
