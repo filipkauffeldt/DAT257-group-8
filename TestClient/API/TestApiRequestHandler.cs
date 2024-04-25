@@ -13,10 +13,7 @@ namespace TestClient.API
         private readonly string _url = "http://localhost:5016";
         private readonly Country _mockCountry = new() { Code = "CODE", Name = "Country Name" };
 
-        [Fact]
-        public async Task TestFetchCountryOfTheDayCorrectEndpoint()
-        {
-            var url = $"{_url}/Country/GetCountryOfTheDay";
+        private Mock<HttpMessageHandler> CreateMockMsgHandler(string url) {
             var mockMsgHandler = new Mock<HttpMessageHandler>();
             mockMsgHandler.Protected()
                 .Setup<Task<HttpResponseMessage>>(
@@ -28,7 +25,14 @@ namespace TestClient.API
                     StatusCode = System.Net.HttpStatusCode.OK,
                     Content = new StringContent(System.Text.Json.JsonSerializer.Serialize(_mockCountry))
                 });
+            return mockMsgHandler;
+        }
 
+        [Fact]
+        public async Task TestFetchCountryOfTheDayCorrectEndpoint()
+        {
+            var url = $"{_url}/Country/GetCountryOfTheDay";
+            var mockMsgHandler = CreateMockMsgHandler(url);
             var mockClient = new HttpClient(mockMsgHandler.Object);
             var mockResponse = await _apiHandler.FetchCountryOfTheDay(mockClient);
 
@@ -45,19 +49,7 @@ namespace TestClient.API
         {
             var code = "CODE";
             var url = $"{_url}/Country/GetCountry/{code}";
-
-            var mockMsgHandler = new Mock<HttpMessageHandler>();
-            mockMsgHandler.Protected()
-                .Setup<Task<HttpResponseMessage>>(
-                    "SendAsync",
-                    ItExpr.Is<HttpRequestMessage>(r => r.Method == HttpMethod.Get && r.RequestUri == new Uri(url)),
-                    ItExpr.IsAny<CancellationToken>())
-                .ReturnsAsync(new HttpResponseMessage
-                {
-                    StatusCode = System.Net.HttpStatusCode.OK,
-                    Content = new StringContent(System.Text.Json.JsonSerializer.Serialize(_mockCountry))
-                });
-
+            var mockMsgHandler = CreateMockMsgHandler(url);
             var mockClient = new HttpClient(mockMsgHandler.Object);
             var mockResponse = await _apiHandler.FetchCountry(code, mockClient);
 
@@ -75,19 +67,7 @@ namespace TestClient.API
             var code = "CODE";
             var date = new DateOnly(2020, 1, 1);
             var url = $"{_url}/Country/GetCountryDataForYear/{code}/{date.Year}-{date.Month}-{date.Day}";
-
-            var mockMsgHandler = new Mock<HttpMessageHandler>();
-            mockMsgHandler.Protected()
-                .Setup<Task<HttpResponseMessage>>(
-                    "SendAsync",
-                    ItExpr.Is<HttpRequestMessage>(r => r.Method == HttpMethod.Get && r.RequestUri == new Uri(url)),
-                    ItExpr.IsAny<CancellationToken>())
-                .ReturnsAsync(new HttpResponseMessage
-                {
-                    StatusCode = System.Net.HttpStatusCode.OK,
-                    Content = new StringContent(System.Text.Json.JsonSerializer.Serialize(_mockCountry))
-                });
-
+            var mockMsgHandler = CreateMockMsgHandler(url);
             var mockClient = new HttpClient(mockMsgHandler.Object);
             var mockResponse = await _apiHandler.FetchCountryByYear(mockClient, code, date);
 

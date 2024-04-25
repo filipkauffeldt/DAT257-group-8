@@ -14,11 +14,8 @@ namespace TestClient.API
         private readonly IGeoLocator _geoLocator = new GeoLocatorHandler();
         private readonly string _apiUrl = "https://ipapi.co";
 
-        [Fact]
-        public async Task GetHomeISOAsync_CorrectEndpoint()
+        private Mock<HttpMessageHandler> CreateMockMsgHandler(string url)
         {
-            var url = $"{_apiUrl}/country_code_iso3/";
-
             var mockMsgHandler = new Mock<HttpMessageHandler>();
             mockMsgHandler.Protected()
                 .Setup<Task<HttpResponseMessage>>(
@@ -28,9 +25,16 @@ namespace TestClient.API
                 .ReturnsAsync(new HttpResponseMessage
                 {
                     StatusCode = System.Net.HttpStatusCode.OK,
-                    Content = new StringContent("ISO")
+                    Content = new StringContent(System.Text.Json.JsonSerializer.Serialize("ISO"))
                 });
+            return mockMsgHandler;
+        }
 
+        [Fact]
+        public async Task GetHomeISOAsync_CorrectEndpoint()
+        {
+            var url = $"{_apiUrl}/country_code_iso3/";
+            var mockMsgHandler = CreateMockMsgHandler(url);
             var mockClient = new HttpClient(mockMsgHandler.Object);
             var mockResponse = await _geoLocator.GetUserISOAsync(mockClient);
 
