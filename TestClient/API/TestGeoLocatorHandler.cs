@@ -4,44 +4,43 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Client.API;
+using Moq;
+using Moq.Protected;
 
 namespace TestClient.API
 {
     public class TestGeoLocatorHandler
     {
-        private readonly IGeoLocator geoLocator = new GeoLocatorHandler();
-        private readonly HttpClient httpClient = new HttpClient();
-        private readonly string apiUrl = "https://ipapi.co";
+        private readonly IGeoLocator _geoLocator = new GeoLocatorHandler();
+        private readonly string _apiUrl = "https://ipapi.co";
         private string? _clientIp;
-        private string ClientIP
-        {
-            get
-            {
-                _clientIp ??= ApiGlobal.GetClientIPAsync(httpClient).Result;
-                return _clientIp;
-            }
-        }
-
-
-        [Fact]
-        public async Task GetHomeISOAsync_ReturnsHomeISO()
-        {
-            // Act
-            var result = await geoLocator.GetHomeISOAsync(httpClient);
-
-            // Assert
-            Assert.Equal("SWE", result);
-        }
 
         [Fact]
         public async Task GetHomeISOAsync_CorrectEndpoint()
         {
-            // Act
-            var result = await geoLocator.GetHomeISOAsync(httpClient);
-            var rawResult = await httpClient.GetStringAsync($"{apiUrl}/{ClientIP}/country_code_iso3/");
+            var url = $"{_apiUrl}/country_code_iso3/";
 
-            // Assert
-            Assert.Equal(rawResult, result);
+            var mockMsgHandler = new Mock<HttpMessageHandler>();
+            mockMsgHandler.Protected()
+                .Setup<Task<HttpResponseMessage>>(
+                    "SendAsync",
+                    ItExpr.Is<HttpRequestMessage>(r => r.Method == HttpMethod.Get && r.RequestUri == new Uri(url)),
+                    ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(new HttpResponseMessage
+                {
+                    StatusCode = System.Net.HttpStatusCode.OK,
+                    Content = new StringContent("ISO")
+                });
+
+            var mockClient = new HttpClient(mockMsgHandler.Object);
+            var mockResponse = await _geoLocator.GetUserISOAsync(mockClient);
+
+            mockMsgHandler.Protected().Verify(
+                "SendAsync",
+                Times.Once(),
+                ItExpr.Is<HttpRequestMessage>(req =>
+                    req.Method == HttpMethod.Get && req.RequestUri == new Uri(url)),
+                ItExpr.IsAny<CancellationToken>());
         }
     }
 }

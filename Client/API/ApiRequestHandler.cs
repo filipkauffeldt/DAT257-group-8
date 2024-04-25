@@ -98,7 +98,7 @@ namespace Client.API
 
         public async Task<Country> FetchHomeCountry(HttpClient httpClient)
         {
-            var iso = await _geoLocator.GetHomeISOAsync(httpClient);
+            var iso = await _geoLocator.GetUserISOAsync(httpClient);
             return await FetchCountry(iso, httpClient);
         }
     }

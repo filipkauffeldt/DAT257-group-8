@@ -2,6 +2,6 @@
 {
     public interface IGeoLocator
     {
-        Task<string> GetHomeISOAsync(HttpClient httpClient);
+        Task<string> GetUserISOAsync(HttpClient httpClient);
     }
 }

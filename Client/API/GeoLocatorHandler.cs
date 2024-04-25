@@ -2,13 +2,12 @@
 {
     public class GeoLocatorHandler : IGeoLocator
     {
-        private readonly string apiUrl = "https://ipapi.co/";
-        public async Task<string> GetHomeISOAsync(HttpClient httpClient)
+        private readonly string _apiUrl = "https://ipapi.co";
+        public async Task<string> GetUserISOAsync(HttpClient httpClient)
         {
             try
             {
-                var ip = await ApiGlobal.GetClientIPAsync(httpClient);
-                var iso = await httpClient.GetStringAsync($"{apiUrl}/{ip}/country_code_iso3/");
+                var iso = await httpClient.GetStringAsync($"{_apiUrl}/country_code_iso3/");
                 return iso;
             }
             catch (Exception e)
