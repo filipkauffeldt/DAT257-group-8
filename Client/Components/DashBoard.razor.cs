@@ -23,10 +23,20 @@ namespace Client.Components
         private DateOnly _date = new DateOnly(2022, 1, 1);
         private IList<string> _dataMetrics = new List<string>();
         private IList<string> _availableMetrics = new List<string>();
+        private bool _homeCountryError = false;
 
         protected override async Task OnInitializedAsync()
         {
-            _country = await apiHandler.FetchCountryByYear(httpClient, "SWE", _date); // Sweden
+            try
+            {
+                _country = await apiHandler.FetchHomeCountry(httpClient);
+                _homeCountryError = false;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                _homeCountryError = true;
+            }
             _countryToCompareWith = await apiHandler.FetchCountryByYear(httpClient, "BGR", _date); // Bulgaria
             _dataMetrics = GetValidMetrics();
             _availableMetrics = _dataMetrics;
