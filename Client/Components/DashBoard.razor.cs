@@ -11,16 +11,10 @@ namespace Client.Components
 {
     public partial class DashBoard
     {
-        public string test;
-        private HomeCountryDropDown dropDown;
-        private ComparisonComponent comparisonComponent;
-        private List<ComparisonComponent> comparisonComponents = new();
-        private List<string> countryNames;
-
-        private List<ComparisonComponent> _refs = new();
-        //public CompareAttribute Ref { set => _refs.Add(value); }
-        private Dictionary<string, ComparisonComponent> compComp = new Dictionary<string, ComparisonComponent>();
+        public HomeCountryDropDown dropDown;
+        private Dictionary<string, ComparisonComponent> compComp = new();
         private Dictionary<string, string> countryCodeDict = new();
+        private List<string> countryNames;
 
         [Inject]
         private HttpClient httpClient { get; set; }
@@ -43,14 +37,7 @@ namespace Client.Components
             countryComp = await apiHandler.FetchCountryByYear(httpClient, "SWE", date); // Sweden
             countryCompTwo = await apiHandler.FetchCountryByYear(httpClient, "BGR", date); // Bulgaria
             dataMetrics = GetValidMetrics();
-            var allCountries = await apiHandler.FetchAllCountries(httpClient);
-            foreach(Country country in allCountries)
-            {
-                countryCodeDict.Add(country.Name, country.Code);
-            }
-            var countryTest = await apiHandler.FetchCountryByYear(httpClient, "URY", date);
-            var DataTest = countryTest.Data.Where(d => d.Name == "el-coal").First();
-            test = DataTest.Points.Where(dp => dp.Date.Year == date.Year).FirstOrDefault().Value.ToString();
+            countryCodeDict = new Dictionary<string,string>(await apiHandler.FetchAllCountryNamesDict(httpClient));
             countryNames = countryCodeDict.Keys.ToList();
         }
 
@@ -58,7 +45,6 @@ namespace Client.Components
         private async void HomeCountryChange(string CountryCode)
         {
             countryCompTwo = await apiHandler.FetchCountry(CountryCode, httpClient);
-
             StateHasChanged();
             foreach (var cC in compComp.Values)
             {

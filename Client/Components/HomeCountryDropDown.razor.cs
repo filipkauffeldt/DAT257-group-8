@@ -7,11 +7,6 @@ namespace Client.Components
         [Parameter]
         public List<String> CountryNames { get; set; }
 
-        /*private Dictionary<string, string> CountryCodeDict =
-              new Dictionary<string, string>(){
-                                  {"Sweden", "SWE"},
-                                  {"Norway", "NOR"},
-                                  {"Denmark", "DNK"} };*/
         [Parameter]
         public Dictionary<string, string> CountryCodeDict { get; set; }
 
@@ -24,9 +19,6 @@ namespace Client.Components
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
-
-            //CountryNames = CountryCodeDict.Keys.ToList();
-            //StateHasChanged();
         }
 
         private async Task HomeCountryChange()
