@@ -7,6 +7,8 @@ namespace Client.API
     {
         Task<Country> FetchCountryOfTheDay(HttpClient httpClient);
 
+        Task<Country> FetchHomeCountry(HttpClient httpClient);
+
         Task<Country> FetchCountry(string iso, HttpClient httpClient);
 
         Task<IEnumerable<Country>> FetchAllCountries(HttpClient httpClient);

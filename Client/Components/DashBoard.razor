@@ -6,28 +6,58 @@
 
 <HomeCountryDropDown @ref="dropDown" CountryChanged="HomeCountryChange" CountryNames ="@countryNames" CountryCodeDict="@countryCodeDict"/>
 <div class="dash-board">
-    @if (dataMetrics.Count() == 0)
+    
+    @if (_homeCountryError)
+    {
+        <div>
+            <p>Home country not found</p>
+            @* Add manual country selection component *@
+        </div>
+    }
+    else if (_country == null || _countryToCompareWith == null)
     {
         <p>Loading...</p>
     }
     else
     {
-        <nav class="table-of-contents">
-            <h3>Statistics</h3>
-            <ul>
-                @foreach (var metric in dataMetrics)
-                {
-                    <li><a href="#@FormatLabel(metric)">@metric</a></li>
-                }
+        <div class="country-of-the-day">
+            <h2>
+                The country of the day is @_countryToCompareWith.Name
+            </h2>
+        </div>
+        <div class="container"> 
+
+            <div class="header"> 
+                <div class="data-filter">
+                    <DataFilterer Data="@_dataMetrics" OnChange="HandleFilterChange"></DataFilterer>
+                </div>
+                <nav class="table-of-contents">
+                    <ul>
+                        @foreach (var metric in _dataMetrics)
+                        {
+                            <li><a href="#@FormatLabel(metric)">@metric</a></li>
+                        }
+                    
             </ul>
         </nav>
-        <div class="grid-container">
-            @foreach (var metric in dataMetrics)
-            {
-                <div id="@FormatLabel(metric)" class="grid-item">
-                    <ComparisonComponent @ref="@compComp[metric]" CountryComparison="@countryComp" CountryOrigin="@countryCompTwo" date="@date" ResourceType="@metric"></ComparisonComponent>
-                </div>
-            }
+        </div>
+        @if (_dataMetrics.Count == 0)
+        {
+            <div>
+                <p>No data shared data available for @_country.Name and @_countryToCompareWith.Name</p>
+            </div>
+        }
+        else
+        {
+            <div class="grid-container">
+                @foreach (var metric in _dataMetrics)
+                {
+                    <div id="@FormatLabel(metric)" class="grid-item">
+                            <ComparisonComponent @ref="@compComp[metric]" CountryComparison="@_countryToCompareWith" CountryOrigin="@_country" date="@_date" ResourceType="@metric"></ComparisonComponent>
+                    </div>
+                }
+            </div>
+        }
         </div>
     }
 </div>
