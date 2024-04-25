@@ -52,11 +52,11 @@ namespace Client.API
             }
         }
 
-        public async Task<Country> FetchCountryByYear(HttpClient httpClient, string code, DateOnly year)
+        public async Task<Country> FetchCountryByYear(HttpClient httpClient, string code, DateOnly date)
         {
             try
             {
-                return await httpClient.GetFromJsonAsync<Country>($"{apiUrl}/Country/GetCountryDataForYear/{code}/{year.Year}-{year.Month}-{year.Day}");
+                return await httpClient.GetFromJsonAsync<Country>($"{apiUrl}/Country/GetCountryDataForYear/{code}/{date.Year}-{date.Month}-{date.Day}");
             }
             catch(Exception e)
             {
