@@ -30,6 +30,16 @@ namespace API.Controllers
         }
 
         [HttpGet()]
+        public IEnumerable<CountryContract> GetAllCountryIdentifiers()
+        {
+            var countries = _countryRepository.GetAllCountryIdentifiers();
+
+            var countryContracts = Mapper.MapCountryList(countries);
+
+            return countryContracts;
+        }
+
+        [HttpGet()]
         public IActionResult GetCountryOfTheDay()
         {
             var country = _countryRepository.GetCountryOfTheDay();

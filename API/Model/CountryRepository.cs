@@ -22,6 +22,11 @@ namespace API.Model
                     .ToList();
         }
 
+        public IEnumerable<Country> GetAllCountryIdentifiers()
+        {
+            return _dbContext.Countries;
+        }
+
         public Country? GetCountryByCode(string code)
         {
             var country = _dbContext.Countries
