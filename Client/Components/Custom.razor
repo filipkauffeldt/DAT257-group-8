@@ -17,7 +17,7 @@
                 <menu class="menu-row">
                         <RadzenLabel Text="Compare" Component="DropDownBindValue" Style="margin-right: 8px; vertical-align: middle;" Visible=true></RadzenLabel>
                         <RadzenDropDown @bind-Value=@selectedHome
-                            Data=@availableCountries
+                            Data=@availableCountries.Keys
                             Name="DropDownBindValue"
                             AllowClear=false
                             Placeholder="Select country"
@@ -28,7 +28,7 @@
 
                         <RadzenLabel Text="with" Component="DropDownBindValue" Style="margin-right: 8px; vertical-align: middle;" Visible=true></RadzenLabel>
                         <RadzenDropDown @bind-Value=@selectedOther
-                            Data=@availableCountries
+                            Data=@availableCountries.Keys
                             Name="DropDownBindValue"
                             AllowClear=false
                             Placeholder="Select country"

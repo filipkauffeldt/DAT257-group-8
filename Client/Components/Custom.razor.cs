@@ -23,7 +23,7 @@ namespace Client.Components
         
         private Country _countryToCompareWith { get; set; }
 
-        private IList<string> availableCountries = new List<string>() {"SWE", "BGR", "NOR", "DNK", "FIN", "ISL"};
+        private IDictionary<string, string> availableCountries = new Dictionary<string, string>();
         
         private DateOnly _date = new DateOnly(2022, 1, 1);
         private IList<string> _dataMetrics = new List<string>();
@@ -32,10 +32,15 @@ namespace Client.Components
 
         protected override async Task OnInitializedAsync()
         {
+            var countries = await apiHandler.FetchAllCountryIdentifiers(httpClient);
+            foreach (Country country in countries)
+            {
+                availableCountries.Add(country.Name, country.Code);
+            }
             _country = await apiHandler.FetchCountryByYear(httpClient, "SWE", _date); // Sweden
-            _countryToCompareWith = await apiHandler.FetchCountryByYear(httpClient, "BGR", _date); // Bulgaria
-            selectedHome = _country.Code;
-            selectedOther = _countryToCompareWith.Code;
+            _countryToCompareWith = await apiHandler.FetchCountryOfTheDay(httpClient);
+            selectedHome = _country.Name;
+            selectedOther = _countryToCompareWith.Name;
             _dataMetrics = GetValidMetrics();
             _availableMetrics = _dataMetrics;
         }
@@ -62,18 +67,18 @@ namespace Client.Components
             return validMetrics;
         }
 
-        private async void UpdateHomeCountry(string code)
+        private async void UpdateHomeCountry(string name)
         {
-            selectedHome = code;
-            _country = await apiHandler.FetchCountryByYear(httpClient, code, _date);
+            selectedHome = name;
+            _country = await apiHandler.FetchCountryByYear(httpClient, availableCountries[name], _date);
             _dataMetrics = GetValidMetrics();
             StateHasChanged();
         }
 
-        private async void UpdateOtherCountry(string code)
+        private async void UpdateOtherCountry(string name)
         {
-            selectedOther = code;
-            _countryToCompareWith = await apiHandler.FetchCountryByYear(httpClient, code, _date);
+            selectedOther = name;
+            _countryToCompareWith = await apiHandler.FetchCountryByYear(httpClient, availableCountries[name], _date);
             _dataMetrics = GetValidMetrics();
             StateHasChanged();
         }
