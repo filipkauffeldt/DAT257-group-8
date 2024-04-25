@@ -3,7 +3,15 @@
 
 
 <div class="dash-board">
-    @if (_country == null || _countryToCompareWith == null)
+    
+    @if (_homeCountryError)
+    {
+        <div>
+            <p>Home country not found</p>
+            @* Add manual country selection component *@
+        </div>
+    }
+    else if (_country == null || _countryToCompareWith == null)
     {
         <p>Loading...</p>
     }
@@ -11,7 +19,7 @@
     {
         <div class="country-of-the-day">
             <h2>
-                The country of the day is @_country.Name
+                The country of the day is @_countryToCompareWith.Name
             </h2>
         </div>
         <div class="container"> 
@@ -26,17 +34,27 @@
                         {
                             <li><a href="#@FormatLabel(metric)">@metric</a></li>
                         }
-                    </ul>
-                </nav>
+                    
+            </ul>
+        </nav>
+        </div>
+        @if (_dataMetrics.Count == 0)
+        {
+            <div>
+                <p>No data shared data available for @_country.Name and @_countryToCompareWith.Name</p>
             </div>
+        }
+        else
+        {
             <div class="grid-container">
                 @foreach (var metric in _dataMetrics)
                 {
                     <div id="@FormatLabel(metric)" class="grid-item">
-                        <ComparisonComponent CountryComparison="@_country" CountryOrigin="@_countryToCompareWith" date="@_date" ResourceType="@metric"></ComparisonComponent>
+                            <ComparisonComponent CountryComparison="@_countryToCompareWith" CountryOrigin="@_country" date="@_date" ResourceType="@metric"></ComparisonComponent>
                     </div>
                 }
             </div>
+        }
         </div>
     }
 </div>

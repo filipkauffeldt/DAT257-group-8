@@ -10,12 +10,25 @@ namespace Client.API
     public class ApiRequestHandler : IApiHandler
     {
         private string apiUrl = "http://localhost:5016";
+        private IGeoLocator _geoLocator;
+
+        public ApiRequestHandler(IGeoLocator geoLocator)
+        {
+            _geoLocator = geoLocator;
+        }
 
         public async Task<Country> FetchCountryOfTheDay(HttpClient httpClient)
         {
             try
             {
-                return await httpClient.GetFromJsonAsync<Country>($"{apiUrl}/Country/GetCountryOfTheDay");
+                var response = await httpClient.GetAsync($"{apiUrl}/Country/GetCountryOfTheDay");
+                var country = await response.Content.ReadFromJsonAsync<Country>();
+                if (country == null)
+                {
+                    throw new Exception("GetCountryOfTheDay returned null");
+                }
+                return country;
+
             }
             catch (Exception e)
             {
@@ -28,7 +41,13 @@ namespace Client.API
         {
             try
             {
-                return await httpClient.GetFromJsonAsync<Country>($"{apiUrl}/Country/GetCountry/{iso}");
+                var response = await httpClient.GetAsync($"{apiUrl}/Country/GetCountry/{iso}");
+                var country = await response.Content.ReadFromJsonAsync<Country>();
+                if (country == null)
+                {
+                    throw new Exception("GetCountry returned null");
+                }
+                return country;
 
             }
             catch (Exception e)
@@ -42,7 +61,13 @@ namespace Client.API
         {
             try
             {
-                return await httpClient.GetFromJsonAsync<IEnumerable<Country>>($"{apiUrl}/Country/GetAllCountries");
+                var response = await httpClient.GetAsync($"{apiUrl}/Country/GetAllCountries");
+                var countries = await response.Content.ReadFromJsonAsync<IEnumerable<Country>>();
+                if (countries == null)
+                {
+                    throw new Exception("GetAllCountries returned null");
+                }
+                return countries;
 
             }
             catch (Exception e)
@@ -56,13 +81,25 @@ namespace Client.API
         {
             try
             {
-                return await httpClient.GetFromJsonAsync<Country>($"{apiUrl}/Country/GetCountryDataForYear/{code}/{date.Year}-{date.Month}-{date.Day}");
+                var response = await httpClient.GetAsync($"{apiUrl}/Country/GetCountryDataForYear/{code}/{date.Year}-{date.Month}-{date.Day}");
+                var country = await response.Content.ReadFromJsonAsync<Country>();
+                if (country == null)
+                {
+                    throw new Exception("GetCountryDataForYear returned null");
+                }
+                return country;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e);
                 throw new Exception($"Api call failed, {e}");
             }
+        }
+
+        public async Task<Country> FetchHomeCountry(HttpClient httpClient)
+        {
+            var iso = await _geoLocator.GetUserISOAsync(httpClient);
+            return await FetchCountry(iso, httpClient);
         }
     }
 }
