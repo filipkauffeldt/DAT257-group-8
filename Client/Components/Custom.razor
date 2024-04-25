@@ -6,44 +6,99 @@
         <p>Loading...</p>
     }
     else
-    {
-        <div class="data-filter">
-            <DataFilterer Data="@_dataMetrics" OnChange="HandleFilterChange"></DataFilterer>
+    {   
+        <div class="country-of-the-day">
+            <h2>
+                Compare Countries
+            </h2>
         </div>
-        <nav class="table-of-contents">
-            <h3>Statistics</h3>
-            <ul>
+        <div class="container"> 
+            <div class="header"> 
+                <menu class="menu-row">
+                        <RadzenLabel Text="Compare" Component="DropDownBindValue" Style="margin-right: 8px; vertical-align: middle;" Visible=true></RadzenLabel>
+                        <RadzenDropDown @bind-Value=@selectedHome
+                            Data=@availableCountries
+                            Name="DropDownBindValue"
+                            AllowClear=false
+                            Placeholder="Select country"
+                            Chips=false
+                            MaxSelectedLabels="1"
+                            Change="@((e) => UpdateHomeCountry((string)e))">
+                        </RadzenDropDown>  
+
+                        <RadzenLabel Text="with" Component="DropDownBindValue" Style="margin-right: 8px; vertical-align: middle;" Visible=true></RadzenLabel>
+                        <RadzenDropDown @bind-Value=@selectedOther
+                            Data=@availableCountries
+                            Name="DropDownBindValue"
+                            AllowClear=false
+                            Placeholder="Select country"
+                            Chips=false
+                            MaxSelectedLabels="1"
+                            Change="@((e) => UpdateOtherCountry((string)e))">
+                        </RadzenDropDown>  
+                </menu>
+                <div class="data-filter">
+                    <DataFilterer Data="@_dataMetrics" OnChange="HandleFilterChange"></DataFilterer>
+                </div>
+                <nav class="table-of-contents">
+                    <ul>
+                        @foreach (var metric in _dataMetrics)
+                        {
+                            <li><a href="Compare/#@FormatLabel(metric)">@metric</a></li>
+                        }
+                    </ul>
+                </nav>
+                
+            </div>
+
+            <div class="grid-container">
                 @foreach (var metric in _dataMetrics)
                 {
-                    <li><a href="#@FormatLabel(metric)">@metric</a></li>
+                    <div id="@FormatLabel(metric)" class="grid-item">
+                        <ComparisonComponent @key="@($"{_country}-{_countryToCompareWith}")" CountryComparison="@_country" CountryOrigin="@_countryToCompareWith" date="@_date" ResourceType="@metric"></ComparisonComponent>
+                    </div>
                 }
-            </ul>
-        </nav>
-
-        <menu class="menu-row">
-            <span>Compare</span>
-            <InputSelect @bind-Value="selectedHome" @oninput="((e) => UpdateHomeCountry((string)e.Value))" class="drop-down">
-                @foreach (var country in availableCountries)
-                {
-                    <option value="@country">@country</option>
-                }
-            </InputSelect>
-            <span>with</span>
-            <InputSelect @bind-Value="selectedOther" @oninput="((e) => UpdateOtherCountry((string)e.Value))" class="drop-down">
-                    @foreach (var country in availableCountries)
-                    {
-                        <option value="@country">@country</option>
-                    }
-            </InputSelect>
-        </menu>
-
-        <div class="grid-container">
-            @foreach (var metric in _dataMetrics)
-            {
-                <div id="@FormatLabel(metric)" class="grid-item">
-                    <ComparisonComponent @key="@($"{_country}-{_countryToCompareWith}")" CountryComparison="@_country" CountryOrigin="@_countryToCompareWith" date="@_date" ResourceType="@metric"></ComparisonComponent>
-                </div>
-            }
+            </div>
+            
         </div>
     }
 </div>
+
+@* <div class="dash-board">
+    @if (_country == null || _countryToCompareWith == null)
+    {
+        <p>Loading...</p>
+    }
+    else
+    {
+        <div class="country-of-the-day">
+            <h2>
+                The country of the day is @_country.Name
+            </h2>
+        </div>
+        <div class="container"> 
+
+            <div class="header"> 
+                <div class="data-filter">
+                    <DataFilterer Data="@_dataMetrics" OnChange="HandleFilterChange"></DataFilterer>
+                </div>
+                <nav class="table-of-contents">
+                    <ul>
+                        @foreach (var metric in _dataMetrics)
+                        {
+                            <li><a href="#@FormatLabel(metric)">@metric</a></li>
+                        }
+                    </ul>
+                </nav>
+            </div>
+            <div class="grid-container">
+                @foreach (var metric in _dataMetrics)
+                {
+                    <div id="@FormatLabel(metric)" class="grid-item">
+                        <ComparisonComponent CountryComparison="@_country" CountryOrigin="@_countryToCompareWith" date="@_date" ResourceType="@metric"></ComparisonComponent>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div> *@
