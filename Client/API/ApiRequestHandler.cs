@@ -34,21 +34,7 @@ namespace Client.API
 
         public async Task<IEnumerable<Country>> FetchAllCountryIdentifiers(HttpClient httpClient)
         {
-            try
-            {
-                var response = await httpClient.GetAsync($"{apiUrl}/Country/GetAllCountryIdentifiers");
-                var countries = await response.Content.ReadFromJsonAsync<IEnumerable<Country>>();
-                if (countries == null)
-                {
-                    throw new Exception("GetAllCountryIdentifiers returned null");
-                }
-                return countries;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw new Exception($"Api call failed, {e}");
-            }
+            return await new RequestWrapper<IEnumerable<Country>>().GetFromJSONAsync(httpClient, $"{apiUrl}/Country/GetAllCountryIdentifiers");
         }
 
         public async Task<Country> FetchCountryByYearAsync(HttpClient httpClient, string code, DateOnly date)

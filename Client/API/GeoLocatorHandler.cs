@@ -5,7 +5,7 @@
         private readonly string _apiUrl = "https://ipapi.co";
         public async Task<string> GetUserISOAsync(HttpClient httpClient)
         {
-            return await new RequestWrapper<string>().GetFromJSONAsync(httpClient, $"{_apiUrl}/country_code_iso3/");
+            return await new RequestWrapper<string>().GetStringAsync(httpClient, $"{_apiUrl}/country_code_iso3/");
         }
     }
 }
