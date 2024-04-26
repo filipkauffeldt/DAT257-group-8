@@ -19,81 +19,22 @@ namespace Client.API
 
         public async Task<Country> FetchCountryOfTheDayAsync(HttpClient httpClient)
         {
-            try
-            {
-                var response = await httpClient.GetAsync($"{apiUrl}/Country/GetCountryOfTheDay");
-                var country = await response.Content.ReadFromJsonAsync<Country>();
-                if (country == null)
-                {
-                    throw new Exception("GetCountryOfTheDay returned null");
-                }
-                return country;
-
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw new Exception($"Api call failed, {e}");
-            }
+            return await new RequestWrapper<Country>().GetFromJSONAsync(httpClient, $"{apiUrl}/Country/GetCountryOfTheDay");
         }
 
         public async Task<Country> FetchCountryAsync(string iso, HttpClient httpClient)
         {
-            try
-            {
-                var response = await httpClient.GetAsync($"{apiUrl}/Country/GetCountry/{iso}");
-                var country = await response.Content.ReadFromJsonAsync<Country>();
-                if (country == null)
-                {
-                    throw new Exception("GetCountry returned null");
-                }
-                return country;
-
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw new Exception($"Api call failed, {e}");
-            }
+            return await new RequestWrapper<Country>().GetFromJSONAsync(httpClient, $"{apiUrl}/Country/GetCountry/{iso}");
         }
 
         public async Task<IEnumerable<Country>> FetchAllCountriesAsync(HttpClient httpClient)
         {
-            try
-            {
-                var response = await httpClient.GetAsync($"{apiUrl}/Country/GetAllCountries");
-                var countries = await response.Content.ReadFromJsonAsync<IEnumerable<Country>>();
-                if (countries == null)
-                {
-                    throw new Exception("GetAllCountries returned null");
-                }
-                return countries;
-
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw new Exception($"Api call failed, {e}");
-            }
+            return await new RequestWrapper<IEnumerable<Country>>().GetFromJSONAsync(httpClient, $"{apiUrl}/Country/GetAllCountries");
         }
 
         public async Task<Country> FetchCountryByYearAsync(HttpClient httpClient, string code, DateOnly date)
         {
-            try
-            {
-                var response = await httpClient.GetAsync($"{apiUrl}/Country/GetCountryDataForYear/{code}/{date.Year}-{date.Month}-{date.Day}");
-                var country = await response.Content.ReadFromJsonAsync<Country>();
-                if (country == null)
-                {
-                    throw new Exception("GetCountryDataForYear returned null");
-                }
-                return country;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw new Exception($"Api call failed, {e}");
-            }
+            return await new RequestWrapper<Country>().GetFromJSONAsync(httpClient, $"{apiUrl}/Country/GetCountryDataForYear/{code}/{date.Year}-{date.Month}-{date.Day}");
         }
 
         public async Task<Country> FetchHomeCountryAsync(HttpClient httpClient)
