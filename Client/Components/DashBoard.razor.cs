@@ -53,7 +53,7 @@ namespace Client.Components
 
         private async void HomeCountryChange(string CountryCode)
         {
-            _country = await apiHandler.FetchCountryByYear(httpClient, CountryCode, _date);
+            _country = await apiHandler.FetchCountryByYearAsync(httpClient, CountryCode, _date);
             StateHasChanged();
             foreach (var cC in compComp.Values)
             {
