@@ -2,6 +2,8 @@ using API.Contracts;
 using API.Model;
 using API.Model.ObjectModels;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace API.Model
 {
@@ -41,7 +43,7 @@ namespace API.Model
             
             DateTime today = DateTime.Today;
             var stringToBeHashed = today.Month.ToString() + today.Day.ToString();
-            int hashed = stringToBeHashed.GetHashCode();
+            int hashed = CreateIntHashFromString(stringToBeHashed);
 
 
             var countries = await _dbContext.Countries.ToListAsync();
@@ -53,6 +55,13 @@ namespace API.Model
                 .Include(c => c.Data)
                 .ThenInclude(d => d.Points)
                 .FirstOrDefaultAsync();
+        }
+        private int CreateIntHashFromString(string inputString)
+        {
+            MD5 md5Hasher = MD5.Create();
+            var hashed = md5Hasher.ComputeHash(Encoding.UTF8.GetBytes(inputString));
+            var ivalue = BitConverter.ToInt32(hashed, 0);
+            return Math.Abs(ivalue);
         }
 
         public void AddCountry(Country country)
