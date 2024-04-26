@@ -31,9 +31,9 @@ namespace API.Controllers
         }
 
         [HttpGet()]
-        public IActionResult GetAllCountryIdentifiers()
+        public async Task<ActionResult<IEnumerable<CountryContract>>> GetAllCountryIdentifiers()
         {
-            var countries = _countryRepository.GetAllCountryIdentifiers();
+            var countries = await _countryRepository.GetAllCountryIdentifiers();
 
             return countries != null ? Ok(Mapper.MapCountryList(countries)) : NotFound("No countries found.");
         }

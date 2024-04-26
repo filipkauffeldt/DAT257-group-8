@@ -5,13 +5,11 @@
 
 
 <div class="dash-board">
-    <HomeCountryDropDown @ref="dropDown" CountryChanged="HomeCountryChange" CountryNames="@countryNames" CountryCodeDict="@countryCodeDict" />
     @if (_homeCountryError)
     {
         <div>
             <p>Home country not found</p>
-            @* Add manual country selection component *@
-            
+            <HomeCountryDropDown @ref="dropDown" CountryChanged="HomeCountryChange" CountryNames="@countryNames" CountryCodeDict="@countryCodeDict" />
         </div>
     }
     else if (_country == null || _countryToCompareWith == null)

@@ -24,10 +24,10 @@ namespace API.Model
                     .ToListAsync();
         }
 
-        public IEnumerable<Country> GetAllCountryIdentifiers()
+        public async Task<IEnumerable<Country>> GetAllCountryIdentifiers()
         {
-            return _dbContext.Countries
-                    .ToList();
+            return await _dbContext.Countries
+                    .ToListAsync();
         }
 
         public async Task<Country?> GetCountryByCodeAsync(string code)
