@@ -13,7 +13,7 @@ namespace Client.Components
         [Parameter]
         public EventCallback<String> CountryChanged { get; set; }
 
-        private string? HomeCountry = "Choose your home country";
+        private string? _HomeCountry = "Choose your home country";
 
 
         protected override async Task OnInitializedAsync()
@@ -24,8 +24,8 @@ namespace Client.Components
         private async Task HomeCountryChange()
         {
             StateHasChanged();
-            var HomeCountryCode = CountryCodeDict[HomeCountry];
-            await CountryChanged.InvokeAsync(HomeCountryCode);
+            var homeCountryCode = CountryCodeDict[_HomeCountry];
+            await CountryChanged.InvokeAsync(homeCountryCode);
             StateHasChanged();
         }
     }

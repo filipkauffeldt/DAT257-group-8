@@ -1,8 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Net.Http.Json;
-using System.Reflection.Metadata.Ecma335;
+﻿using System.Reflection.Metadata.Ecma335;
 using System.Runtime.InteropServices;
-using System.Security.AccessControl;
 using API;
 using Client.API;
 using Microsoft.AspNetCore.Components;
@@ -31,9 +28,6 @@ namespace Client.Components
         private IList<string> _availableMetrics = new List<string>();
         private bool _homeCountryError = false;
 
-
-
-
         protected override async Task OnInitializedAsync()
         {
             try
@@ -49,12 +43,17 @@ namespace Client.Components
             _countryToCompareWith = await apiHandler.FetchCountryByYear(httpClient, "BGR", _date); // Bulgaria
             _dataMetrics = GetValidMetrics();
             _availableMetrics = _dataMetrics;
-            countryCodeDict = new Dictionary<string,string>(await apiHandler.FetchAllCountryNamesDict(httpClient));
+            var countryIdentifiers = await apiHandler.FetchAllCountryIdentifiers(httpClient);
+            foreach(var country in countryIdentifiers)
+            {
+                countryCodeDict.Add(country.Name, country.Code);
+            }
             countryNames = countryCodeDict.Keys.ToList();
         }
+
         private async void HomeCountryChange(string CountryCode)
         {
-            _country = await apiHandler.FetchCountry(CountryCode, httpClient);
+            _country = await apiHandler.FetchCountryByYear(httpClient, CountryCode, _date);
             StateHasChanged();
             foreach (var cC in compComp.Values)
             {

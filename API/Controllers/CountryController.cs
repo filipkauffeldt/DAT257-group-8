@@ -30,48 +30,11 @@ namespace API.Controllers
         }
 
         [HttpGet()]
-        public IEnumerable<string> GetAllCountryNames()
+        public IActionResult GetAllCountryIdentifiers()
         {
-            var countries = _countryRepository.GetAllCountries();
+            var countries = _countryRepository.GetAllCountryIdentifiers();
 
-            var countryNames = new List<string>();
-
-            foreach(var country in countries)
-            {
-                countryNames.Add(country.Name);
-            }
-
-            return countryNames;
-        }
-
-        [HttpGet()]
-        public IEnumerable<string> GetAllCountryCodes()
-        {
-            var countries = _countryRepository.GetAllCountries();
-
-            var countryCodes = new List<string>();
-
-            foreach (var country in countries)
-            {
-                countryCodes.Add(country.Code);
-            }
-
-            return countryCodes;
-        }
-
-        [HttpGet()]
-        public IDictionary<string,string> GetAllCountryNamesDict()
-        {
-            var countries = _countryRepository.GetAllCountries();
-
-            var countryDict = new Dictionary<string, string>();
-
-            foreach (var country in countries)
-            {
-                countryDict.Add(country.Name, country.Code);
-            }
-
-            return countryDict;
+            return countries != null ? Ok(Mapper.MapCountryList(countries)) : NotFound("No countries found.");
         }
 
         [HttpGet()]

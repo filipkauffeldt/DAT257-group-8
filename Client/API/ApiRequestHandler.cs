@@ -96,38 +96,17 @@ namespace Client.API
             }
         }
 
-        public async Task<IEnumerable<string>> FetchAllCountryNames(HttpClient httpClient)
+        public async Task<IEnumerable<Country>> FetchAllCountryIdentifiers(HttpClient httpClient)
         {
             try
             {
-                return await httpClient.GetFromJsonAsync<IEnumerable<string>>($"{apiUrl}/Country/GetAllCountryNames");
-
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw new Exception($"Api call failed, {e}");
-            }
-        }
-
-        public async Task<IEnumerable<string>> FetchAllCountryCodes(HttpClient httpClient)
-        {
-            try
-            {
-                return await httpClient.GetFromJsonAsync<IEnumerable<string>>($"{apiUrl}/Country/GetAllCountryCodes");
-
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw new Exception($"Api call failed, {e}");
-            }
-        }
-        public async Task<IDictionary<string,string>> FetchAllCountryNamesDict(HttpClient httpClient)
-        {
-            try
-            {
-                return await httpClient.GetFromJsonAsync<IDictionary<string,string>>($"{apiUrl}/Country/GetAllCountryNamesDict");
+                var response = await httpClient.GetAsync($"{apiUrl}/Country/GetAllCountryIdentifiers");
+                var countryIdentifiers = await response.Content.ReadFromJsonAsync<IEnumerable<Country>>();
+                if (countryIdentifiers == null)
+                {
+                    throw new Exception("GetAllCountryIdentifiers returned null");
+                }
+                return countryIdentifiers;
 
             }
             catch (Exception e)
