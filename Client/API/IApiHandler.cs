@@ -5,16 +5,16 @@ namespace Client.API
 {
     public interface IApiHandler
     {
-        Task<Country> FetchCountryOfTheDay(HttpClient httpClient);
+        Task<Country> FetchCountryOfTheDayAsync(HttpClient httpClient);
 
-        Task<Country> FetchHomeCountry(HttpClient httpClient);
+        Task<Country> FetchHomeCountryAsync(HttpClient httpClient);
 
-        Task<Country> FetchCountry(string iso, HttpClient httpClient);
+        Task<Country> FetchCountryAsync(string iso, HttpClient httpClient);
 
-        Task<IEnumerable<Country>> FetchAllCountries(HttpClient httpClient);
+        Task<IEnumerable<Country>> FetchAllCountriesAsync(HttpClient httpClient);
 
-        Task<Country> FetchCountryByYear(HttpClient httpClient, string code, DateOnly year);
-
-        Task<IEnumerable<Country>> FetchAllCountryIdentifiers(HttpClient httpClient);
+        Task<Country> FetchCountryByYearAsync(HttpClient httpClient, string code, DateOnly year);
+        
+        Task<IEnumerable<Country>> FetchAllCountryIdentifiersAsync(HttpClient httpClient);
     }
 }

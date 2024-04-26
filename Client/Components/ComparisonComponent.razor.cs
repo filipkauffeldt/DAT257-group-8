@@ -95,7 +95,7 @@ namespace Client.Components
             }
         }
 
-        public float setBarWidth()
+        public float SetBarWidth()
         {
             return MathF.Max(ComparisonCountryValue, OriginCountryValue) * 1.1f;
         }

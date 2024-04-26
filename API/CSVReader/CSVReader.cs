@@ -106,12 +106,12 @@ namespace CSVReader
                 Console.WriteLine($"Error adding data: {ex.Message}");
             }
 
-            foreach ((var n, var d) in dataMap)
+            foreach ((var countryName, var countryData) in dataMap)
             {
-                Console.WriteLine($"Country: {n}, Data: {d.Name}");
-                countries.Where(c => c.Name == n)
+                Console.WriteLine($"Country: {countryName}, Data: {countryData.Name}");
+                countries.Where(c => c.Name == countryName)
                     .ToList()
-                    .ForEach(c => c.Data.Add(d));
+                    .ForEach(c => c.Data.Add(countryData));
             }
 
             return countries;

@@ -19,9 +19,9 @@ namespace Client.Components
         [Inject]
         private IApiHandler apiHandler { get; set; }
 
-        private Country _country;
+        private Country? _country;
 
-        private Country _countryToCompareWith;
+        private Country? _countryToCompareWith;
         
         private DateOnly _date = new DateOnly(2022, 1, 1);
         private IList<string> _dataMetrics = new List<string>();
@@ -32,7 +32,7 @@ namespace Client.Components
         {
             try
             {
-                _country = await apiHandler.FetchHomeCountry(httpClient);
+                _country = await apiHandler.FetchHomeCountryAsync(httpClient);
                 _homeCountryError = false;
             }
             catch (Exception e)
@@ -40,10 +40,10 @@ namespace Client.Components
                 Console.WriteLine(e);
                 _homeCountryError = true;
             }
-            _countryToCompareWith = await apiHandler.FetchCountryOfTheDay(httpClient);
+            _countryToCompareWith = await apiHandler.FetchCountryOfTheDayAsync(httpClient);
             _dataMetrics = GetValidMetrics();
             _availableMetrics = _dataMetrics;
-            var countryIdentifiers = await apiHandler.FetchAllCountryIdentifiers(httpClient);
+            var countryIdentifiers = await apiHandler.FetchAllCountryIdentifiersAsync(httpClient);
             foreach(var country in countryIdentifiers)
             {
                 countryCodeDict.Add(country.Name, country.Code);
@@ -53,7 +53,7 @@ namespace Client.Components
 
         private async void HomeCountryChange(string CountryCode)
         {
-            _country = await apiHandler.FetchCountryByYear(httpClient, CountryCode, _date);
+            _country = await apiHandler.FetchCountryByYearAsync(httpClient, CountryCode, _date);
             StateHasChanged();
             foreach (var cC in compComp.Values)
             {
