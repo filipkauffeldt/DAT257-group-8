@@ -10,20 +10,20 @@ namespace Client.Components
     public partial class Custom
     {
         [Inject]
-        private HttpClient httpClient { get; set; }
+        private HttpClient _httpClient { get; set; }
 
         [Inject]
-        private IApiHandler apiHandler { get; set; }
+        private IApiHandler _apiHandler { get; set; }
 
-        private string selectedHome = "";
+        private string _selectedHome = "";
 
-        private string selectedOther = "";
+        private string _selectedOther = "";
 
         private Country _country { get; set; }
         
         private Country _countryToCompareWith { get; set; }
 
-        private IDictionary<string, string> availableCountries = new Dictionary<string, string>();
+        private IDictionary<string, string> _availableCountries = new Dictionary<string, string>();
         
         private DateOnly _date = new DateOnly(2022, 1, 1);
         private IList<string> _dataMetrics = new List<string>();
@@ -32,15 +32,15 @@ namespace Client.Components
 
         protected override async Task OnInitializedAsync()
         {
-            var countries = await apiHandler.FetchAllCountryIdentifiers(httpClient);
+            var countries = await _apiHandler.FetchAllCountryIdentifiers(_httpClient);
             foreach (Country country in countries)
             {
-                availableCountries.Add(country.Name, country.Code);
+                _availableCountries.Add(country.Name, country.Code);
             }
-            _country = await apiHandler.FetchHomeCountry(httpClient);
-            _countryToCompareWith = await apiHandler.FetchCountryOfTheDay(httpClient);
-            selectedHome = _country.Name;
-            selectedOther = _countryToCompareWith.Name;
+            _country = await _apiHandler.FetchHomeCountry(_httpClient);
+            _countryToCompareWith = await _apiHandler.FetchCountryOfTheDay(_httpClient);
+            _selectedHome = _country.Name;
+            _selectedOther = _countryToCompareWith.Name;
             _dataMetrics = GetValidMetrics();
             _availableMetrics = _dataMetrics;
         }
@@ -69,16 +69,16 @@ namespace Client.Components
 
         private async void UpdateHomeCountry(string name)
         {
-            selectedHome = name;
-            _country = await apiHandler.FetchCountryByYear(httpClient, availableCountries[name], _date);
+            _selectedHome = name;
+            _country = await _apiHandler.FetchCountryByYear(_httpClient, _availableCountries[name], _date);
             _dataMetrics = GetValidMetrics();
             StateHasChanged();
         }
 
         private async void UpdateOtherCountry(string name)
         {
-            selectedOther = name;
-            _countryToCompareWith = await apiHandler.FetchCountryByYear(httpClient, availableCountries[name], _date);
+            _selectedOther = name;
+            _countryToCompareWith = await _apiHandler.FetchCountryByYear(_httpClient, _availableCountries[name], _date);
             _dataMetrics = GetValidMetrics();
             StateHasChanged();
         }
