@@ -1,6 +1,4 @@
-﻿@page "/custom"
-
-<div class="custom">
+﻿<div class="compare">
     @if (_country == null || _countryToCompareWith == null)
     {
         <p>Loading...</p>
@@ -16,8 +14,8 @@
             <div class="header"> 
                 <menu class="menu-row">
                         <RadzenLabel Text="Compare" Component="DropDownBindValue" Style="margin-right: 8px; vertical-align: middle;" Visible=true></RadzenLabel>
-                        <RadzenDropDown @bind-Value=@selectedHome
-                            Data=@availableCountries.Keys
+                        <RadzenDropDown @bind-Value=@_selectedHome
+                            Data=@_availableCountries.Keys
                             Name="DropDownBindValue"
                             AllowClear=false
                             Placeholder="Select country"
@@ -30,8 +28,8 @@
                         </RadzenDropDown>  
 
                         <RadzenLabel Text="with" Component="DropDownBindValue" Style="margin-right: 8px; vertical-align: middle;" Visible=true></RadzenLabel>
-                        <RadzenDropDown @bind-Value=@selectedOther
-                            Data=@availableCountries.Keys
+                        <RadzenDropDown @bind-Value=@_selectedOther
+                            Data=@_availableCountries.Keys
                             Name="DropDownBindValue"
                             AllowClear=false
                             Placeholder="Select country"
@@ -44,7 +42,7 @@
                         </RadzenDropDown>  
                 </menu>
                 <div class="data-filter">
-                    <DataFilterer Data="@_dataMetrics" OnChange="HandleFilterChange"></DataFilterer>
+                    <DataFilterer @key="@_availableMetrics" Data="@_dataMetrics" OnChange="HandleFilterChange"></DataFilterer>
                 </div>
                 <nav class="table-of-contents">
                     <ul>

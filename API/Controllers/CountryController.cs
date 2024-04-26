@@ -4,6 +4,7 @@ using API.Model;
 using API.Model.ObjectModels;
 using Microsoft.AspNetCore.Http.HttpResults;
 using API.Utils;
+
 namespace API.Controllers
 {
     [ApiController]
@@ -20,9 +21,9 @@ namespace API.Controllers
         }
 
         [HttpGet()]
-        public IEnumerable<CountryContract> GetAllCountries()
+        public async Task<IEnumerable<CountryContract>> GetAllCountries()
         {
-            var countries = _countryRepository.GetAllCountries();
+            var countries = await _countryRepository.GetAllCountriesAsync();
 
             var countryContracts = Mapper.MapCountryList(countries);
 
@@ -30,9 +31,9 @@ namespace API.Controllers
         }
 
         [HttpGet()]
-        public IEnumerable<CountryContract> GetAllCountryIdentifiers()
+        public async Task<IEnumerable<CountryContract>> GetAllCountryIdentifiers()
         {
-            var countries = _countryRepository.GetAllCountryIdentifiers();
+            var countries = await _countryRepository.GetAllCountryIdentifiersAsync();
 
             var countryContracts = Mapper.MapCountryList(countries);
 
@@ -40,23 +41,23 @@ namespace API.Controllers
         }
 
         [HttpGet()]
-        public IActionResult GetCountryOfTheDay()
+        public async Task<ActionResult<CountryContract>> GetCountryOfTheDay()
         {
-            var country = _countryRepository.GetCountryOfTheDay();
+            var country = await _countryRepository.GetCountryOfTheDayAsync();
 
             return country != null ? Ok(Mapper.MapCountry(country)) : NotFound("No country of the day found.");
         }
 
         [HttpGet("{code}")]
-        public IActionResult GetCountry(string code)
+        public async Task<ActionResult<CountryContract>> GetCountry(string code)
         {
-            var country = _countryRepository.GetCountryByCode(code);
+            var country = await _countryRepository.GetCountryByCodeAsync(code);
 
             return country != null ? Ok(Mapper.MapCountry(country)) : NotFound("The specified country could not be found.");
         }
 
         [HttpGet("{code}/{date}")]
-        public IActionResult GetCountryDataForYear(string code, DateOnly date)
+        public async Task<ActionResult<CountryContract>> GetCountryDataForYear(string code, DateOnly date)
         {
             if (string.IsNullOrEmpty(code))
             {
@@ -68,7 +69,7 @@ namespace API.Controllers
                 return BadRequest("Year must be a valid year");
             }
 
-            var country = _countryRepository.GetCountryWithYear(code, date);
+            var country = await _countryRepository.GetCountryWithYearAsync(code, date);
             if (country == null) return NotFound($"No country with code = '{code}' found.");
 
             var countryContract = Mapper.MapCountry(country);

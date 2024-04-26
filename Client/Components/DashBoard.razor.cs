@@ -36,7 +36,7 @@ namespace Client.Components
                 Console.WriteLine(e);
                 _homeCountryError = true;
             }
-            _countryToCompareWith = await apiHandler.FetchCountryByYear(httpClient, "BGR", _date); // Bulgaria
+            _countryToCompareWith = await apiHandler.FetchCountryOfTheDay(httpClient);
             _dataMetrics = GetValidMetrics();
             _availableMetrics = _dataMetrics;
         }
