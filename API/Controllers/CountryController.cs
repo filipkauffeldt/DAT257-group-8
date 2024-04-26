@@ -31,6 +31,16 @@ namespace API.Controllers
         }
 
         [HttpGet()]
+        public async Task<IEnumerable<CountryContract>> GetAllCountryIdentifiers()
+        {
+            var countries = await _countryRepository.GetAllCountryIdentifiersAsync();
+
+            var countryContracts = Mapper.MapCountryList(countries);
+
+            return countryContracts;
+        }
+
+        [HttpGet()]
         public async Task<ActionResult<CountryContract>> GetCountryOfTheDay()
         {
             var country = await _countryRepository.GetCountryOfTheDayAsync();
