@@ -38,12 +38,12 @@ namespace API.Model
         {
             
             DateTime today = DateTime.Today;
-            string stringToBeHashed = today.Month.ToString() + today.Day.ToString();
+            var stringToBeHashed = today.Month.ToString() + today.Day.ToString();
             int hashed = stringToBeHashed.GetHashCode();
 
 
-            List<Country> countries = _dbContext.Countries.ToList();
-            int amountOfCountries = countries.Count();
+            var countries = _dbContext.Countries.ToList();
+            var amountOfCountries = countries.Count();
             string countryCode = countries[hashed % AmountOfCountries].Code;
          
             return _dbContext.Countries
