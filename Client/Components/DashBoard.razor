@@ -2,13 +2,14 @@
 
 
 
+
+
 <div class="dash-board">
-    
     @if (_homeCountryError)
     {
         <div>
             <p>Home country not found</p>
-            @* Add manual country selection component *@
+            <HomeCountryDropDown @ref="dropDown" CountryChanged="HomeCountryChange" CountryNames="@countryNames" CountryCodeDict="@countryCodeDict" />
         </div>
     }
     else if (_country == null || _countryToCompareWith == null)
@@ -49,7 +50,7 @@
                 @foreach (var metric in _dataMetrics)
                 {
                     <div id="@FormatLabel(metric)" class="grid-item">
-                            <ComparisonComponent CountryComparison="@_countryToCompareWith" CountryOrigin="@_country" date="@_date" ResourceType="@metric"></ComparisonComponent>
+                            <ComparisonComponent @ref="@compComp[metric]" CountryComparison="@_countryToCompareWith" CountryOrigin="@_country" date="@_date" ResourceType="@metric"></ComparisonComponent>
                     </div>
                 }
             </div>

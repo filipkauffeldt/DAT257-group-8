@@ -31,13 +31,11 @@ namespace API.Controllers
         }
 
         [HttpGet()]
-        public async Task<IEnumerable<CountryContract>> GetAllCountryIdentifiers()
+        public async Task<ActionResult<IEnumerable<CountryContract>>> GetAllCountryIdentifiers()
         {
             var countries = await _countryRepository.GetAllCountryIdentifiersAsync();
 
-            var countryContracts = Mapper.MapCountryList(countries);
-
-            return countryContracts;
+            return countries != null ? Ok(Mapper.MapCountryList(countries)) : NotFound("No countries found.");
         }
 
         [HttpGet()]

@@ -34,32 +34,46 @@ namespace Client.Components
             var countryData = country.Data;
             if (countryData != null)
             {
-                return countryData.Where(d => d.Name == ResourceType).First();
+                    return countryData.Where(d => d.Name == ResourceType).FirstOrDefault();
             }
-            
             return null;
         }
+
         protected override void OnInitialized()
         {
             base.OnInitialized();
             LoadValues();
 
         }
-        private void LoadValues()
+        public void LoadValues()
         {
             var resource1 = GetCountryData(CountryOrigin);  
             var resource2 = GetCountryData(CountryComparison);
-            if (resource1 != null && resource2 != null)
+            OriginValueList.Clear();
+            ComparisonValueList.Clear();
+            if (resource1 != null)
             {
-                OriginValueList.Clear();
-                ComparisonValueList.Clear();
                 OriginValueList.Add(resource1.Points.Where(dp => dp.Date.Year == date.Year).FirstOrDefault() ??
-                    new DataPoint { Date = date, Value = 1});
-                ComparisonValueList.Add(resource2.Points.Where(dp => dp.Date.Year == date.Year).FirstOrDefault() ??
-                    new DataPoint { Date = date, Value = 1});
+                    new DataPoint { Date = date, Value = 1 });
                 OriginCountryValue = (float)OriginValueList[0].Value;
-                this.ComparisonCountryValue = (float)ComparisonValueList[0].Value;
                 Unit = resource1.Unit;
+            }
+            else
+            {
+                OriginValueList.Add(new DataPoint { Date = date, Value = 1 });
+                OriginCountryValue = 1;
+            }
+            if (resource2 != null)
+            {
+                ComparisonValueList.Add(resource2.Points.Where(dp => dp.Date.Year == date.Year).FirstOrDefault() ??
+                    new DataPoint { Date = date, Value = 1 });
+                ComparisonCountryValue = (float)ComparisonValueList[0].Value;
+                Unit = resource2.Unit;
+            }
+            else
+            {
+                ComparisonValueList.Add(new DataPoint { Date = date, Value = 1 });
+                ComparisonCountryValue = 1;
             }
         }
 
