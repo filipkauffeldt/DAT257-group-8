@@ -23,7 +23,10 @@
                             Placeholder="Select country"
                             Chips=false
                             MaxSelectedLabels="1"
-                            Change="@((e) => UpdateHomeCountry((string)e))">
+                            Change="@((e) => UpdateHomeCountry((string)e))"
+                            FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                            FilterOperator="StringFilterOperator.StartsWith"
+                            AllowFiltering=true>
                         </RadzenDropDown>  
 
                         <RadzenLabel Text="with" Component="DropDownBindValue" Style="margin-right: 8px; vertical-align: middle;" Visible=true></RadzenLabel>
@@ -34,7 +37,10 @@
                             Placeholder="Select country"
                             Chips=false
                             MaxSelectedLabels="1"
-                            Change="@((e) => UpdateOtherCountry((string)e))">
+                            Change="@((e) => UpdateOtherCountry((string)e))" 
+                            FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                            FilterOperator="StringFilterOperator.StartsWith"
+                            AllowFiltering=true>
                         </RadzenDropDown>  
                 </menu>
                 <div class="data-filter">
