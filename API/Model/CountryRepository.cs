@@ -2,6 +2,8 @@ using API.Contracts;
 using API.Model;
 using API.Model.ObjectModels;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace API.Model
 {
@@ -14,12 +16,12 @@ namespace API.Model
             _dbContext = dbContext;
         }
 
-        public IEnumerable<Country> GetAllCountries()
+        public async Task<IEnumerable<Country>> GetAllCountriesAsync()
         {
-            return _dbContext.Countries
+            return await _dbContext.Countries
                     .Include(c => c.Data)
                     .ThenInclude(d => d.Points)
-                    .ToList();
+                    .ToListAsync();
         }
 
         public IEnumerable<Country> GetAllCountryIdentifiers()
@@ -28,37 +30,51 @@ namespace API.Model
                     .ToList();
         }
 
-        public Country? GetCountryByCode(string code)
+        public async Task<Country?> GetCountryByCodeAsync(string code)
         {
-            var country = _dbContext.Countries
+            return await _dbContext.Countries
                     .Where(c => c.Code == code)
                     .Include(c => c.Data)
                     .ThenInclude(d => d.Points)
-                    .FirstOrDefault();
-
-            if (country == null) return country;
-            else return country.Copy();
+                    .FirstOrDefaultAsync();
         }
 
-        public Country? GetCountryOfTheDay()
+        public async Task<Country?> GetCountryOfTheDayAsync()
         {
-            // TODO: Implement logic to get country of the day
-            return _dbContext.Countries
-                .Include (c => c.Data)
+            
+            DateTime today = DateTime.Today;
+            var stringToBeHashed = today.Month.ToString() + today.Day.ToString();
+            int hashed = CreateIntHashFromString(stringToBeHashed);
+
+
+            var countries = _dbContext.Countries.ToList();
+            var amountOfCountries = countries.Count();
+            string countryCode = countries[hashed % amountOfCountries].Code;
+         
+            return await _dbContext.Countries
+                .Where(c => c.Code.Equals(countryCode))
+                .Include(c => c.Data)
                 .ThenInclude(d => d.Points)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
+        }
+        private int CreateIntHashFromString(string inputString)
+        {
+            MD5 md5Hasher = MD5.Create();
+            var hashed = md5Hasher.ComputeHash(Encoding.UTF8.GetBytes(inputString));
+            var ivalue = BitConverter.ToInt32(hashed, 0);
+            return Math.Abs(ivalue);
         }
 
         public void AddCountry(Country country)
         {
             _dbContext.Countries.Add(country);
-            _dbContext.SaveChanges();
+            _dbContext.SaveChangesAsync();
         }
 
         public void UpdateCountry(Country country)
         {
             _dbContext.Countries.Update(country);
-            _dbContext.SaveChanges();
+            _dbContext.SaveChangesAsync();
         }
 
         public void DeleteCountry(string code)
@@ -67,18 +83,18 @@ namespace API.Model
             if (country != null)
             {
                 _dbContext.Countries.Remove(country);
-                _dbContext.SaveChanges();
+                _dbContext.SaveChangesAsync();
             }
         }
 
-        public Country? GetCountryWithYear(string code, DateOnly date)
+        public async Task<Country?> GetCountryWithYearAsync(string code, DateOnly date)
         {
-            return _dbContext.Countries
+            return await _dbContext.Countries
                 .Where(c => c.Code == code)
                 .Include(c => c.Data)
                 .ThenInclude(d => d.Points
                     .Where(p => p.Date.Year == date.Year))
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
         }
     }
 }
