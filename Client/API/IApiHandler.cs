@@ -14,5 +14,7 @@ namespace Client.API
         Task<IEnumerable<Country>> FetchAllCountriesAsync(HttpClient httpClient);
 
         Task<Country> FetchCountryByYearAsync(HttpClient httpClient, string code, DateOnly year);
+        
+        Task<IEnumerable<Country>> FetchAllCountryIdentifiers(HttpClient httpClient);
     }
 }
