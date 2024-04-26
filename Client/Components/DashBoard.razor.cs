@@ -24,8 +24,9 @@ namespace Client.Components
 
         protected override async Task OnInitializedAsync()
         {
-            countryComp = await apiHandler.FetchCountryByYear(httpClient, "SWE", date); // Sweden
-            countryCompTwo = await apiHandler.FetchCountryByYear(httpClient, "BGR", date); // Bulgaria
+            //countryComp = await apiHandler.FetchCountryByYear(httpClient, "SWE", date); // Sweden
+            countryComp = await apiHandler.FetchCountryOfTheDay(httpClient);
+            countryCompTwo = await apiHandler.FetchCountryByYear(httpClient, "SWE", date); // Bulgaria
             dataMetrics = GetValidMetrics();
         }
 

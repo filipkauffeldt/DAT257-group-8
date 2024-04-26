@@ -2,7 +2,6 @@ using API.Contracts;
 using API.Model;
 using API.Model.ObjectModels;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
 
 namespace API.Model
 {
@@ -43,9 +42,9 @@ namespace API.Model
             int hashed = stringToBeHashed.GetHashCode();
 
 
-            List<Country> Countries = _dbContext.Countries.ToList();
-            int AmountOfCountries = Countries.Count();
-            string CountryCode = Countries[hashed % AmountOfCountries].Code;
+            List<Country> countries = _dbContext.Countries.ToList();
+            int AmountOfCountries = countries.Count();
+            string CountryCode = countries[hashed % AmountOfCountries].Code;
          
             return _dbContext.Countries
                 .Where(c => c.Code.Equals(CountryCode))
@@ -82,7 +81,7 @@ namespace API.Model
                 .Where(c => c.Code == code)
                 .Include(c => c.Data)
                 .ThenInclude(d => d.Points
-                .Where(p => p.Date.Year == date.Year))
+                    .Where(p => p.Date.Year == date.Year))
                 .FirstOrDefault();
         }
     }
