@@ -44,7 +44,7 @@ namespace API.Model
 
             var countries = _dbContext.Countries.ToList();
             var amountOfCountries = countries.Count();
-            string countryCode = countries[hashed % AmountOfCountries].Code;
+            string countryCode = countries[hashed % amountOfCountries].Code;
          
             return _dbContext.Countries
                 .Where(c => c.Code.Equals(CountryCode))
