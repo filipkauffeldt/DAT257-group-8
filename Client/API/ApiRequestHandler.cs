@@ -82,12 +82,13 @@ namespace Client.API
             try
             {
                 var response = await httpClient.GetAsync($"{apiUrl}/Country/GetAllCountryIdentifiers");
-                var countries = await response.Content.ReadFromJsonAsync<IEnumerable<Country>>();
-                if (countries == null)
+                var countryIdentifiers = await response.Content.ReadFromJsonAsync<IEnumerable<Country>>();
+                if (countryIdentifiers == null)
                 {
                     throw new Exception("GetAllCountryIdentifiers returned null");
                 }
-                return countries;
+                return countryIdentifiers;
+
             }
             catch (Exception e)
             {
@@ -115,25 +116,6 @@ namespace Client.API
             }
         }
 
-        public async Task<IEnumerable<Country>> FetchAllCountryIdentifiers(HttpClient httpClient)
-        {
-            try
-            {
-                var response = await httpClient.GetAsync($"{apiUrl}/Country/GetAllCountryIdentifiers");
-                var countryIdentifiers = await response.Content.ReadFromJsonAsync<IEnumerable<Country>>();
-                if (countryIdentifiers == null)
-                {
-                    throw new Exception("GetAllCountryIdentifiers returned null");
-                }
-                return countryIdentifiers;
-
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw new Exception($"Api call failed, {e}");
-            }
-        }
         public async Task<Country> FetchHomeCountry(HttpClient httpClient)
         {
             var iso = await _geoLocator.GetUserISOAsync(httpClient);
