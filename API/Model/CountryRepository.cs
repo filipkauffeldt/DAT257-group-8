@@ -43,8 +43,8 @@ namespace API.Model
 
 
             List<Country> countries = _dbContext.Countries.ToList();
-            int AmountOfCountries = countries.Count();
-            string CountryCode = countries[hashed % AmountOfCountries].Code;
+            int amountOfCountries = countries.Count();
+            string countryCode = countries[hashed % AmountOfCountries].Code;
          
             return _dbContext.Countries
                 .Where(c => c.Code.Equals(CountryCode))
