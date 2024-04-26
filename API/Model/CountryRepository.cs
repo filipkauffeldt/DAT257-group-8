@@ -26,7 +26,8 @@ namespace API.Model
 
         public async Task<IEnumerable<Country>> GetAllCountryIdentifiersAsync()
         {
-            return await _dbContext.Countries.ToListAsync();
+            return await _dbContext.Countries
+                    .ToListAsync();
         }
 
         public async Task<Country?> GetCountryByCodeAsync(string code)

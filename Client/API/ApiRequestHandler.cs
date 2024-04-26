@@ -82,12 +82,13 @@ namespace Client.API
             try
             {
                 var response = await httpClient.GetAsync($"{apiUrl}/Country/GetAllCountryIdentifiers");
-                var countries = await response.Content.ReadFromJsonAsync<IEnumerable<Country>>();
-                if (countries == null)
+                var countryIdentifiers = await response.Content.ReadFromJsonAsync<IEnumerable<Country>>();
+                if (countryIdentifiers == null)
                 {
                     throw new Exception("GetAllCountryIdentifiers returned null");
                 }
-                return countries;
+                return countryIdentifiers;
+
             }
             catch (Exception e)
             {

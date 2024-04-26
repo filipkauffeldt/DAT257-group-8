@@ -1,5 +1,4 @@
-﻿using System.Net.Http.Json;
-using System.Reflection.Metadata.Ecma335;
+﻿using System.Reflection.Metadata.Ecma335;
 using System.Runtime.InteropServices;
 using API;
 using Client.API;
@@ -9,6 +8,11 @@ namespace Client.Components
 {
     public partial class DashBoard
     {
+        private HomeCountryDropDown dropDown;
+        private Dictionary<string, ComparisonComponent> compComp = new();
+        private Dictionary<string, string> countryCodeDict = new();
+        private List<string> countryNames;
+
         [Inject]
         private HttpClient httpClient { get; set; }
 
@@ -39,6 +43,23 @@ namespace Client.Components
             _countryToCompareWith = await apiHandler.FetchCountryOfTheDay(httpClient);
             _dataMetrics = GetValidMetrics();
             _availableMetrics = _dataMetrics;
+            var countryIdentifiers = await apiHandler.FetchAllCountryIdentifiers(httpClient);
+            foreach(var country in countryIdentifiers)
+            {
+                countryCodeDict.Add(country.Name, country.Code);
+            }
+            countryNames = countryCodeDict.Keys.ToList();
+        }
+
+        private async void HomeCountryChange(string CountryCode)
+        {
+            _country = await apiHandler.FetchCountryByYear(httpClient, CountryCode, _date);
+            StateHasChanged();
+            foreach (var cC in compComp.Values)
+            {
+                cC.LoadValues();
+            }
+            StateHasChanged();
         }
 
         private IList<string> GetValidMetrics()
