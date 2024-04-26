@@ -24,7 +24,7 @@ namespace API.Model
 
         public async Task<IEnumerable<Country>> GetAllCountryIdentifiersAsync()
         {
-            return await _dbContext.Countries;
+            return await _dbContext.Countries.ToListAsync();
         }
 
         public async Task<Country?> GetCountryByCodeAsync(string code)
@@ -44,7 +44,7 @@ namespace API.Model
             int hashed = stringToBeHashed.GetHashCode();
 
 
-            var countries = await _dbContext.Countries.ToList();
+            var countries = await _dbContext.Countries.ToListAsync();
             var amountOfCountries = countries.Count();
             string countryCode = countries[hashed % amountOfCountries].Code;
          

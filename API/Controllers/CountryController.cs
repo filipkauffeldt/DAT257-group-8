@@ -23,7 +23,7 @@ namespace API.Controllers
         [HttpGet()]
         public async Task<IEnumerable<CountryContract>> GetAllCountries()
         {
-            var countries = _countryRepository.GetAllCountries();
+            var countries = await _countryRepository.GetAllCountriesAsync();
 
             var countryContracts = Mapper.MapCountryList(countries);
 
@@ -33,7 +33,7 @@ namespace API.Controllers
         [HttpGet()]
         public async Task<IEnumerable<CountryContract>> GetAllCountryIdentifiers()
         {
-            var countries = await _countryRepository.GetAllCountryIdentifiers();
+            var countries = await _countryRepository.GetAllCountryIdentifiersAsync();
 
             var countryContracts = Mapper.MapCountryList(countries);
 

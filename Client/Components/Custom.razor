@@ -38,7 +38,7 @@
                         </RadzenDropDown>  
                 </menu>
                 <div class="data-filter">
-                    <DataFilterer Data="@_dataMetrics" OnChange="HandleFilterChange"></DataFilterer>
+                    <DataFilterer @key="@_dataMetrics" Data="@_dataMetrics" OnChange="HandleFilterChange"></DataFilterer>
                 </div>
                 <nav class="table-of-contents">
                     <ul>
