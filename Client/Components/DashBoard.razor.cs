@@ -15,9 +15,9 @@ namespace Client.Components
         [Inject]
         private IApiHandler apiHandler { get; set; }
 
-        private Country _country;
+        private Country? _country;
 
-        private Country _countryToCompareWith;
+        private Country? _countryToCompareWith;
         
         private DateOnly _date = new DateOnly(2022, 1, 1);
         private IList<string> _dataMetrics = new List<string>();
@@ -28,7 +28,7 @@ namespace Client.Components
         {
             try
             {
-                _country = await apiHandler.FetchHomeCountry(httpClient);
+                _country = await apiHandler.FetchHomeCountryAsync(httpClient);
                 _homeCountryError = false;
             }
             catch (Exception e)
@@ -36,7 +36,7 @@ namespace Client.Components
                 Console.WriteLine(e);
                 _homeCountryError = true;
             }
-            _countryToCompareWith = await apiHandler.FetchCountryOfTheDay(httpClient);
+            _countryToCompareWith = await apiHandler.FetchCountryOfTheDayAsync(httpClient);
             _dataMetrics = GetValidMetrics();
             _availableMetrics = _dataMetrics;
         }

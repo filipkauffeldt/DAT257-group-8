@@ -17,7 +17,7 @@ namespace Client.API
             _geoLocator = geoLocator;
         }
 
-        public async Task<Country> FetchCountryOfTheDay(HttpClient httpClient)
+        public async Task<Country> FetchCountryOfTheDayAsync(HttpClient httpClient)
         {
             try
             {
@@ -37,7 +37,7 @@ namespace Client.API
             }
         }
 
-        public async Task<Country> FetchCountry(string iso, HttpClient httpClient)
+        public async Task<Country> FetchCountryAsync(string iso, HttpClient httpClient)
         {
             try
             {
@@ -57,7 +57,7 @@ namespace Client.API
             }
         }
 
-        public async Task<IEnumerable<Country>> FetchAllCountries(HttpClient httpClient)
+        public async Task<IEnumerable<Country>> FetchAllCountriesAsync(HttpClient httpClient)
         {
             try
             {
@@ -77,7 +77,7 @@ namespace Client.API
             }
         }
 
-        public async Task<Country> FetchCountryByYear(HttpClient httpClient, string code, DateOnly date)
+        public async Task<Country> FetchCountryByYearAsync(HttpClient httpClient, string code, DateOnly date)
         {
             try
             {
@@ -96,10 +96,10 @@ namespace Client.API
             }
         }
 
-        public async Task<Country> FetchHomeCountry(HttpClient httpClient)
+        public async Task<Country> FetchHomeCountryAsync(HttpClient httpClient)
         {
             var iso = await _geoLocator.GetUserISOAsync(httpClient);
-            return await FetchCountry(iso, httpClient);
+            return await FetchCountryAsync(iso, httpClient);
         }
     }
 }

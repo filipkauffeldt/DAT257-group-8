@@ -34,7 +34,7 @@ namespace TestClient.API
             var url = $"{_url}/Country/GetCountryOfTheDay";
             var mockMsgHandler = CreateMockMsgHandler(url);
             var mockClient = new HttpClient(mockMsgHandler.Object);
-            var mockResponse = await _apiHandler.FetchCountryOfTheDay(mockClient);
+            var mockResponse = await _apiHandler.FetchCountryOfTheDayAsync(mockClient);
 
             mockMsgHandler.Protected().Verify(
                 "SendAsync",
@@ -51,7 +51,7 @@ namespace TestClient.API
             var url = $"{_url}/Country/GetCountry/{code}";
             var mockMsgHandler = CreateMockMsgHandler(url);
             var mockClient = new HttpClient(mockMsgHandler.Object);
-            var mockResponse = await _apiHandler.FetchCountry(code, mockClient);
+            var mockResponse = await _apiHandler.FetchCountryAsync(code, mockClient);
 
             mockMsgHandler.Protected().Verify(
                 "SendAsync",
@@ -69,7 +69,7 @@ namespace TestClient.API
             var url = $"{_url}/Country/GetCountryDataForYear/{code}/{date.Year}-{date.Month}-{date.Day}";
             var mockMsgHandler = CreateMockMsgHandler(url);
             var mockClient = new HttpClient(mockMsgHandler.Object);
-            var mockResponse = await _apiHandler.FetchCountryByYear(mockClient, code, date);
+            var mockResponse = await _apiHandler.FetchCountryByYearAsync(mockClient, code, date);
 
             mockMsgHandler.Protected().Verify(
                 "SendAsync",
