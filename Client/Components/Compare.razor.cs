@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace Client.Components
 {
-    public partial class Custom
+    public partial class Compare
     {
         [Inject]
         private HttpClient _httpClient { get; set; }
