@@ -19,9 +19,9 @@ namespace Client.Components
 
         private string _selectedOther = "";
 
-        private Country _country { get; set; }
+        private Country _country;
         
-        private Country _countryToCompareWith { get; set; }
+        private Country _countryToCompareWith;
 
         private IDictionary<string, string> _availableCountries = new Dictionary<string, string>();
         
