@@ -24,12 +24,7 @@ namespace Client.Components
 
         protected override async Task OnInitializedAsync()
         {
-<<<<<<< Updated upstream
-            //countryComp = await apiHandler.FetchCountryByYear(httpClient, "SWE", date); // Sweden
-            countryComp = await apiHandler.FetchCountryOfTheDay(httpClient);
-            countryCompTwo = await apiHandler.FetchCountryByYear(httpClient, "SWE", date); // Bulgaria
-            dataMetrics = GetValidMetrics();
-=======
+
             try
             {
                 _country =  await apiHandler.FetchHomeCountry(httpClient);
@@ -43,7 +38,6 @@ namespace Client.Components
             _countryToCompareWith = await apiHandler.FetchCountryOfTheDay(httpClient);
             _dataMetrics = GetValidMetrics();
             _availableMetrics = _dataMetrics;
->>>>>>> Stashed changes
         }
 
         private IList<string> GetValidMetrics()
