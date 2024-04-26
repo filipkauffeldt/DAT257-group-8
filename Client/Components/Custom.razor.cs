@@ -37,7 +37,7 @@ namespace Client.Components
             {
                 availableCountries.Add(country.Name, country.Code);
             }
-            _country = await apiHandler.FetchCountryByYear(httpClient, "SWE", _date); // Sweden
+            _country = await apiHandler.FetchHomeCountry(httpClient);
             _countryToCompareWith = await apiHandler.FetchCountryOfTheDay(httpClient);
             selectedHome = _country.Name;
             selectedOther = _countryToCompareWith.Name;
