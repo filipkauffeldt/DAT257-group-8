@@ -36,9 +36,19 @@ namespace API.Model
 
         public Country? GetCountryOfTheDay()
         {
-            // TODO: Implement logic to get country of the day
+            
+            DateTime today = DateTime.Today;
+            var stringToBeHashed = today.Month.ToString() + today.Day.ToString();
+            int hashed = stringToBeHashed.GetHashCode();
+
+
+            var countries = _dbContext.Countries.ToList();
+            var amountOfCountries = countries.Count();
+            string countryCode = countries[hashed % amountOfCountries].Code;
+         
             return _dbContext.Countries
-                .Include (c => c.Data)
+                .Where(c => c.Code.Equals(CountryCode))
+                .Include(c => c.Data)
                 .ThenInclude(d => d.Points)
                 .FirstOrDefault();
         }
