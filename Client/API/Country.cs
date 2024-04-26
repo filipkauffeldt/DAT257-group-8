@@ -32,5 +32,10 @@ namespace API
                 this.Description == other.Description
             );
         }
+
+        public override string ToString()
+        {
+            return Code;
+        }
     }
 }

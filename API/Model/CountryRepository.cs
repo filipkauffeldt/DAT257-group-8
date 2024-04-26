@@ -47,7 +47,7 @@ namespace API.Model
             int hashed = CreateIntHashFromString(stringToBeHashed);
 
 
-            var countries = _dbContext.Countries.ToList();
+            var countries = await _dbContext.Countries.ToListAsync();
             var amountOfCountries = countries.Count();
             string countryCode = countries[hashed % amountOfCountries].Code;
          
