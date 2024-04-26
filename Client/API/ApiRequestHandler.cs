@@ -32,7 +32,7 @@ namespace Client.API
             return await new RequestWrapper<IEnumerable<Country>>().GetFromJSONAsync(httpClient, $"{apiUrl}/Country/GetAllCountries");
         }
 
-        public async Task<IEnumerable<Country>> FetchAllCountryIdentifiers(HttpClient httpClient)
+        public async Task<IEnumerable<Country>> FetchAllCountryIdentifiersAsync(HttpClient httpClient)
         {
             return await new RequestWrapper<IEnumerable<Country>>().GetFromJSONAsync(httpClient, $"{apiUrl}/Country/GetAllCountryIdentifiers");
         }

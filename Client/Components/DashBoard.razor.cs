@@ -43,7 +43,7 @@ namespace Client.Components
             _countryToCompareWith = await apiHandler.FetchCountryOfTheDayAsync(httpClient);
             _dataMetrics = GetValidMetrics();
             _availableMetrics = _dataMetrics;
-            var countryIdentifiers = await apiHandler.FetchAllCountryIdentifiers(httpClient);
+            var countryIdentifiers = await apiHandler.FetchAllCountryIdentifiersAsync(httpClient);
             foreach(var country in countryIdentifiers)
             {
                 countryCodeDict.Add(country.Name, country.Code);

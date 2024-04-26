@@ -32,7 +32,7 @@ namespace Client.Components
 
         protected override async Task OnInitializedAsync()
         {
-            var countries = await _apiHandler.FetchAllCountryIdentifiers(_httpClient);
+            var countries = await _apiHandler.FetchAllCountryIdentifiersAsync(_httpClient);
             foreach (Country country in countries)
             {
                 _availableCountries.Add(country.Name, country.Code);
