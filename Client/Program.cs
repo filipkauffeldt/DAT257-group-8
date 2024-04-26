@@ -10,5 +10,6 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddRadzenComponents();
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddScoped<IApiHandler, ApiRequestHandler>();
+builder.Services.AddScoped<IGeoLocator, GeoLocatorHandler>();
 
 await builder.Build().RunAsync();
