@@ -22,7 +22,10 @@
                         SelectAllText="Select all data"
                         Chips=false
                         MaxSelectedLabels="1"
-                        Change="@((args) => OnValueChanged((IEnumerable<string>)args))">
+                        Change="@((args) => OnValueChanged((IEnumerable<string>)args))"
+                        FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                        FilterOperator="StringFilterOperator.StartsWith"
+                        AllowFiltering=true>
         </RadzenDropDown>
     }
 </div>
