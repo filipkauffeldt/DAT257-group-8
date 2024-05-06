@@ -9,8 +9,8 @@ namespace CSVReader
         static void Main(string[] args)
         {
             var repository = new CountryRepository(new CountryDbContext());
-            var pathToCountryFile = new ZlpDirectoryInfo(@""); // Add path to csv file with countries, eg allcountries.csv
-            var basePathForData = new ZlpDirectoryInfo(@""); // Add path to directory with csv files containing data, eg /Data
+            var pathToCountryFile = new ZlpDirectoryInfo(@"API/CSVReader/Files/"); // Add path to csv file with countries, eg allcountries.csv
+            var basePathForData = new ZlpDirectoryInfo(@"API/CSVReader/Files/Data/"); // Add path to directory with csv files containing data, eg /Data
 
             var countryFile = pathToCountryFile.GetFiles(SearchOption.TopDirectoryOnly);
             var countries = CSVReader.ReadCountries(countryFile.First().ToString());
