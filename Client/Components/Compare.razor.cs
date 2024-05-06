@@ -71,16 +71,16 @@ namespace Client.Components
         {
             _selectedHome = name;
             _country = await _apiHandler.FetchCountryByYearAsync(_httpClient, _availableCountries[name], _date);
-            _dataMetrics = GetValidMetrics();
             StateHasChanged();
+            _dataMetrics = (IList<string>)_dataMetrics.Intersect(GetValidMetrics());
         }
 
         private async void UpdateOtherCountry(string name)
         {
             _selectedOther = name;
             _countryToCompareWith = await _apiHandler.FetchCountryByYearAsync(_httpClient, _availableCountries[name], _date);
-            _dataMetrics = GetValidMetrics();
             StateHasChanged();
+            _dataMetrics = (IList<string>)_dataMetrics.Intersect(GetValidMetrics());
         }
 
         private static string FormatLabel(string label)
