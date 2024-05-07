@@ -23,7 +23,7 @@
                             MaxSelectedLabels="1"
                             Change="@((e) => UpdateHomeCountry((string)e))"
                             FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                            FilterOperator="StringFilterOperator.StartsWith"
+                            FilterOperator="StringFilterOperator.Contains"
                             AllowFiltering=true>
                         </RadzenDropDown>  
 
@@ -37,7 +37,7 @@
                             MaxSelectedLabels="1"
                             Change="@((e) => UpdateOtherCountry((string)e))" 
                             FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                            FilterOperator="StringFilterOperator.StartsWith"
+                            FilterOperator="StringFilterOperator.Contains"
                             AllowFiltering=true>
                         </RadzenDropDown>  
                 </menu>
