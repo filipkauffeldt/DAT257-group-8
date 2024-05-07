@@ -29,6 +29,11 @@
                 <div class="data-filter">
                     <DataFilterer Data="@_dataMetrics" OnChange="HandleFilterChange"></DataFilterer>
                 </div>
+
+                <div class="sorting-dropdown">
+                    <SortingComponent SortingOptions="@sortingOptions" OnSortingOptionSelected="@SortData" />
+                </div>
+                    
                 <nav class="table-of-contents">
                     <ul>
                         @foreach (var metric in _dataMetrics)
@@ -58,3 +63,32 @@
         </div>
     }
 </div>
+
+@code {
+    // Sorting options
+    private List<SortingOptions> sortingOptions = new List<SortingOptions>
+        {
+            new SortingOptions {DisplayName = "Alphabetical order", Value = "alphabetical"},
+            new SortingOptions {DisplayName = "Biggest Difference", Value = "biggest_difference"},
+            new SortingOptions {DisplayName = "Smallest Difference", Value = "smallest_difference"}
+        };
+
+        // Sorting methods
+        private void SortData(String selectedValue)
+        {
+            switch(selectedValue)
+            {
+                case "alphabetical":
+                    //Alphabetical sorting logic
+                    _dataMetrics = _dataMetrics.OrderBy(metric => metric).ToList();
+                    break;
+                case "biggest_difference":
+                    // Biggest differnce sorting logic
+                    break;
+                case "smallest_difference":
+                    // Smallest difference sorting logic
+                    break;
+
+            }
+        }
+}

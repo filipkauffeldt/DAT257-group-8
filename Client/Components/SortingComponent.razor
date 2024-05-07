@@ -1,0 +1,22 @@
+
+<select class = "sorting-dropdown" @onchange="HandleSelection">
+    <option value="">-- Select Sorting Option --</option>
+    @foreach (var option in sortingOptions)
+    {
+        <option value="@option.Value">@option.DisplayName</option>
+    }
+</select>
+
+@code {
+    [Parameter]
+    public List<SortingOptions> sortingOptions { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnSortingOptionSelected { get; set; }
+
+    private async Task HandleSelection(ChangeEventArgs e)
+    {
+        string selectedValue = e.Value.ToString();
+        await OnSortingOptionSelected.InvokeAsync(selectedValue);
+    }
+}
