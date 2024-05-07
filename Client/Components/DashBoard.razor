@@ -30,7 +30,7 @@
                     <DataFilterer Data="@_dataMetrics" OnChange="HandleFilterChange"></DataFilterer>
                 </div>
 
-                <div class="sorting-dropdown">
+                <div class="sorting-menu">
                     <SortingComponent SortingOptions="@sortingOptions" OnSortingOptionSelected="@SortData" />
                 </div>
                     
@@ -68,9 +68,9 @@
     // Sorting options
     private List<SortingOptions> sortingOptions = new List<SortingOptions>
         {
-            new SortingOptions {DisplayName = "Alphabetical order", Value = "alphabetical"},
-            new SortingOptions {DisplayName = "Biggest Difference", Value = "biggest_difference"},
-            new SortingOptions {DisplayName = "Smallest Difference", Value = "smallest_difference"}
+            new SortingOptions {DisplayName = "Alphabetical", Value = "alphabetical"},
+            new SortingOptions {DisplayName = "Descending ", Value = "biggest_difference"},
+            new SortingOptions {DisplayName = "Ascending", Value = "smallest_difference"}
         };
 
         // Sorting methods
