@@ -2,12 +2,19 @@
     margin-top: auto;
     background-color: var( --main-dark-blue);
     padding: 20px 0;
-    text-align: center;
     width: 100%;
     color: white;
-    display: inline-flex;
+    
 }
 
-.col-md-12 {
-    width: 500px;
+.row {
+    display: inline-flex;
+    width: 100%;
+    
+    justify-content: center;
+}
+
+.row p {
+    width: auto;
+    margin: 0 20px;
 }
