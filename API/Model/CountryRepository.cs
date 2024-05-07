@@ -65,10 +65,11 @@ namespace API.Model
             return Math.Abs(ivalue);
         }
 
-        public void AddCountry(Country country)
+        public async Task<Country> AddCountry(Country country)
         {
             _dbContext.Countries.Add(country);
-            _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
+            return country;
         }
 
         public void UpdateCountry(Country country)
