@@ -34,7 +34,7 @@ namespace CSVReader
             {
                 Console.WriteLine($"{country.Code} {country.Name} {country.Continent}");
 
-                await repository.AddCountry(country);
+                await repository.AddCountryAsync(country);
             }
         }
     }
