@@ -1,0 +1,15 @@
+﻿footer {
+    position: absolute;
+    bottom: 0;
+    background-color: var( --main-dark-blue);
+    padding: 20px 0;
+    text-align: center;
+    width: 100%;
+    color: white;
+    display: inline-flex;
+    /*margin-left: -24px;*/ /* This is a hack to make the footer align with the rest of the page */
+}
+
+.col-md-12 {
+    width: 500px;
+}
