@@ -1,5 +1,7 @@
-﻿using System.Reflection.Metadata.Ecma335;
+﻿using System.Diagnostics.Metrics;
+using System.Reflection.Metadata.Ecma335;
 using System.Runtime.InteropServices;
+using System.Security.AccessControl;
 using API;
 using Client.API;
 using Microsoft.AspNetCore.Components;
@@ -59,6 +61,8 @@ namespace Client.Components
             {
                 cC.LoadValues();
             }
+            _dataMetrics = GetValidMetrics();
+            _availableMetrics = _dataMetrics;
             StateHasChanged();
         }
 
@@ -72,15 +76,13 @@ namespace Client.Components
             var validMetrics = new List<string>();
             foreach (var metric in _country.Data.Select(d => d.Name).ToList())
             {
-                var countryCompDataExists = _country.Data?.Any(d => d.Name == metric && d.Points.Any()) ?? false;
-                var countryCompTwoDataExists = _countryToCompareWith.Data?.Any(d => d.Name == metric && d.Points.Any()) ?? false;
-
+                var countryCompDataExists = _country.Data?.Any(d => d.Name == metric && d.Points.Any(e => e.Date.Year == _date.Year)) ?? false;
+                var countryCompTwoDataExists = _countryToCompareWith.Data?.Any(d => d.Name == metric && d.Points.Any(e => e.Date.Year == _date.Year)) ?? false;
                 if (countryCompDataExists && countryCompTwoDataExists)
                 {
                     validMetrics.Add(metric);
                 }
             }
-
             return validMetrics;
         }
 

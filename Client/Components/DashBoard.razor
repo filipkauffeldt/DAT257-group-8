@@ -27,7 +27,7 @@
 
             <div class="header"> 
                 <div class="data-filter">
-                    <DataFilterer Data="@_dataMetrics" OnChange="HandleFilterChange"></DataFilterer>
+                    <DataFilterer @key="@_availableMetrics" Data="@_dataMetrics" OnChange="HandleFilterChange"></DataFilterer>
                 </div>
                 <nav class="table-of-contents">
                     <ul>
