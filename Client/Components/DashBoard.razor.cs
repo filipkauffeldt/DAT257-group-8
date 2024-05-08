@@ -44,7 +44,7 @@ namespace Client.Components
             }
             _countryToCompareWith = await apiHandler.FetchCountryOfTheDayAsync(httpClient);
             _dataMetrics = GetValidMetrics();
-            _availableMetrics = _dataMetrics;
+            _availableMetrics = new List<string>(_dataMetrics);
             var countryIdentifiers = await apiHandler.FetchAllCountryIdentifiersAsync(httpClient);
             foreach(var country in countryIdentifiers)
             {
@@ -62,7 +62,7 @@ namespace Client.Components
                 cC.LoadValues();
             }
             _dataMetrics = GetValidMetrics();
-            _availableMetrics = _dataMetrics;
+            _availableMetrics = new List<string>(_dataMetrics);
             StateHasChanged();
         }
 

@@ -42,7 +42,7 @@ namespace Client.Components
             _selectedHome = _country.Name;
             _selectedOther = _countryToCompareWith.Name;
             _dataMetrics = GetValidMetrics();
-            _availableMetrics = _dataMetrics;
+            _availableMetrics = new List<string>(_dataMetrics);
         }
 
         private IList<string> GetValidMetrics()
@@ -72,7 +72,7 @@ namespace Client.Components
             _selectedHome = name;
             _country = await _apiHandler.FetchCountryByYearAsync(_httpClient, _availableCountries[name], _date);
             _dataMetrics = GetValidMetrics();
-            _availableMetrics = _dataMetrics;
+            _availableMetrics = new List<string>(_dataMetrics);
             StateHasChanged();
         }
 
@@ -81,7 +81,7 @@ namespace Client.Components
             _selectedOther = name;
             _countryToCompareWith = await _apiHandler.FetchCountryByYearAsync(_httpClient, _availableCountries[name], _date);
             _dataMetrics = GetValidMetrics();
-            _availableMetrics = _dataMetrics;
+            _availableMetrics = new List<string>(_dataMetrics);
             StateHasChanged();
         }
 
