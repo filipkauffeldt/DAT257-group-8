@@ -1,18 +1,14 @@
-﻿@page "/dashboard"
-
-
-
-
+﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent;
 
 <div class="dash-board">
-    @if (_homeCountryError)
+    @if (!State.Value.HomeCountryFound)
     {
         <div>
             <p>Home country not found</p>
             <HomeCountryDropDown @ref="dropDown" CountryChanged="HomeCountryChange" CountryNames="@countryNames" CountryCodeDict="@countryCodeDict" />
         </div>
     }
-    else if (_country == null || _countryToCompareWith == null)
+    else if (!State.Value.HomeCountryFound || !State.Value.CountryOfTheDayFound)
     {
         <p>Loading...</p>
     }
@@ -20,37 +16,37 @@
     {
         <div class="country-of-the-day">
             <h2>
-                The country of the day is @_countryToCompareWith.Name
+                The country of the day is @State.Value.CountryOfTheDay.Name
             </h2>
         </div>
         <div class="container"> 
 
             <div class="header"> 
                 <div class="data-filter">
-                    <DataFilterer Data="@_dataMetrics" OnChange="HandleFilterChange"></DataFilterer>
+                    <DataFilterer Data="@State.Value.SharedMetrics" OnChange="HandleFilterChange"></DataFilterer>
                 </div>
                 <nav class="table-of-contents">
                     <ul>
-                        @foreach (var metric in _dataMetrics)
+                        @foreach (var metric in State.Value.SharedMetrics)
                         {
                             <li><a href="#@FormatLabel(metric)">@metric</a></li>
                         }
             </ul>
         </nav>
         </div>
-        @if (_availableMetrics.Count == 0)
+        @if (State.Value.SharedMetrics.Count == 0)
         {
             <div>
-                <p>No shared data between @_country.Name and @_countryToCompareWith.Name</p>
+                <p>No shared data between @State.Value.HomeCountry.Name and @State.Value.CountryOfTheDay.Name</p>
             </div>
         }
-        else if(_dataMetrics.Count != 0)
+        else if(State.Value.ShownMetrics.Count != 0)
         {
             <div class="grid-container">
-                @foreach (var metric in _dataMetrics)
+                @foreach (var metric in State.Value.ShownMetrics)
                 {
                     <div id="@FormatLabel(metric)" class="grid-item">
-                            <ComparisonComponent @ref="@compComp[metric]" CountryComparison="@_countryToCompareWith" CountryOrigin="@_country" date="@_date" ResourceType="@metric"></ComparisonComponent>
+                            <ComparisonComponent @ref="@compComp[metric]" CountryComparison="@State.Value.CountryOfTheDay" CountryOrigin="@State.Value.HomeCountry" date="@_date" ResourceType="@metric"></ComparisonComponent>
                     </div>
                 }
                 </div>
@@ -58,7 +54,7 @@
             else
             {
                 <div>
-                    <p>No data selected between @_country.Name and @_countryToCompareWith.Name</p>
+                    <p>No data selected between @State.Value.HomeCountry.Name and @State.Value.CountryOfTheDay.Name</p>
                 </div>
             }
 
