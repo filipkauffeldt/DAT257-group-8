@@ -1,20 +1,28 @@
 ﻿
 
 <div class="main">
+    <div>
     <h4>@CountryComparison.Name uses @GetComparisonPercentage(ComparisonCountryValue, OriginCountryValue) @ResourceType than @CountryOrigin.Name </h4>
     <p>Unit: @Unit</p>
     <RadzenChart>
+           
         <RadzenBarSeries Fill="@Colors.Warning" Data="@OriginValueList" CategoryProperty="Date" Title="@CountryOrigin.Name" LineType="LineType.Dashed" ValueProperty="Value">
             <RadzenSeriesDataLabels Visible="true" />
         </RadzenBarSeries>
         <RadzenBarSeries Data="@ComparisonValueList" CategoryProperty="Date" Title="@CountryComparison.Name" LineType="LineType.Dashed" ValueProperty="Value">
             <RadzenSeriesDataLabels Visible="true" />
         </RadzenBarSeries>
-        <RadzenValueAxis Min="0" Max="@SetBarWidth()">
+            <RadzenValueAxis Min="0" Max="@SetBarWidth()" FormatString="{0:N}" >
+                
             <RadzenGridLines Visible="true" />
             <RadzenAxisTitle Text="Consumption" />
+            
         </RadzenValueAxis>
+              
         <RadzenBarOptions Radius="10" Height="40" Margin="10" />
+            <RadzenCategoryAxis Formatter=@(value => value == null ? "" : DateOnly.Parse((value.ToString())).Year.ToString() ) Step="20" />
     </RadzenChart>
+
+    </div>
 </div>
 
