@@ -12,15 +12,12 @@
         <RadzenBarSeries Data="@ComparisonValueList" CategoryProperty="Date" Title="@CountryComparison.Name" LineType="LineType.Dashed" ValueProperty="Value">
             <RadzenSeriesDataLabels Visible="true" />
         </RadzenBarSeries>
-            <RadzenValueAxis Min="0" Max="@SetBarWidth()" FormatString="{0:N}" >
-                
+        <RadzenValueAxis Min="0" Max="@SetBarWidth()" FormatString="{0:N}" >
             <RadzenGridLines Visible="true" />
             <RadzenAxisTitle Text="Consumption" />
-            
         </RadzenValueAxis>
-              
         <RadzenBarOptions Radius="10" Height="40" Margin="10" />
-            <RadzenCategoryAxis Formatter=@(value => value == null ? "" : DateOnly.Parse((value.ToString())).Year.ToString() ) />
+        <RadzenCategoryAxis Formatter=@(value => value == null ? "" : DateOnly.Parse((value.ToString())).Year.ToString() ) />
     </RadzenChart>
 
     </div>
