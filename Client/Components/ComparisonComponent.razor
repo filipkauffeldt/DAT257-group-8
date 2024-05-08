@@ -20,7 +20,7 @@
         </RadzenValueAxis>
               
         <RadzenBarOptions Radius="10" Height="40" Margin="10" />
-            <RadzenCategoryAxis Formatter=@(value => value == null ? "" : DateOnly.Parse((value.ToString())).Year.ToString() ) Step="20" />
+            <RadzenCategoryAxis Formatter=@(value => value == null ? "" : DateOnly.Parse((value.ToString())).Year.ToString() ) />
     </RadzenChart>
 
     </div>
