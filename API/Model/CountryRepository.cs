@@ -72,7 +72,7 @@ namespace API.Model
             return country;
         }
 
-        public async Task<CountryRepository> UpdateCountryAsync(Country country)
+        public async Task<Country> UpdateCountryAsync(Country country)
         {
             _dbContext.Countries.Update(country);
             await _dbContext.SaveChangesAsync();
