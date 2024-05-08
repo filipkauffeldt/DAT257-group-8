@@ -56,12 +56,28 @@
             </div>
 
             <div class="grid-container">
-                @foreach (var metric in _dataMetrics)
+                @if (_availableMetrics.Count == 0)
+                {
+                    <div>
+                        <p>No shared data between @_country.Name and @_countryToCompareWith.Name</p>
+                    </div>
+                }
+                else if (_dataMetrics.Count != 0)
+                {
+                   @foreach (var metric in _dataMetrics)
                 {
                     <div id="@FormatLabel(metric)" class="grid-item">
                         <ComparisonComponent @key="@($"{_country}-{_countryToCompareWith}-{metric}")" CountryComparison="@_country" CountryOrigin="@_countryToCompareWith" date="@_date" ResourceType="@metric"></ComparisonComponent>
                     </div>
                 }
+                }
+                else
+                {
+                    <div>
+                        <p>No data selected between @_country.Name and @_countryToCompareWith.Name</p>
+                    </div>
+                }
+                
             </div>
             
         </div>
