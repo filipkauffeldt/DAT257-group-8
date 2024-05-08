@@ -1,0 +1,20 @@
+﻿footer {
+    margin-top: auto;
+    background-color: var( --main-dark-blue);
+    padding: 20px 0;
+    width: 100%;
+    color: white;
+    
+}
+
+.row {
+    display: inline-flex;
+    width: 100%;
+    
+    justify-content: center;
+}
+
+.row p {
+    width: auto;
+    margin: 0 20px;
+}

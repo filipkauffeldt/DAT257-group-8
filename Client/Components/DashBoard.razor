@@ -43,13 +43,13 @@
             </ul>
         </nav>
         </div>
-        @if (_dataMetrics.Count == 0)
+        @if (_availableMetrics.Count == 0)
         {
             <div>
-                <p>No data shared data available for @_country.Name and @_countryToCompareWith.Name</p>
+                <p>No shared data between @_country.Name and @_countryToCompareWith.Name</p>
             </div>
         }
-        else
+        else if(_dataMetrics.Count != 0)
         {
             <div class="grid-container">
                 @foreach (var metric in _dataMetrics)
@@ -58,8 +58,15 @@
                             <ComparisonComponent @ref="@compComp[metric]" CountryComparison="@_countryToCompareWith" CountryOrigin="@_country" date="@_date" ResourceType="@metric"></ComparisonComponent>
                     </div>
                 }
-            </div>
-        }
+                </div>
+            }
+            else
+            {
+                <div>
+                    <p>No data selected between @_country.Name and @_countryToCompareWith.Name</p>
+                </div>
+            }
+
         </div>
     }
 </div>

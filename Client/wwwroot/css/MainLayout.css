@@ -1,3 +1,9 @@
+main {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
 /* Title and Logo settings */
 .title {
     margin-right: 20px;
