@@ -1,6 +1,4 @@
-﻿using System.Reflection.Metadata.Ecma335;
-using System.Runtime.InteropServices;
-using API;
+﻿using API;
 using Client.API;
 using Microsoft.AspNetCore.Components;
 
@@ -42,7 +40,7 @@ namespace Client.Components
             }
             _countryToCompareWith = await apiHandler.FetchCountryOfTheDayAsync(httpClient);
             _dataMetrics = GetValidMetrics();
-            _availableMetrics = _dataMetrics;
+            _availableMetrics = new List<string>(_dataMetrics);
             var countryIdentifiers = await apiHandler.FetchAllCountryIdentifiersAsync(httpClient);
             foreach(var country in countryIdentifiers)
             {
@@ -59,6 +57,8 @@ namespace Client.Components
             {
                 cC.LoadValues();
             }
+            _dataMetrics = GetValidMetrics();
+            _availableMetrics = new List<string>(_dataMetrics);
             StateHasChanged();
         }
 
@@ -72,15 +72,13 @@ namespace Client.Components
             var validMetrics = new List<string>();
             foreach (var metric in _country.Data.Select(d => d.Name).ToList())
             {
-                var countryCompDataExists = _country.Data?.Any(d => d.Name == metric && d.Points.Any()) ?? false;
-                var countryCompTwoDataExists = _countryToCompareWith.Data?.Any(d => d.Name == metric && d.Points.Any()) ?? false;
-
+                var countryCompDataExists = _country.Data?.Any(d => d.Name == metric && d.Points.Any(e => e.Date.Year == _date.Year)) ?? false;
+                var countryCompTwoDataExists = _countryToCompareWith.Data?.Any(d => d.Name == metric && d.Points.Any(e => e.Date.Year == _date.Year)) ?? false;
                 if (countryCompDataExists && countryCompTwoDataExists)
                 {
                     validMetrics.Add(metric);
                 }
             }
-
             return validMetrics;
         }
 

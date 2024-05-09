@@ -42,7 +42,7 @@ namespace Client.Components
             _selectedHome = _country.Name;
             _selectedOther = _countryToCompareWith.Name;
             _dataMetrics = GetValidMetrics();
-            _availableMetrics = _dataMetrics;
+            _availableMetrics = new List<string>(_dataMetrics);
         }
 
         private IList<string> GetValidMetrics()
@@ -55,8 +55,8 @@ namespace Client.Components
             var validMetrics = new List<string>();
             foreach (var metric in _country.Data.Select(d => d.Name).ToList())
             {
-                var countryCompDataExists = _country.Data?.Any(d => d.Name == metric && d.Points.Any()) ?? false;
-                var countryCompTwoDataExists = _countryToCompareWith.Data?.Any(d => d.Name == metric && d.Points.Any()) ?? false;
+                var countryCompDataExists = _country.Data?.Any(d => d.Name == metric && d.Points.Any(e => e.Date.Year == _date.Year)) ?? false;
+                var countryCompTwoDataExists = _countryToCompareWith.Data?.Any(d => d.Name == metric && d.Points.Any(e => e.Date.Year == _date.Year)) ?? false;
 
                 if (countryCompDataExists && countryCompTwoDataExists)
                 {
@@ -72,6 +72,7 @@ namespace Client.Components
             _selectedHome = name;
             _country = await _apiHandler.FetchCountryByYearAsync(_httpClient, _availableCountries[name], _date);
             _dataMetrics = GetValidMetrics();
+            _availableMetrics = new List<string>(_dataMetrics);
             StateHasChanged();
         }
 
@@ -80,6 +81,7 @@ namespace Client.Components
             _selectedOther = name;
             _countryToCompareWith = await _apiHandler.FetchCountryByYearAsync(_httpClient, _availableCountries[name], _date);
             _dataMetrics = GetValidMetrics();
+            _availableMetrics = new List<string>(_dataMetrics);
             StateHasChanged();
         }
 
