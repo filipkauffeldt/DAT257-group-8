@@ -17,7 +17,7 @@ namespace CSVReader
                     while (!reader.EndOfStream)
                     {
                         string line = reader.ReadLine();
- 
+
                         var values = Regex.Split(line, ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
 
                         values[1] = values[1].Replace("\"", string.Empty);
@@ -40,7 +40,7 @@ namespace CSVReader
 
             return countries;
         }
-        
+
         public static List<Country> AddData(List<Country> countries, string path)
         {
             var dataMap = new Dictionary<string, Data>();
@@ -55,44 +55,7 @@ namespace CSVReader
                         {
                             string line = reader.ReadLine();
 
-                            var values = Regex.Split(line, ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
-
-                            values[0] = values[0].Replace("\"", string.Empty);
-                            values[1] = values[1].Replace("\"", string.Empty);
-                            values[2] = values[2].Replace("\"", string.Empty);
-                            values[3] = values[3].Replace("\"", string.Empty);
-                            values[4] = values[4].Replace("\"", string.Empty);
-
-                            var dataName = values[0];
-                        
-                            var countryName = values[1];
-                            var unit = values[2];
-                            var year = values[3];
-                            var value = double.Parse(values[4], CultureInfo.InvariantCulture);
-
-                            Console.WriteLine($"Add data for {countryName}");
-
-                            if (!dataMap.ContainsKey(countryName))
-                            {
-                                var newData = new Data()
-                                { 
-                                    Name = dataName,
-                                    Unit = unit,
-                                    Points = new List<DataPoint>()
-                                };
-
-                                dataMap.Add(countryName, newData);
-                            }
-
-                            var dp = new DataPoint()
-                            {
-                                Date = new DateOnly(int.Parse(year), 1, 1),
-                                Value = value
-                            };
-
-                            var countryData = dataMap[countryName];
-                            var points = countryData.Points;
-                            points.Add(dp);
+                            AddDataLine(line, dataMap);
                         }
                         catch (Exception e)
                         {
@@ -115,6 +78,47 @@ namespace CSVReader
             }
 
             return countries;
+        }
+        private static void AddDataLine(string line, Dictionary<string, Data> dataMap)
+        {
+            var values = Regex.Split(line, ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+
+            values[0] = values[0].Replace("\"", string.Empty);
+            values[1] = values[1].Replace("\"", string.Empty);
+            values[2] = values[2].Replace("\"", string.Empty);
+            values[3] = values[3].Replace("\"", string.Empty);
+            values[4] = values[4].Replace("\"", string.Empty);
+
+            var dataName = values[0];
+
+            var countryName = values[1];
+            var unit = values[2];
+            var year = values[3];
+            var value = double.Parse(values[4], CultureInfo.InvariantCulture);
+
+            Console.WriteLine($"Add data for {countryName}");
+
+            if (!dataMap.ContainsKey(countryName))
+            {
+                var newData = new Data()
+                {
+                    Name = dataName,
+                    Unit = unit,
+                    Points = new List<DataPoint>()
+                };
+
+                dataMap.Add(countryName, newData);
+            }
+
+            var dp = new DataPoint()
+            {
+                Date = new DateOnly(int.Parse(year), 1, 1),
+                Value = value
+            };
+
+            var countryData = dataMap[countryName];
+            var points = countryData.Points;
+            points.Add(dp);
         }
     }
 }
