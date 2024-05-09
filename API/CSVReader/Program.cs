@@ -6,10 +6,10 @@ namespace CSVReader
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             var repository = new CountryRepository(new CountryDbContext());
-            var pathToCountryFile = new ZlpDirectoryInfo(@""); // Add path to csv file with countries, eg allcountries.csv
+            var pathToCountryFile = new ZlpDirectoryInfo(@""); // Add path to directory with csv file with countries, eg ..\API\CSVReader\Files\
             var basePathForData = new ZlpDirectoryInfo(@""); // Add path to directory with csv files containing data, eg /Data
 
             var countryFile = pathToCountryFile.GetFiles(SearchOption.TopDirectoryOnly);
@@ -34,7 +34,7 @@ namespace CSVReader
             {
                 Console.WriteLine($"{country.Code} {country.Name} {country.Continent}");
 
-                repository.AddCountry(country);
+                await repository.AddCountryAsync(country);
             }
         }
     }

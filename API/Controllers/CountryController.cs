@@ -74,40 +74,5 @@ namespace API.Controllers
 
             return Ok(countryContract);
         }
-
-        [HttpPost()]
-        public IActionResult CreateRandomCountry()
-        {
-            var country = new Country
-            {
-                Code = Guid.NewGuid().ToString(),
-                Name = "Random Country",
-                Continent = "Random Continent",
-                Description = "Random Description",
-                Data = new List<Data>
-                {
-                    new Data
-                    {
-                        Name = "Random Data",
-                        Description = "Random Description",
-                        Unit = "Random Unit",
-                        Points = new List<DataPoint>
-                        {
-                            new DataPoint
-                            {
-                                Value = Random.Shared.Next(0, 100),
-                                Date = DateOnly.FromDateTime(DateTime.Now)
-                            }
-                        }
-                    }
-                }
-            };
-
-            _countryRepository.AddCountry(country);
-
-            var countryContract = Mapper.MapCountry(country);
-
-            return CreatedAtAction(nameof(CreateRandomCountry), new { code = countryContract.Code }, countryContract);
-        }
     }
 }
