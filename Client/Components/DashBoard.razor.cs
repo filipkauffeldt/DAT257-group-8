@@ -42,13 +42,14 @@ namespace Client.Components
 
         private async void HomeCountryChange(string CountryCode)
         {
-            //_country = await apiHandler.FetchCountryByYearAsync(httpClient, CountryCode, _date);
-            //StateHasChanged();
-            //foreach (var cC in compComp.Values)
-            //{
-            //    cC.LoadValues();
-            //}
-            //StateHasChanged();
+            var country = await _apiHandler.FetchCountryByYearAsync(_httpClient, CountryCode, _date);
+            Dispatcher.Dispatch(new HomeCountryDetectedSuccessfullyAction(country));
+            StateHasChanged();
+            foreach (var cC in compComp.Values)
+            {
+               cC.LoadValues();
+            }
+            StateHasChanged();
         }
 
         private void InitSharedMetrics()
