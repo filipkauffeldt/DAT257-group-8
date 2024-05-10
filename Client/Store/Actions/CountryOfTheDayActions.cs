@@ -26,4 +26,9 @@ namespace Client.Store.Actions
         public ShownMetricsSelectedAction(IList<string> metrics) => Metrics = metrics;
     };
 
+    public class CountryIdentifiersFetchedAction
+    {
+        public IList<Country> CountryIdentifiers { get; }
+        public CountryIdentifiersFetchedAction(IList<Country> countryIdentifiers) => CountryIdentifiers = countryIdentifiers;
+    }
 }

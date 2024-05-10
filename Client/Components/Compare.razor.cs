@@ -41,8 +41,9 @@ namespace Client.Components
 
         protected override async Task OnInitializedAsync()
         {
-            var countries = await _apiHandler.FetchAllCountryIdentifiersAsync(_httpClient);
-            foreach (Country country in countries)
+            // var countries = await _apiHandler.FetchAllCountryIdentifiersAsync(_httpClient);
+            await InitCompareCountryNames();
+            foreach (Country country in State.Value.CountryIdentifiers)
             {
                 _availableCountries.Add(country.Name, country.Code);
             }
@@ -52,6 +53,12 @@ namespace Client.Components
             _selectedOther = _countryToCompareWith.Name;
             _dataMetrics = GetValidMetrics();
             _availableMetrics = new List<string>(_dataMetrics);
+        }
+
+        private async Task InitCompareCountryNames() {
+            if (State.Value.CountryIdentifiers != null) return;
+            var countries = await _apiHandler.FetchAllCountryIdentifiersAsync(_httpClient);
+            Dispatcher.Dispatch(new CountryIdentifiersFetchedAction(countries.ToList()));
         }
 
         private IList<string> GetValidMetrics()

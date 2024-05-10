@@ -41,5 +41,14 @@ namespace Client.Store.Reducers
                 ShownMetrics = action.Metrics
             };
         }
+
+        [ReducerMethod]
+        public static CustomCompareState CountryIdentifiersDetectedSuccessfullyReducer(CustomCompareState state, CountryIdentifiersFetchedAction action)
+        {
+            return state with
+            {
+                CountryIdentifiers = action.CountryIdentifiers
+            };
+        }
     }
 }
