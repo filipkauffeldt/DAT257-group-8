@@ -136,12 +136,6 @@ namespace Client.Components
             }
         }
 
-        // private async Task InitCompareCountryNamesAsync() {
-        //     if (State.Value.CountryIdentifiers != null) return;
-        //     var countries = await _apiHandler.FetchAllCountryIdentifiersAsync(_httpClient);
-        //     Dispatcher.Dispatch(new CountryIdentifiersFetchedAction(countries.ToList()));
-        // }
-
         private async Task InitCountryIdentifiersAsync()
         {
             if (State.Value.CountryIdentifiers == null) {
