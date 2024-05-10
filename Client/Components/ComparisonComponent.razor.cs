@@ -27,7 +27,8 @@ namespace Client.Components
         public string Unit { get; set; } = "NaN";
 
         public string ComparisonValueStyle = "width: 10rem;";
-        
+
+        private float Threshold = 0.0001f;
         private Data? GetCountryData(Country country)
         {
             
@@ -79,6 +80,17 @@ namespace Client.Components
 
         public string GetComparisonPercentage(float comparisonValue, float originValue)
         {
+            if( (Math.Abs(comparisonValue) < this.Threshold) && (Math.Abs(originValue) < Threshold))
+            {
+                return "the same amount of";
+            } else if (Math.Abs(comparisonValue) < Threshold)
+            {
+                return (comparisonValue.ToString() + " " + Unit + " less ");
+            }
+            else if((Math.Abs(originValue) < Threshold))
+            {
+                return (comparisonValue.ToString() + " " + Unit + " more ");
+            }
             float relativeDifference = (comparisonValue / originValue) - 1;
             // Sets width of comparison value bar
             if (comparisonValue > originValue)
@@ -97,7 +109,7 @@ namespace Client.Components
 
         public float SetBarWidth()
         {
-            return MathF.Max(ComparisonCountryValue, OriginCountryValue) * 1.1f;
+            return MathF.Max(ComparisonCountryValue, OriginCountryValue) * 1.3f;
         }
     }
 }
