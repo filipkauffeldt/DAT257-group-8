@@ -78,12 +78,12 @@ namespace Client.Components
                 ComparisonValueList.Add(new DataPoint { Date = date, Value = 1 });
                 ComparisonCountryValue = 1;
             }
-
+            // Text at the bottom of the cards
             ConsumptionText = "Consumption in " + Unit;
         }
 
         public string GetComparisonPercentage(float comparisonValue, float originValue)
-        {
+        {  // Threshold makes ut so that values near 0 do not cause a extremely large percentage value in the comparison text.
             if( (Math.Abs(comparisonValue) < this.Threshold) && (Math.Abs(originValue) < Threshold))
             {
                 return "the same amount of";
@@ -96,7 +96,7 @@ namespace Client.Components
                 return (comparisonValue.ToString() + " " + Unit + " more ");
             }
             float relativeDifference = (comparisonValue / originValue) - 1;
-            // Sets width of comparison value bar
+            
             if (comparisonValue > originValue)
             {
                 return ((int)(Math.Abs(relativeDifference) * 100)).ToString() + "% more";
@@ -110,7 +110,7 @@ namespace Client.Components
                 return "the same amount of";
             }
         }
-
+        // Sets width of comparison value bar
         public float SetBarWidth()
         {
             return MathF.Max(ComparisonCountryValue, OriginCountryValue) * 1.3f;
