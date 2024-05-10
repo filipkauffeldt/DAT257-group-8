@@ -1,18 +1,18 @@
 ﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent;
 
 <div class="dash-board">
-    @if (!State.Value.HomeCountryFound)
+    @if (_homeCountryError)
     {
         <div>
             <p>Home country not found</p>
             <HomeCountryDropDown @ref="dropDown" CountryChanged="HomeCountryChange" CountryNames="@countryNames" CountryCodeDict="@countryCodeDict" />
         </div>
     }
-    else if (!State.Value.HomeCountryFound || !State.Value.CountryOfTheDayFound)
+    else if (!State.Value.HomeCountryFound || !State.Value.CountryOfTheDayFound || !_initialized)
     {
         <p>Loading...</p>
     }
-    else
+    else 
     {
         <div class="country-of-the-day">
             <h2>
@@ -22,12 +22,10 @@
         <div class="container"> 
 
             <div class="header"> 
-                @if (_initialized)
-                {
-                    <div class="data-filter">
-                        <DataFilterer Data="@State.Value.SharedMetrics" DefaultSelectedValues="@State.Value.ShownMetrics" OnChange="HandleFilterChange"></DataFilterer>
-                    </div>
-                }
+                <div class="data-filter">
+                    <DataFilterer Data="@State.Value.SharedMetrics" DefaultSelectedValues="@State.Value.ShownMetrics" OnChange="HandleFilterChange"></DataFilterer>
+                </div>
+                
                 <nav class="table-of-contents">
                     <ul>
                         @foreach (var metric in State.Value.SharedMetrics)

@@ -110,10 +110,12 @@ namespace Client.Components
                 }
                 else
                 {
+                    _homeCountryError = true;
                     Dispatcher.Dispatch(new HomeCountryDetectedFailedAction());
                 }
             } catch (Exception ex)
             {
+                _homeCountryError = true;
                 Console.Out.WriteLineAsync(ex.Message);
                 Dispatcher.Dispatch(new HomeCountryDetectedFailedAction());
             }

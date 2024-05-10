@@ -1,7 +1,7 @@
 ﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent;
 
 <div class="compare">
-    @if (State.Value.OriginCountry == null || State.Value.ComparedCountry == null)
+    @if (State.Value.OriginCountry == null || State.Value.ComparedCountry == null || !_initialized)
     {
         <p>Loading...</p>
     }
