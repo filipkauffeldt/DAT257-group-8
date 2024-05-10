@@ -3,7 +3,10 @@ using System.Reflection.Metadata.Ecma335;
 using System.Runtime.InteropServices;
 using API;
 using Client.API;
+using Fluxor;
 using Microsoft.AspNetCore.Components;
+using Client.Store.Actions;
+using Client.Store.States;
 
 namespace Client.Components
 {
@@ -14,6 +17,12 @@ namespace Client.Components
 
         [Inject]
         private IApiHandler _apiHandler { get; set; }
+
+        [Inject]
+        private IDispatcher Dispatcher { get; set; }
+
+        [Inject]
+        private IState<CustomCompareState> State { get; set; } 
 
         private string _selectedHome = "";
 

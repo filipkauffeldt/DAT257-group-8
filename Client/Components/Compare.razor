@@ -1,4 +1,6 @@
-﻿<div class="compare">
+﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent;
+
+<div class="compare">
     @if (_country == null || _countryToCompareWith == null)
     {
         <p>Loading...</p>
