@@ -25,7 +25,7 @@ namespace Client.Store.Reducers
         }
 
         [ReducerMethod]
-        public static CustomCompareState SharedMetricsDetectedSuccessfullyReducer(CustomCompareState state, SharedMetricsDetectedSuccessfullyAction action)
+        public static CustomCompareState SharedMetricsDetectedSuccessfullyReducer(CustomCompareState state, CustomSharedMetricsDetectedSuccessfullyAction action)
         {
             return state with
             {
