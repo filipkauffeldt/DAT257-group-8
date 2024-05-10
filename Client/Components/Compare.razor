@@ -43,9 +43,13 @@
                             AllowFiltering=true>
                         </RadzenDropDown>  
                 </menu>
-                <div class="data-filter">
+                @if (_initialized)
+                {
+                    <div class="data-filter">
                     <DataFilterer Data="@State.Value.SharedMetrics" DefaultSelectedValues="@State.Value.ShownMetrics" OnChange="HandleFilterChange"></DataFilterer>
                 </div>
+                }
+               
                 <nav class="table-of-contents">
                     <ul>
                         @foreach (var metric in State.Value.ShownMetrics)

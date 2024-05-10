@@ -3,6 +3,7 @@ using Client.Store.Actions;
 using Client.Store.States;
 using Fluxor;
 using Microsoft.AspNetCore.Components;
+using Radzen;
 
 namespace Client.Components
 {
@@ -26,6 +27,8 @@ namespace Client.Components
         private IState<CountryOfTheDayState> State { get; set; } 
         
         private DateOnly _date = new DateOnly(2022, 1, 1);
+
+        private bool _initialized = false;
         private bool _homeCountryError = false;
 
         protected override async Task OnInitializedAsync()
@@ -41,6 +44,7 @@ namespace Client.Components
                 countryCodeDict.Add(country.Name, country.Code);
             }
             countryNames = countryCodeDict.Keys.ToList();
+            _initialized = true;
         }
 
         private async void HomeCountryChange(string CountryCode)
