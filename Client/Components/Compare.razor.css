@@ -100,7 +100,10 @@
     max-height: 70vh;
     text-align: center;
     border-radius: 40px;
-    box-shadow: 0 0 15px 1px #808080;
+    box-shadow: 0 0 15px 1px #057dcd;
+    border-color: #1E3D58;
+    border-style: inset;
+    border-width: 5px;
     justify-content: center;
     display: flex;
     flex-direction: column;

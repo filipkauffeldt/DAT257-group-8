@@ -29,6 +29,8 @@ namespace Client.Components
         public string ComparisonValueStyle = "width: 10rem;";
 
         private float Threshold = 0.0001f;
+
+        public string ConsumptionText = "Consumption";
         private Data? GetCountryData(Country country)
         {
             
@@ -76,6 +78,8 @@ namespace Client.Components
                 ComparisonValueList.Add(new DataPoint { Date = date, Value = 1 });
                 ComparisonCountryValue = 1;
             }
+
+            ConsumptionText = "Consumption in " + Unit;
         }
 
         public string GetComparisonPercentage(float comparisonValue, float originValue)
