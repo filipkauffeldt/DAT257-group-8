@@ -97,6 +97,10 @@ namespace Client.Components
 
         public float SetBarWidth()
         {
+            if(ComparisonCountryValue == 0 && OriginCountryValue == 0)
+            {
+                return 1;
+            }
             return MathF.Max(ComparisonCountryValue, OriginCountryValue) * 1.1f;
         }
     }

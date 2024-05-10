@@ -67,8 +67,8 @@ namespace Client.Components
             var sharedMetrics = new List<string>();
             foreach (var metric in State.Value.HomeCountry.Data!.Select(d => d.Name).ToList())
             {
-                var countryCompDataExists = State.Value.HomeCountry.Data?.Any(d => d.Name == metric && d.Points.Any()) ?? false;
-                var countryCompTwoDataExists = State.Value.CountryOfTheDay.Data?.Any(d => d.Name == metric && d.Points.Any()) ?? false;
+                var countryCompDataExists = State.Value.HomeCountry.Data?.Any(d => d.Name == metric && d.Points.Any(e => e.Date.Year == _date.Year)) ?? false;
+                var countryCompTwoDataExists = State.Value.CountryOfTheDay.Data?.Any(d => d.Name == metric && d.Points.Any(e => e.Date.Year == _date.Year)) ?? false;
 
                 if (countryCompDataExists && countryCompTwoDataExists)
                 {
