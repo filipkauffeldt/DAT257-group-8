@@ -37,7 +37,7 @@ namespace Client.Store.Reducers
         }
 
         [ReducerMethod]
-        public CountryOfTheDayState ShownMetricsSelectedReducer(CountryOfTheDayState state, ShownMetricsSelectedAction action)
+        public static CountryOfTheDayState ShownMetricsSelectedReducer(CountryOfTheDayState state, ShownMetricsSelectedAction action)
         {
             return state with
             {
