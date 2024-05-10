@@ -28,7 +28,7 @@
                 
                 <nav class="table-of-contents">
                     <ul>
-                        @foreach (var metric in State.Value.SharedMetrics)
+                        @foreach (var metric in State.Value.ShownMetrics)
                         {
                             <li><a href="#@FormatLabel(metric)">@metric</a></li>
                         }
