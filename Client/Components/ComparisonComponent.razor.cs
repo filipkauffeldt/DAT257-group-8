@@ -85,7 +85,7 @@ namespace Client.Components
                 return "the same amount of";
             } else if (Math.Abs(comparisonValue) < Threshold)
             {
-                return (comparisonValue.ToString() + " " + Unit + " less ");
+                return (originValue.ToString() + " " + Unit + " less ");
             }
             else if((Math.Abs(originValue) < Threshold))
             {
