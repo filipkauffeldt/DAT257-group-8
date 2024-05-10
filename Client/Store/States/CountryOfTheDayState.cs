@@ -11,6 +11,8 @@ namespace Client.Store.States
         public required bool CountryOfTheDayFound { get; init; } = false;
         public required bool HomeCountryFound { get; init; } = false;
 
+        public required IList<Country> CountryIdentifiers { get; init; }
+
         public required IList<string> SharedMetrics { get; init; } = new List<string>();
         public required IList<string> ShownMetrics { get; init; } = new List<string>();
     }

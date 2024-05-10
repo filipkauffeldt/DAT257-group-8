@@ -15,10 +15,10 @@ namespace Client.Components
         private List<string> countryNames;
 
         [Inject]
-        private HttpClient httpClient { get; set; }
+        private HttpClient _httpClient { get; set; }
 
         [Inject]
-        private IApiHandler apiHandler { get; set; }
+        private IApiHandler _apiHandler { get; set; }
 
         [Inject]
         private IDispatcher Dispatcher { get; set; }
@@ -33,17 +33,10 @@ namespace Client.Components
 
         protected override async Task OnInitializedAsync()
         {
+            await InitCountryIdentifiersAsync();
             await InitHomeCountryAsync();
             await InitCountryOfTheDayAsync();
-
             InitSharedMetrics();
-
-            var countryIdentifiers = await apiHandler.FetchAllCountryIdentifiersAsync(httpClient);
-            foreach(var country in countryIdentifiers)
-            {
-                countryCodeDict.Add(country.Name, country.Code);
-            }
-            countryNames = countryCodeDict.Keys.ToList();
             _initialized = true;
         }
 
@@ -102,7 +95,7 @@ namespace Client.Components
 
             try
             {
-                var country = await apiHandler.FetchHomeCountryAsync(httpClient);
+                var country = await _apiHandler.FetchHomeCountryAsync(_httpClient);
                    
                 if (country != null)
                 {
@@ -126,7 +119,7 @@ namespace Client.Components
             if (State.Value.CountryOfTheDay != null) return;
             try
             {
-                var countryOfTheDay = await apiHandler.FetchCountryOfTheDayAsync(httpClient);
+                var countryOfTheDay = await _apiHandler.FetchCountryOfTheDayAsync(_httpClient);
 
                 if (countryOfTheDay != null)
                 {
@@ -140,6 +133,26 @@ namespace Client.Components
                 Console.Out.WriteLineAsync(ex.Message);
                 Dispatcher.Dispatch(new CountryOfTheDayDetectedFailedAction());
             }
+        }
+
+        // private async Task InitCompareCountryNamesAsync() {
+        //     if (State.Value.CountryIdentifiers != null) return;
+        //     var countries = await _apiHandler.FetchAllCountryIdentifiersAsync(_httpClient);
+        //     Dispatcher.Dispatch(new CountryIdentifiersFetchedAction(countries.ToList()));
+        // }
+
+        private async Task InitCountryIdentifiersAsync()
+        {
+            if (State.Value.CountryIdentifiers == null) {
+                var countryIdentifiers = await _apiHandler.FetchAllCountryIdentifiersAsync(_httpClient);
+                Dispatcher.Dispatch(new CountryIdentifiersFetchedAction(countryIdentifiers.ToList()));
+            }
+            
+            foreach(var country in State.Value.CountryIdentifiers)
+            {
+                countryCodeDict.Add(country.Name, country.Code);
+            }
+            countryNames = countryCodeDict.Keys.ToList();
         }
     }
 }
