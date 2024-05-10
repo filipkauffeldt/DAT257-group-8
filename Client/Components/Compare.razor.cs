@@ -25,6 +25,8 @@ namespace Client.Components
         [Inject]
         private IState<CustomCompareState> State { get; set; } 
 
+        private bool _initialized = false;
+
         private string _selectedHome = "";
 
         private string _selectedOther = "";
@@ -48,19 +50,14 @@ namespace Client.Components
                 _availableCountries.Add(country.Name, country.Code);
             }
             await InitOriginCountryAsync();
-            // _country = State.Value.OriginCountry;
             await InitComparedCountryAsync();
-            // _countryToCompareWith = await _apiHandler.FetchCountryOfTheDayAsync(_httpClient);
-            // _countryToCompareWith = State.Value.ComparedCountry;
-            // _selectedHome = State.Value.OriginCountry.Name;
-            // _selectedOther = State.Value.ComparedCountry.Name;
-            // _dataMetrics = GetSharedMetrics();
             InitSharedMetrics();
             _dataMetrics = State.Value.SharedMetrics;
-            // _availableMetrics = new List<string>(_dataMetrics);
-            UpdateShownMetrics(State.Value.SharedMetrics);
+            InitShownMetrics();
+            var testShared = State.Value.SharedMetrics;
+            var testShown = State.Value.ShownMetrics;
             _availableMetrics = State.Value.ShownMetrics;
-
+            _initialized = true;
         }
 
         private async Task InitCompareCountryNamesAsync() {
@@ -83,6 +80,11 @@ namespace Client.Components
             Dispatcher.Dispatch(new ComparedCountryChosenAction(country));
         }
 
+        private void UpdateSharedMetrics() {
+            var sharedMetrics = GetSharedMetrics();
+            Dispatcher.Dispatch(new ComparedSharedMetricsChangedAction(sharedMetrics));	
+        }
+
         private void UpdateShownMetrics(IList<string> metrics)
         {
             Dispatcher.Dispatch(new ComparedMetricsSelectedAction(metrics));
@@ -91,7 +93,12 @@ namespace Client.Components
         private void InitSharedMetrics() {
             if (State.Value.SharedMetrics.Count > 0) return;
             var sharedMetrics = GetSharedMetrics();
-            Dispatcher.Dispatch(new CustomSharedMetricsDetectedSuccessfullyAction(sharedMetrics));
+            Dispatcher.Dispatch(new ComparedSharedMetricsChangedAction(sharedMetrics));
+        }
+
+        private void InitShownMetrics() {
+            if (State.Value.ShownMetrics.Count > 0) return;
+            Dispatcher.Dispatch(new ComparedMetricsSelectedAction(State.Value.SharedMetrics));
         }
 
         private IList<string> GetSharedMetrics()
@@ -121,10 +128,8 @@ namespace Client.Components
         {
             var country = await _apiHandler.FetchCountryByYearAsync(_httpClient, _availableCountries[name], _date);
             Dispatcher.Dispatch(new UpdateOriginCountryAction(country));
-            var sharedMetrics = GetSharedMetrics();
-            Dispatcher.Dispatch(new CustomSharedMetricsDetectedSuccessfullyAction(sharedMetrics));
-            var shownMetrics = new List<string>(_dataMetrics);
-            Dispatcher.Dispatch(new ComparedMetricsSelectedAction(shownMetrics));
+            UpdateSharedMetrics();
+            UpdateShownMetrics(State.Value.SharedMetrics);
             StateHasChanged();
         }
 
@@ -132,10 +137,8 @@ namespace Client.Components
         {
             var country = await _apiHandler.FetchCountryByYearAsync(_httpClient, _availableCountries[name], _date);
             Dispatcher.Dispatch(new UpdateComparedCountryAction(country));
-            var sharedMetrics = GetSharedMetrics();
-            Dispatcher.Dispatch(new CustomSharedMetricsDetectedSuccessfullyAction(sharedMetrics));
-            var shownMetrics = new List<string>(sharedMetrics);
-            Dispatcher.Dispatch(new ComparedMetricsSelectedAction(shownMetrics));
+            UpdateSharedMetrics();
+            UpdateShownMetrics(State.Value.SharedMetrics);
             StateHasChanged();
         }
 
@@ -146,10 +149,11 @@ namespace Client.Components
 
         private void HandleFilterChange(IEnumerable<string> selectedValues)
         {
-            _dataMetrics = selectedValues.ToList();
+            var shownMetrics = selectedValues.ToList();
 
             // Makes sure that when you select unselected values, they end up in the same order as before
-            _dataMetrics = _dataMetrics.OrderBy(d => _availableMetrics.IndexOf(d)).ToList();
+            shownMetrics = shownMetrics.OrderBy(d => State.Value.SharedMetrics.IndexOf(d)).ToList();
+            UpdateShownMetrics(shownMetrics);
         }
     }
 }

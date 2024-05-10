@@ -18,10 +18,10 @@ namespace Client.Store.Actions
 
     public class ComparedCountryChoiceFailedAction { };
 
-    public class CustomSharedMetricsDetectedSuccessfullyAction
+    public class ComparedSharedMetricsChangedAction
     {
         public IList<string> Metrics { get; }
-        public CustomSharedMetricsDetectedSuccessfullyAction(IList<string> metrics) => Metrics = metrics;
+        public ComparedSharedMetricsChangedAction(IList<string> metrics) => Metrics = metrics;
     };
 
     public class ComparedMetricsSelectedAction

@@ -88,7 +88,7 @@ namespace Client.Components
         private void HandleFilterChange(IEnumerable<string> selectedValues)
         {
             var selectedMetrics = selectedValues.ToList();
-
+            selectedMetrics = selectedMetrics.OrderBy(d => State.Value.SharedMetrics.IndexOf(d)).ToList();
             Dispatcher.Dispatch(new ShownMetricsSelectedAction(selectedMetrics));
         }
 

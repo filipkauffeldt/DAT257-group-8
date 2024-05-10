@@ -44,11 +44,11 @@
                         </RadzenDropDown>  
                 </menu>
                 <div class="data-filter">
-                    <DataFilterer @key="@_availableMetrics" Data="@_dataMetrics" OnChange="HandleFilterChange"></DataFilterer>
+                    <DataFilterer Data="@State.Value.SharedMetrics" DefaultSelectedValues="@State.Value.ShownMetrics" OnChange="HandleFilterChange"></DataFilterer>
                 </div>
                 <nav class="table-of-contents">
                     <ul>
-                        @foreach (var metric in _dataMetrics)
+                        @foreach (var metric in State.Value.ShownMetrics)
                         {
                             <li><a href="Compare/#@FormatLabel(metric)">@metric</a></li>
                         }
@@ -58,18 +58,18 @@
             </div>
 
             <div class="grid-container">
-                @if (_availableMetrics.Count == 0)
+                @if (State.Value.SharedMetrics.Count == 0)
                 {
                     <div>
                         <p>No shared data between @State.Value.OriginCountry.Name and @State.Value.ComparedCountry.Name</p>
                     </div>
                 }
-                else if (_dataMetrics.Count != 0)
+                else if (State.Value.ShownMetrics.Count != 0)
                 {
-                   @foreach (var metric in _dataMetrics)
+                   @foreach (var metric in State.Value.ShownMetrics)
                 {
                     <div id="@FormatLabel(metric)" class="grid-item">
-                        <ComparisonComponent @key="@($"{State.Value.OriginCountry}-{State.Value.ComparedCountry}-{metric}")" CountryComparison="@State.Value.OriginCountry" CountryOrigin="@State.Value.ComparedCountry" date="@_date" ResourceType="@metric"></ComparisonComponent>
+                        <ComparisonComponent @key="@($"{State.Value.OriginCountry}-{State.Value.ComparedCountry}-{metric}")" CountryComparison="@State.Value.ComparedCountry" CountryOrigin="@State.Value.OriginCountry" date="@_date" ResourceType="@metric"></ComparisonComponent>
                     </div>
                 }
                 }
