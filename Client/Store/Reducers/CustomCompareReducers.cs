@@ -50,23 +50,5 @@ namespace Client.Store.Reducers
                 CountryIdentifiers = action.CountryIdentifiers
             };
         }
-
-        [ReducerMethod]
-        public static CustomCompareState UpdateOriginCountryReducer(CustomCompareState state, UpdateOriginCountryAction action)
-        {
-            return state with
-            {
-                OriginCountry = action.Country
-            };
-        }
-
-        [ReducerMethod]
-        public static CustomCompareState UpdateComparedCountryReducer(CustomCompareState state, UpdateComparedCountryAction action)
-        {
-            return state with
-            {
-                ComparedCountry = action.Country
-            };
-        }
     }
 }

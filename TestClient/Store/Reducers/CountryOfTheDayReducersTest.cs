@@ -26,7 +26,8 @@ namespace TestClient.Store.Reducers
                 CountryOfTheDayFound = true,
                 HomeCountryFound = false,
                 SharedMetrics = null,
-                ShownMetrics = null
+                ShownMetrics = null,
+                CountryIdentifiers = null,
             };
 
             var homeCountry = new Country
@@ -66,7 +67,8 @@ namespace TestClient.Store.Reducers
                 CountryOfTheDayFound = true,
                 HomeCountryFound = true,
                 SharedMetrics = null,
-                ShownMetrics = null
+                ShownMetrics = null,
+                CountryIdentifiers = null,
             };
 
             var sharedMetrics = new List<string> { "a", "b" };
@@ -102,7 +104,8 @@ namespace TestClient.Store.Reducers
                 CountryOfTheDayFound = true,
                 HomeCountryFound = true,
                 SharedMetrics = new List<string> { "a", "b" },
-                ShownMetrics = null
+                ShownMetrics = null,
+                CountryIdentifiers = null,
             };
 
             var shownMetrics = new List<string> { "a" };

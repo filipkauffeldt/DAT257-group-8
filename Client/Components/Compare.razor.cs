@@ -114,7 +114,7 @@ namespace Client.Components
         private async void UpdateOriginCountry(string name)
         {
             var country = await _apiHandler.FetchCountryByYearAsync(_httpClient, _availableCountries[name], _date);
-            Dispatcher.Dispatch(new UpdateOriginCountryAction(country));
+            Dispatcher.Dispatch(new OriginCountryChosenAction(country));
             UpdateSharedMetrics();
             UpdateShownMetrics(State.Value.SharedMetrics);
             StateHasChanged();
@@ -123,7 +123,7 @@ namespace Client.Components
         private async void UpdateComparedCountry(string name)
         {
             var country = await _apiHandler.FetchCountryByYearAsync(_httpClient, _availableCountries[name], _date);
-            Dispatcher.Dispatch(new UpdateComparedCountryAction(country));
+            Dispatcher.Dispatch(new ComparedCountryChosenAction(country));
             UpdateSharedMetrics();
             UpdateShownMetrics(State.Value.SharedMetrics);
             StateHasChanged();
