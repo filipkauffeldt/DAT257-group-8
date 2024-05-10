@@ -29,4 +29,16 @@ namespace Client.Store.Actions
         public IList<string> Metrics { get; }
         public ComparedMetricsSelectedAction(IList<string> metrics) => Metrics = metrics;
     };
+
+    public class UpdateOriginCountryAction
+    {
+        public Country Country { get; }
+        public UpdateOriginCountryAction(Country country) => Country = country;
+    };
+
+    public class UpdateComparedCountryAction
+    {
+        public Country Country { get; }
+        public UpdateComparedCountryAction(Country country) => Country = country;
+    };
 }

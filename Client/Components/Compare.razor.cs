@@ -48,12 +48,12 @@ namespace Client.Components
                 _availableCountries.Add(country.Name, country.Code);
             }
             await InitOriginCountryAsync();
-            _country = State.Value.OriginCountry;
+            // _country = State.Value.OriginCountry;
             await InitComparedCountryAsync();
             // _countryToCompareWith = await _apiHandler.FetchCountryOfTheDayAsync(_httpClient);
-            _countryToCompareWith = State.Value.ComparedCountry;
-            _selectedHome = State.Value.OriginCountry.Name;
-            _selectedOther = State.Value.ComparedCountry.Name;
+            // _countryToCompareWith = State.Value.ComparedCountry;
+            // _selectedHome = State.Value.OriginCountry.Name;
+            // _selectedOther = State.Value.ComparedCountry.Name;
             // _dataMetrics = GetSharedMetrics();
             InitSharedMetrics();
             _dataMetrics = State.Value.SharedMetrics;
@@ -90,14 +90,18 @@ namespace Client.Components
 
         private void InitSharedMetrics() {
             if (State.Value.SharedMetrics.Count > 0) return;
-            
+            var sharedMetrics = GetSharedMetrics();
+            Dispatcher.Dispatch(new CustomSharedMetricsDetectedSuccessfullyAction(sharedMetrics));
+        }
 
+        private IList<string> GetSharedMetrics()
+        {
             var countryOrigin = State.Value.OriginCountry;
             var countryCompared = State.Value.ComparedCountry;
 
             if (countryOrigin == null || countryOrigin.Data == null ||
                 countryCompared == null || countryCompared.Data == null) {
-                return;
+                return new List<string>();
             }
 
             var sharedMetrics = new List<string>();
@@ -111,47 +115,27 @@ namespace Client.Components
                     sharedMetrics.Add(metric);
                 }
             }
-
+            return sharedMetrics;
+        }
+        private async void UpdateOriginCountry(string name)
+        {
+            var country = await _apiHandler.FetchCountryByYearAsync(_httpClient, _availableCountries[name], _date);
+            Dispatcher.Dispatch(new UpdateOriginCountryAction(country));
+            var sharedMetrics = GetSharedMetrics();
             Dispatcher.Dispatch(new CustomSharedMetricsDetectedSuccessfullyAction(sharedMetrics));
-        }
-
-        private IList<string> GetSharedMetrics()
-        {
-            if (_country == null || _country.Data == null ||
-                _countryToCompareWith == null || _countryToCompareWith.Data == null) {
-                return new List<string>();
-            }
-
-            var validMetrics = new List<string>();
-            foreach (var metric in _country.Data.Select(d => d.Name).ToList())
-            {
-                var countryCompDataExists = _country.Data?.Any(d => d.Name == metric && d.Points.Any(e => e.Date.Year == _date.Year)) ?? false;
-                var countryCompTwoDataExists = _countryToCompareWith.Data?.Any(d => d.Name == metric && d.Points.Any(e => e.Date.Year == _date.Year)) ?? false;
-
-                if (countryCompDataExists && countryCompTwoDataExists)
-                {
-                    validMetrics.Add(metric);
-                }
-            }
-
-            return validMetrics;
-        }
-
-        private async void UpdateHomeCountry(string name)
-        {
-            _selectedHome = name;
-            _country = await _apiHandler.FetchCountryByYearAsync(_httpClient, _availableCountries[name], _date);
-            _dataMetrics = GetSharedMetrics();
-            _availableMetrics = new List<string>(_dataMetrics);
+            var shownMetrics = new List<string>(_dataMetrics);
+            Dispatcher.Dispatch(new ComparedMetricsSelectedAction(shownMetrics));
             StateHasChanged();
         }
 
-        private async void UpdateOtherCountry(string name)
+        private async void UpdateComparedCountry(string name)
         {
-            _selectedOther = name;
-            _countryToCompareWith = await _apiHandler.FetchCountryByYearAsync(_httpClient, _availableCountries[name], _date);
-            _dataMetrics = GetSharedMetrics();
-            _availableMetrics = new List<string>(_dataMetrics);
+            var country = await _apiHandler.FetchCountryByYearAsync(_httpClient, _availableCountries[name], _date);
+            Dispatcher.Dispatch(new UpdateComparedCountryAction(country));
+            var sharedMetrics = GetSharedMetrics();
+            Dispatcher.Dispatch(new CustomSharedMetricsDetectedSuccessfullyAction(sharedMetrics));
+            var shownMetrics = new List<string>(sharedMetrics);
+            Dispatcher.Dispatch(new ComparedMetricsSelectedAction(shownMetrics));
             StateHasChanged();
         }
 

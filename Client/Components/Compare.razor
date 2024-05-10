@@ -1,7 +1,7 @@
 ﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent;
 
 <div class="compare">
-    @if (_country == null || _countryToCompareWith == null)
+    @if (State.Value.OriginCountry == null || State.Value.ComparedCountry == null)
     {
         <p>Loading...</p>
     }
@@ -16,28 +16,28 @@
             <div class="header"> 
                 <menu class="menu-row">
                         <RadzenLabel Text="Compare" Component="DropDownBindValue" Style="margin-right: 8px; vertical-align: middle;" Visible=true></RadzenLabel>
-                        <RadzenDropDown @bind-Value=@_selectedHome
+                        <RadzenDropDown @bind-Value=@State.Value.OriginCountry.Name
                             Data=@_availableCountries.Keys
                             Name="DropDownBindValue"
                             AllowClear=false
                             Placeholder="Select country"
                             Chips=false
                             MaxSelectedLabels="1"
-                            Change="@((e) => UpdateHomeCountry((string)e))"
+                            Change="@((e) => UpdateOriginCountry((string)e))"
                             FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                             FilterOperator="StringFilterOperator.Contains"
                             AllowFiltering=true>
                         </RadzenDropDown>  
 
                         <RadzenLabel Text="with" Component="DropDownBindValue" Style="margin-right: 8px; vertical-align: middle;" Visible=true></RadzenLabel>
-                        <RadzenDropDown @bind-Value=@_selectedOther
+                        <RadzenDropDown @bind-Value=@State.Value.ComparedCountry.Name
                             Data=@_availableCountries.Keys
                             Name="DropDownBindValue"
                             AllowClear=false
                             Placeholder="Select country"
                             Chips=false
                             MaxSelectedLabels="1"
-                            Change="@((e) => UpdateOtherCountry((string)e))" 
+                            Change="@((e) => UpdateComparedCountry((string)e))" 
                             FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                             FilterOperator="StringFilterOperator.Contains"
                             AllowFiltering=true>
@@ -61,7 +61,7 @@
                 @if (_availableMetrics.Count == 0)
                 {
                     <div>
-                        <p>No shared data between @_country.Name and @_countryToCompareWith.Name</p>
+                        <p>No shared data between @State.Value.OriginCountry.Name and @State.Value.ComparedCountry.Name</p>
                     </div>
                 }
                 else if (_dataMetrics.Count != 0)
@@ -69,19 +69,17 @@
                    @foreach (var metric in _dataMetrics)
                 {
                     <div id="@FormatLabel(metric)" class="grid-item">
-                        <ComparisonComponent @key="@($"{_country}-{_countryToCompareWith}-{metric}")" CountryComparison="@_country" CountryOrigin="@_countryToCompareWith" date="@_date" ResourceType="@metric"></ComparisonComponent>
+                        <ComparisonComponent @key="@($"{State.Value.OriginCountry}-{State.Value.ComparedCountry}-{metric}")" CountryComparison="@State.Value.OriginCountry" CountryOrigin="@State.Value.ComparedCountry" date="@_date" ResourceType="@metric"></ComparisonComponent>
                     </div>
                 }
                 }
                 else
                 {
                     <div>
-                        <p>No data selected between @_country.Name and @_countryToCompareWith.Name</p>
+                        <p>No data selected between @State.Value.OriginCountry.Name and @State.Value.ComparedCountry.Name</p>
                     </div>
                 }
-                
             </div>
-            
         </div>
     }
 </div>
