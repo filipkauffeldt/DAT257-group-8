@@ -42,6 +42,10 @@ namespace TestClient.Store.Reducers
             Assert.NotEqual(state, newState);
             Assert.Equal(homeCountry, newState.HomeCountry);
             Assert.True(newState.HomeCountryFound);
+            Assert.Equal(state.CountryOfTheDay, newState.CountryOfTheDay);
+            Assert.Equal(state.CountryOfTheDayFound, newState.CountryOfTheDayFound);
+            Assert.Equal(state.SharedMetrics, newState.SharedMetrics);
+            Assert.Equal(state.ShownMetrics, newState.ShownMetrics);
         }
 
         [Fact]
@@ -73,6 +77,11 @@ namespace TestClient.Store.Reducers
 
             Assert.NotEqual(state, newState);
             Assert.Equal(sharedMetrics, newState.SharedMetrics);
+            Assert.Equal(state.CountryOfTheDay, newState.CountryOfTheDay);
+            Assert.Equal(state.CountryOfTheDayFound, newState.CountryOfTheDayFound);
+            Assert.Equal(state.HomeCountry, newState.HomeCountry);
+            Assert.Equal(state.HomeCountryFound, newState.HomeCountryFound);    
+            Assert.Equal(state.ShownMetrics, newState.ShownMetrics);
         }
 
         [Fact]
@@ -104,6 +113,11 @@ namespace TestClient.Store.Reducers
 
             Assert.NotEqual(state, newState);
             Assert.Equal(shownMetrics, newState.ShownMetrics);
+            Assert.Equal(state.CountryOfTheDay, newState.CountryOfTheDay);
+            Assert.Equal(state.CountryOfTheDayFound, newState.CountryOfTheDayFound);
+            Assert.Equal(state.HomeCountry, newState.HomeCountry);
+            Assert.Equal(state.HomeCountryFound, newState.HomeCountryFound);
+            Assert.Equal(state.SharedMetrics, newState.SharedMetrics);
         }
     }
 }
