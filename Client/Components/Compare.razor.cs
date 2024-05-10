@@ -27,20 +27,9 @@ namespace Client.Components
 
         private bool _initialized = false;
 
-        private string _selectedHome = "";
-
-        private string _selectedOther = "";
-
-        private Country _country;
-        
-        private Country _countryToCompareWith;
-
         private IDictionary<string, string> _availableCountries = new Dictionary<string, string>();
         
         private DateOnly _date = new DateOnly(2022, 1, 1);
-        private IList<string> _dataMetrics = new List<string>();
-
-        private IList<string> _availableMetrics = new List<string>();
 
         protected override async Task OnInitializedAsync()
         {
@@ -52,11 +41,9 @@ namespace Client.Components
             await InitOriginCountryAsync();
             await InitComparedCountryAsync();
             InitSharedMetrics();
-            _dataMetrics = State.Value.SharedMetrics;
             InitShownMetrics();
             var testShared = State.Value.SharedMetrics;
             var testShown = State.Value.ShownMetrics;
-            _availableMetrics = State.Value.ShownMetrics;
             _initialized = true;
         }
 
