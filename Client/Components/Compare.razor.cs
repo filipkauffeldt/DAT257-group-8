@@ -67,9 +67,8 @@ namespace Client.Components
             Dispatcher.Dispatch(new ComparedCountryChosenAction(country));
         }
 
-        private void UpdateSharedMetrics() {
-            var sharedMetrics = GetSharedMetrics();
-            Dispatcher.Dispatch(new ComparedSharedMetricsChangedAction(sharedMetrics));	
+        private void UpdateSharedMetrics(IList<string> metrics) {
+            Dispatcher.Dispatch(new ComparedSharedMetricsChangedAction(metrics));	
         }
 
         private void UpdateShownMetrics(IList<string> metrics)
@@ -115,8 +114,9 @@ namespace Client.Components
         {
             var country = await _apiHandler.FetchCountryByYearAsync(_httpClient, _availableCountries[name], _date);
             Dispatcher.Dispatch(new OriginCountryChosenAction(country));
-            UpdateSharedMetrics();
-            UpdateShownMetrics(State.Value.SharedMetrics);
+            var sharedMetrics = GetSharedMetrics();
+            UpdateSharedMetrics(sharedMetrics);
+            UpdateShownMetrics(sharedMetrics);
             StateHasChanged();
         }
 
@@ -124,8 +124,9 @@ namespace Client.Components
         {
             var country = await _apiHandler.FetchCountryByYearAsync(_httpClient, _availableCountries[name], _date);
             Dispatcher.Dispatch(new ComparedCountryChosenAction(country));
-            UpdateSharedMetrics();
-            UpdateShownMetrics(State.Value.SharedMetrics);
+            var sharedMetrics = GetSharedMetrics();
+            UpdateShownMetrics(sharedMetrics);
+            UpdateSharedMetrics(sharedMetrics);
             StateHasChanged();
         }
 

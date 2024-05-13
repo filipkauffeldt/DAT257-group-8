@@ -43,10 +43,10 @@
                             AllowFiltering=true>
                         </RadzenDropDown>  
                 </menu>
-                @if (_initialized)
+                @if (State.Value.SharedMetrics.Count > 0)
                 {
                     <div class="data-filter">
-                    <DataFilterer Data="@State.Value.SharedMetrics" DefaultSelectedValues="@State.Value.ShownMetrics" OnChange="HandleFilterChange"></DataFilterer>
+                    <DataFilterer @key=@State.Value.SharedMetrics Data="@State.Value.SharedMetrics" DefaultSelectedValues="@State.Value.ShownMetrics" OnChange="HandleFilterChange"></DataFilterer>
                 </div>
                 }
                

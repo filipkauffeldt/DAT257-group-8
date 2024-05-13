@@ -41,6 +41,5 @@ namespace Client.Components
         {
             await OnChange.InvokeAsync(selectedValues);
         }
-
     }
 }
