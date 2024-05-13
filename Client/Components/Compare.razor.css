@@ -83,6 +83,13 @@
     text-decoration: none;
     color: black;
 }
+.table-of-contents ul :hover {
+    border-color: #057dcd;
+}
+
+.table-of-contents ul :active {
+    border-color: #1E3D58;
+}
 
 /* Grid settings */
 .grid-container {
@@ -100,10 +107,10 @@
     max-height: 70vh;
     text-align: center;
     border-radius: 40px;
-    box-shadow: 0 0 15px 1px #057dcd;
+    box-shadow: 0 0 15px 1px gray;
     border-color: #1E3D58;
-    border-style: inset;
-    border-width: 5px;
+    border-style: solid;
+    border-width: 2px;
     justify-content: center;
     display: flex;
     flex-direction: column;
