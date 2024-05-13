@@ -1,5 +1,7 @@
-﻿using API;
-using Client.API;
+﻿using Client.API;
+using Client.Store.Actions;
+using Client.Store.States;
+using Fluxor;
 using Microsoft.AspNetCore.Components;
 
 namespace Client.Components
@@ -17,30 +19,22 @@ namespace Client.Components
         [Inject]
         private IApiHandler apiHandler { get; set; }
 
-        private Country? _country;
+        [Inject]
+        private IDispatcher Dispatcher { get; set; }
 
-        private Country? _countryToCompareWith;
+        [Inject]
+        private IState<CountryOfTheDayState> State { get; set; } 
         
         private DateOnly _date = new DateOnly(2022, 1, 1);
-        private IList<string> _dataMetrics = new List<string>();
-        private IList<string> _availableMetrics = new List<string>();
         private bool _homeCountryError = false;
 
         protected override async Task OnInitializedAsync()
         {
-            try
-            {
-                _country = await apiHandler.FetchHomeCountryAsync(httpClient);
-                _homeCountryError = false;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                _homeCountryError = true;
-            }
-            _countryToCompareWith = await apiHandler.FetchCountryOfTheDayAsync(httpClient);
-            _dataMetrics = GetValidMetrics();
-            _availableMetrics = new List<string>(_dataMetrics);
+            await InitHomeCountryAsync();
+            await InitCountryOfTheDayAsync();
+
+            InitSharedMetrics();
+
             var countryIdentifiers = await apiHandler.FetchAllCountryIdentifiersAsync(httpClient);
             foreach(var country in countryIdentifiers)
             {
@@ -51,35 +45,39 @@ namespace Client.Components
 
         private async void HomeCountryChange(string CountryCode)
         {
-            _country = await apiHandler.FetchCountryByYearAsync(httpClient, CountryCode, _date);
-            StateHasChanged();
-            foreach (var cC in compComp.Values)
-            {
-                cC.LoadValues();
-            }
-            _dataMetrics = GetValidMetrics();
-            _availableMetrics = new List<string>(_dataMetrics);
-            StateHasChanged();
+            //_country = await apiHandler.FetchCountryByYearAsync(httpClient, CountryCode, _date);
+            //StateHasChanged();
+            //foreach (var cC in compComp.Values)
+            //{
+            //    cC.LoadValues();
+            //}
+            //StateHasChanged();
         }
 
-        private IList<string> GetValidMetrics()
+        private void InitSharedMetrics()
         {
-            if (_country == null || _country.Data == null ||
-                _countryToCompareWith == null || _countryToCompareWith.Data == null) {
-                return new List<string>();
+            if (State.Value.SharedMetrics.Count > 0) return;
+
+            if (!State.Value.HomeCountryFound || !State.Value.CountryOfTheDayFound || State.Value.HomeCountry.Data == null || State.Value.CountryOfTheDay.Data == null)
+            {
+                Dispatcher.Dispatch(new SharedMetricsDetectedFailedAction());
+                Dispatcher.Dispatch(new ShownMetricsSelectedAction(new List<string>()));
             }
 
-            var validMetrics = new List<string>();
-            foreach (var metric in _country.Data.Select(d => d.Name).ToList())
+            var sharedMetrics = new List<string>();
+            foreach (var metric in State.Value.HomeCountry.Data!.Select(d => d.Name).ToList())
             {
-                var countryCompDataExists = _country.Data?.Any(d => d.Name == metric && d.Points.Any(e => e.Date.Year == _date.Year)) ?? false;
-                var countryCompTwoDataExists = _countryToCompareWith.Data?.Any(d => d.Name == metric && d.Points.Any(e => e.Date.Year == _date.Year)) ?? false;
+                var countryCompDataExists = State.Value.HomeCountry.Data?.Any(d => d.Name == metric && d.Points.Any(e => e.Date.Year == _date.Year)) ?? false;
+                var countryCompTwoDataExists = State.Value.CountryOfTheDay.Data?.Any(d => d.Name == metric && d.Points.Any(e => e.Date.Year == _date.Year)) ?? false;
+
                 if (countryCompDataExists && countryCompTwoDataExists)
                 {
-                    validMetrics.Add(metric);
+                    sharedMetrics.Add(metric);
                 }
             }
-            return validMetrics;
+
+            Dispatcher.Dispatch(new SharedMetricsDetectedSuccessfullyAction(sharedMetrics));
+            Dispatcher.Dispatch(new ShownMetricsSelectedAction(sharedMetrics));
         }
 
         private static string FormatLabel(string label)
@@ -89,10 +87,55 @@ namespace Client.Components
 
         private void HandleFilterChange(IEnumerable<string> selectedValues)
         {
-            _dataMetrics = selectedValues.ToList();
+            var selectedMetrics = selectedValues.ToList();
 
-            // Makes sure that when you select unselected values, they end up in the same order as before
-            _dataMetrics = _dataMetrics.OrderBy(d => _availableMetrics.IndexOf(d)).ToList();
+            selectedMetrics = selectedMetrics.OrderBy(d => State.Value.SharedMetrics.IndexOf(d)).ToList();
+
+            Dispatcher.Dispatch(new ShownMetricsSelectedAction(selectedMetrics));
+        }
+
+        private async Task InitHomeCountryAsync()
+        {
+            if (State.Value.HomeCountry != null) return;
+
+            try
+            {
+                var country = await apiHandler.FetchHomeCountryAsync(httpClient);
+                   
+                if (country != null)
+                {
+                    Dispatcher.Dispatch(new HomeCountryDetectedSuccessfullyAction(country));
+                }
+                else
+                {
+                    Dispatcher.Dispatch(new HomeCountryDetectedFailedAction());
+                }
+            } catch (Exception ex)
+            {
+                Console.Out.WriteLineAsync(ex.Message);
+                Dispatcher.Dispatch(new HomeCountryDetectedFailedAction());
+            }
+        }
+
+        private async Task InitCountryOfTheDayAsync()
+        {
+            if (State.Value.CountryOfTheDay != null) return;
+            try
+            {
+                var countryOfTheDay = await apiHandler.FetchCountryOfTheDayAsync(httpClient);
+
+                if (countryOfTheDay != null)
+                {
+                    Dispatcher.Dispatch(new CountryOfTheDayDetectedSuccessfullyAction(countryOfTheDay));
+                } else
+                {
+                    Dispatcher.Dispatch(new CountryOfTheDayDetectedFailedAction());
+                }
+            } catch(Exception ex)
+            {
+                Console.Out.WriteLineAsync(ex.Message);
+                Dispatcher.Dispatch(new CountryOfTheDayDetectedFailedAction());
+            }
         }
     }
 }

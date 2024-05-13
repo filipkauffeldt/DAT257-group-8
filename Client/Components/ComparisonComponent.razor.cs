@@ -27,7 +27,10 @@ namespace Client.Components
         public string Unit { get; set; } = "NaN";
 
         public string ComparisonValueStyle = "width: 10rem;";
-        
+
+        private float Threshold = 0.0001f;
+
+        public string ConsumptionText = "Consumption";
         private Data? GetCountryData(Country country)
         {
             
@@ -75,12 +78,25 @@ namespace Client.Components
                 ComparisonValueList.Add(new DataPoint { Date = date, Value = 1 });
                 ComparisonCountryValue = 1;
             }
+            // Text at the bottom of the cards
+            ConsumptionText = "Consumption in " + Unit;
         }
 
         public string GetComparisonPercentage(float comparisonValue, float originValue)
-        {
+        {  // Threshold makes ut so that values near 0 do not cause a extremely large percentage value in the comparison text.
+            if( (Math.Abs(comparisonValue) < this.Threshold) && (Math.Abs(originValue) < Threshold))
+            {
+                return "the same amount of";
+            } else if (Math.Abs(comparisonValue) < Threshold)
+            {
+                return (originValue.ToString() + " " + Unit + " less ");
+            }
+            else if((Math.Abs(originValue) < Threshold))
+            {
+                return (comparisonValue.ToString() + " " + Unit + " more ");
+            }
             float relativeDifference = (comparisonValue / originValue) - 1;
-            // Sets width of comparison value bar
+            
             if (comparisonValue > originValue)
             {
                 return ((int)(Math.Abs(relativeDifference) * 100)).ToString() + "% more";
@@ -94,14 +110,14 @@ namespace Client.Components
                 return "the same amount of";
             }
         }
-
+        // Sets width of comparison value bar
         public float SetBarWidth()
         {
             if(ComparisonCountryValue == 0 && OriginCountryValue == 0)
             {
                 return 1;
             }
-            return MathF.Max(ComparisonCountryValue, OriginCountryValue) * 1.1f;
+            return MathF.Max(ComparisonCountryValue, OriginCountryValue) * 1.3f;
         }
     }
 }
