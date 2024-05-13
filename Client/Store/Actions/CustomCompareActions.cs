@@ -8,15 +8,11 @@ namespace Client.Store.Actions
         public OriginCountryChosenAction(Country country) => Country = country;
     };
 
-    public class OriginCountryChoiceFailedAction { };
-
     public class ComparedCountryChosenAction
     {
         public Country Country { get; }
         public ComparedCountryChosenAction(Country country) => Country = country;
     };
-
-    public class ComparedCountryChoiceFailedAction { };
 
     public class ComparedSharedMetricsChangedAction
     {
