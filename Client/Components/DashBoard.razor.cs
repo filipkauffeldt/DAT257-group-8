@@ -3,7 +3,6 @@ using Client.Store.Actions;
 using Client.Store.States;
 using Fluxor;
 using Microsoft.AspNetCore.Components;
-using Radzen;
 
 namespace Client.Components
 {
