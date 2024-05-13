@@ -27,7 +27,7 @@
 
             <div class="header"> 
                 <div class="data-filter">
-                    <DataFilterer Data="@_dataMetrics" OnChange="HandleFilterChange"></DataFilterer>
+                    <DataFilterer @key="@_availableMetrics" Data="@_dataMetrics" OnChange="HandleFilterChange"></DataFilterer>
                 </div>
 
                 <div class="sorting-menu">
@@ -55,7 +55,7 @@
                 @foreach (var metric in _dataMetrics)
                 {
                     <div id="@FormatLabel(metric)" class="grid-item">
-                            <ComparisonComponent @ref="@compComp[metric]" CountryComparison="@_countryToCompareWith" CountryOrigin="@_country" date="@_date" ResourceType="@metric"></ComparisonComponent>
+                            <ComparisonComponent @key=@metric @ref="@compComp[metric]" CountryComparison="@_countryToCompareWith" CountryOrigin="@_country" date="@_date" ResourceType="@metric"></ComparisonComponent>
                     </div>
                 }
                 </div>

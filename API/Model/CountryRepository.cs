@@ -65,26 +65,29 @@ namespace API.Model
             return Math.Abs(ivalue);
         }
 
-        public void AddCountry(Country country)
+        public async Task<Country> AddCountryAsync(Country country)
         {
             _dbContext.Countries.Add(country);
-            _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
+            return country;
         }
 
-        public void UpdateCountry(Country country)
+        public async Task<Country> UpdateCountryAsync(Country country)
         {
             _dbContext.Countries.Update(country);
-            _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
+            return country;
         }
 
-        public void DeleteCountry(string code)
+        public async Task<string> DeleteCountryAsync(string code)
         {
             var country = _dbContext.Countries.FirstOrDefault(c => c.Code == code);
             if (country != null)
             {
                 _dbContext.Countries.Remove(country);
-                _dbContext.SaveChangesAsync();
+                await _dbContext.SaveChangesAsync();
             }
+            return code;
         }
 
         public async Task<Country?> GetCountryWithYearAsync(string code, DateOnly date)
