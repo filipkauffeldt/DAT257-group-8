@@ -47,8 +47,20 @@ namespace TestClient.Components
                 date = new DateOnly(2022, 1, 1)
             };
         }
-        
-      
+
+        ComparisonComponent MockDataNearZeroValue()
+        {
+            return new ComparisonComponent()
+            {
+                CountryComparison = GenerateRandomCountryTyp("Sweden", 0.00001f),
+                CountryOrigin = GenerateRandomCountryTyp("BOlibompa", 200f),
+                ResourceType = "Water",
+                date = new DateOnly(2022, 1, 1),
+                Unit = "liters"
+            };
+        }
+
+
 
 
         [Fact]
@@ -59,6 +71,16 @@ namespace TestClient.Components
             Assert.Equal("the same amount of", comp.GetComparisonPercentage(100f, 100f));
             Assert.Equal("100% more", comp.GetComparisonPercentage(200f, 100f));
             Assert.Equal("50% less", comp.GetComparisonPercentage(50f, 100f));
+
+        }
+
+        [Fact]
+        public void TestGetComparisonPercentageNearZero()
+        {
+            ComparisonComponent comp = MockDataNearZeroValue();
+            Assert.Equal("200 liters more ", comp.GetComparisonPercentage(200f, 0.000001f));
+            Assert.Equal("200 liters less ", comp.GetComparisonPercentage(0.000001f ,200f));
+            Assert.Equal("the same amount of", comp.GetComparisonPercentage(0, 0));
         }
 
         [Fact]
