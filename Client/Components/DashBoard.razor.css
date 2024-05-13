@@ -40,8 +40,9 @@
     transition: all 0.5s;
 }
 
+
 .table-of-contents ul li :hover {
-    border-bottom: solid 1px black;
+    border-bottom: solid 1px black
 }
 
 .table-of-contents ul li :active {
@@ -51,6 +52,14 @@
 .table-of-contents ul li a {
     text-decoration: none;
     color: black;
+}
+
+.table-of-contents ul :hover {
+    border-color: #057dcd;
+}
+
+.table-of-contents ul :active {
+    border-color: #1E3D58;
 }
 
 /* Grid settings */
@@ -66,13 +75,18 @@
 .grid-item {
     background-color: #f0f0f0;
     min-height: 25vh;
-    max-height: 60vh;
+    max-height: 70vh;
     text-align: center;
     border-radius: 40px;
-    box-shadow: 0 0 15px 1px #808080;
+    box-shadow: 0 0 15px 1px gray;
+    border-color: #1E3D58;
+    border-style: solid;
+    border-width: 2px;
     justify-content: center;
     display: flex;
     flex-direction: column;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 
 .header {

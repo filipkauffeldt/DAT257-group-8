@@ -23,7 +23,10 @@
 
             <div class="header"> 
                 <div class="data-filter">
-                    <DataFilterer Data="@State.Value.SharedMetrics" DefaultSelectedValues="@State.Value.ShownMetrics" OnChange="HandleFilterChange"></DataFilterer>
+                    @if (State.Value.ShownMetrics.Count > 0)
+                    {
+                        <DataFilterer Data="@State.Value.SharedMetrics" DefaultSelectedValues="@State.Value.ShownMetrics" OnChange="HandleFilterChange"></DataFilterer>
+                    }
                 </div>
                 
                 <nav class="table-of-contents">

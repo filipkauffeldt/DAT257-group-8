@@ -1,20 +1,20 @@
 ﻿
 
-<div class="main">
+<div class="main">  
     <h4>@CountryComparison.Name uses @GetComparisonPercentage(ComparisonCountryValue, OriginCountryValue) @ResourceType than @CountryOrigin.Name </h4>
-    <p>Unit: @Unit</p>
     <RadzenChart>
-        <RadzenBarSeries Fill="@Colors.Warning" Data="@OriginValueList" CategoryProperty="Date" Title="@CountryOrigin.Name" LineType="LineType.Dashed" ValueProperty="Value">
+        <RadzenBarSeries Fill="#e14177" Data="@OriginValueList" CategoryProperty="Date" Title="@CountryOrigin.Name" LineType="LineType.Dashed" ValueProperty="Value">
             <RadzenSeriesDataLabels Visible="true" />
         </RadzenBarSeries>
-        <RadzenBarSeries Data="@ComparisonValueList" CategoryProperty="Date" Title="@CountryComparison.Name" LineType="LineType.Dashed" ValueProperty="Value">
-            <RadzenSeriesDataLabels Visible="true" />
+        <RadzenBarSeries Fill="#1E3D58" Data="@ComparisonValueList" CategoryProperty="Date" Title="@CountryComparison.Name" LineType="LineType.Dashed" ValueProperty="Value">
+                <RadzenSeriesDataLabels Visible="true" />
         </RadzenBarSeries>
-        <RadzenValueAxis Min="0" Max="@SetBarWidth()">
+        <RadzenValueAxis Min="0" Max="@SetBarWidth()" Formatter=@(value => value == null ? "" : (Decimal.Parse( String.Format( "{0:n}",value) )/1.000000000000000000000000000000000m).ToString() )>
             <RadzenGridLines Visible="true" />
-            <RadzenAxisTitle Text="Consumption" />
+            <RadzenAxisTitle Text="@ConsumptionText" />
         </RadzenValueAxis>
         <RadzenBarOptions Radius="10" Height="40" Margin="10" />
+        <RadzenCategoryAxis Formatter=@(value => value == null ? "" : DateOnly.Parse((value.ToString())).Year.ToString() ) />
     </RadzenChart>
 </div>
 
