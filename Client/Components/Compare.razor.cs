@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Components;
 using Client.Store.Actions;
 using Client.Store.States;
 using System.Reflection;
+using System;
 
 namespace Client.Components
 {
@@ -23,13 +24,15 @@ namespace Client.Components
         private IDispatcher Dispatcher { get; set; }
 
         [Inject]
-        private IState<CustomCompareState> State { get; set; } 
+        private IState<CustomCompareState> State { get; set; }
 
         private bool _initialized = false;
 
         private IDictionary<string, string> _availableCountries = new Dictionary<string, string>();
-        
+
         private DateOnly _date = new DateOnly(2022, 1, 1);
+
+        private int _comparisonChangedIndex = 0;
 
         protected override async Task OnInitializedAsync()
         {
@@ -39,7 +42,8 @@ namespace Client.Components
                 _availableCountries.Add(country.Name, country.Code);
             }
             await InitOriginCountryAsync();
-            await InitComparedCountryAsync();
+            //await InitComparedCountryAsync();
+            await InitComparedCountriesAsync();
             InitSharedMetrics();
             InitShownMetrics();
             var testShared = State.Value.SharedMetrics;
@@ -62,9 +66,17 @@ namespace Client.Components
 
         private async Task InitComparedCountryAsync()
         {
-            if (State.Value.ComparedCountry != null) return;
+            if (State.Value.ComparedCountries[0] != null) return;
             var country = await _apiHandler.FetchCountryOfTheDayAsync(_httpClient);
             Dispatcher.Dispatch(new ComparedCountryChosenAction(country));
+        }
+
+        private async Task InitComparedCountriesAsync()
+        {
+            if (State.Value.ComparedCountries != null) return;
+            var country = await _apiHandler.FetchCountryOfTheDayAsync(_httpClient);
+            Dispatcher.Dispatch(new InitComparedCountriesAction(country));
+            //Dispatcher.Dispatch(new ComparedCountriesChosenAction(country, 0));
         }
 
         private void UpdateSharedMetrics(IList<string> metrics) {
@@ -90,7 +102,8 @@ namespace Client.Components
         private IList<string> GetSharedMetrics()
         {
             var countryOrigin = State.Value.OriginCountry;
-            var countryCompared = State.Value.ComparedCountry;
+            var countryCompared = State.Value.ComparedCountries[0];
+            
 
             if (countryOrigin == null || countryOrigin.Data == null ||
                 countryCompared == null || countryCompared.Data == null) {
@@ -120,14 +133,46 @@ namespace Client.Components
             StateHasChanged();
         }
 
-        private async void UpdateComparedCountry(string name)
+        private async void UpdateComparedCountry(string name, int index)
         {
+            var countries = State.Value.ComparedCountries;
             var country = await _apiHandler.FetchCountryByYearAsync(_httpClient, _availableCountries[name], _date);
-            Dispatcher.Dispatch(new ComparedCountryChosenAction(country));
+            countries[index] = country;
+            _comparisonChangedIndex = index;
+            Dispatcher.Dispatch(new ComparedCountriesChosenAction(countries));
             var sharedMetrics = GetSharedMetrics();
             UpdateShownMetrics(sharedMetrics);
             UpdateSharedMetrics(sharedMetrics);
             StateHasChanged();
+        }
+
+        private async void AddComparedCountry()
+        {
+            var countries = State.Value.ComparedCountries;
+            if(countries.Count < 3)
+            {
+                var country = await _apiHandler.FetchCountryOfTheDayAsync(_httpClient);
+                countries.Add(country);
+                Dispatcher.Dispatch(new ComparedCountriesChosenAction(countries));
+                var sharedMetrics = GetSharedMetrics();
+                UpdateShownMetrics(sharedMetrics);
+                UpdateSharedMetrics(sharedMetrics);
+                StateHasChanged();
+            }
+        }
+
+        private void RemoveComparedCountry()
+        {
+            var countries = State.Value.ComparedCountries;
+            if(countries.Count > 1)
+            {
+                countries.RemoveAt(countries.Count - 1);
+                Dispatcher.Dispatch(new ComparedCountriesChosenAction(countries));
+                var sharedMetrics = GetSharedMetrics();
+                UpdateShownMetrics(sharedMetrics);
+                UpdateSharedMetrics(sharedMetrics);
+                StateHasChanged();
+            }
         }
 
         private static string FormatLabel(string label)

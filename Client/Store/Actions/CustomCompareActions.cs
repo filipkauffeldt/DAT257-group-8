@@ -12,7 +12,21 @@ namespace Client.Store.Actions
     {
         public Country Country { get; }
         public ComparedCountryChosenAction(Country country) => Country = country;
+
     };
+
+
+    public class ComparedCountriesChosenAction
+    {
+        public IList<Country> Countries { get; }
+        public ComparedCountriesChosenAction(IList<Country> countries) => Countries = countries;
+    }
+
+    public class InitComparedCountriesAction
+    {
+        public IList<Country> Countries { get; }
+        public InitComparedCountriesAction(Country country) => Countries = [country];
+    }
 
     public class ComparedSharedMetricsChangedAction
     {
@@ -37,4 +51,11 @@ namespace Client.Store.Actions
         public Country Country { get; }
         public UpdateComparedCountryAction(Country country) => Country = country;
     };
+
+    public class UpdateComparedCountriesAction
+    {
+        public IList<Country> Countries { get; }
+
+        public UpdateComparedCountriesAction(Country country) => Countries.Append(country);
+    }
 }
