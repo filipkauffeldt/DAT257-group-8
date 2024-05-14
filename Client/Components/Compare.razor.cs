@@ -43,8 +43,7 @@ namespace Client.Components
             await InitComparedCountryAsync();
             InitSharedMetrics();
             InitShownMetrics();
-            _countries.Add(State.Value.OriginCountry);
-            _countries.Add(State.Value.ComparedCountry);
+            UpdateCountryList();
             _initialized = true;
         }
 
@@ -118,6 +117,7 @@ namespace Client.Components
             var sharedMetrics = GetSharedMetrics();
             UpdateSharedMetrics(sharedMetrics);
             UpdateShownMetrics(sharedMetrics);
+            UpdateCountryList();
             StateHasChanged();
         }
 
@@ -128,6 +128,7 @@ namespace Client.Components
             var sharedMetrics = GetSharedMetrics();
             UpdateShownMetrics(sharedMetrics);
             UpdateSharedMetrics(sharedMetrics);
+            UpdateCountryList();
             StateHasChanged();
         }
 
@@ -143,6 +144,15 @@ namespace Client.Components
             // Makes sure that when you select unselected values, they end up in the same order as before
             shownMetrics = shownMetrics.OrderBy(d => State.Value.SharedMetrics.IndexOf(d)).ToList();
             UpdateShownMetrics(shownMetrics);
+        }
+
+        // Trigger re-rendering of the ComparisonComponents
+        private void UpdateCountryList()
+        {
+            var newCountryList = new List<Country>();
+            newCountryList.Add(State.Value.OriginCountry);
+            newCountryList.Add(State.Value.ComparedCountry);
+            _countries = newCountryList;
         }
     }
 }

@@ -36,6 +36,7 @@ namespace Client.Components
         private float Threshold = 0.0001f;
 
         public string ConsumptionText = "Consumption";
+
         private Data? GetCountryData(Country country)
         {
             
@@ -51,13 +52,21 @@ namespace Client.Components
         {
             base.OnInitialized();
             LoadValues();
-
         }
+
+        // Update values on parameter change
+        protected override void OnParametersSet()
+        {
+            LoadValues();
+            StateHasChanged();
+        }
+
         public void LoadValues()
         {
             foreach (var country in CountryList)
             {
                 var resource = GetCountryData(country);
+                ValueMap.Remove(country.Name);
                 if (resource != null)
                 {
                     var valueList = new List<DataPoint> {
@@ -74,34 +83,7 @@ namespace Client.Components
                     ValueMap.Add(country.Name, valueList);
                 }
             }
-            //var resource1 = GetCountryData(CountryOrigin);  
-            //var resource2 = GetCountryData(CountryComparison);
-            //OriginValueList.Clear();
-            //ComparisonValueList.Clear();
-            //if (resource1 != null)
-            //{
-            //    OriginValueList.Add(resource1.Points.Where(dp => dp.Date.Year == date.Year).FirstOrDefault() ??
-            //        new DataPoint { Date = date, Value = 1 });
-            //    OriginCountryValue = (float)OriginValueList[0].Value;
-            //    Unit = resource1.Unit;
-            //}
-            //else
-            //{
-            //    OriginValueList.Add(new DataPoint { Date = date, Value = 1 });
-            //    OriginCountryValue = 1;
-            //}
-            //if (resource2 != null)
-            //{
-            //    ComparisonValueList.Add(resource2.Points.Where(dp => dp.Date.Year == date.Year).FirstOrDefault() ??
-            //        new DataPoint { Date = date, Value = 1 });
-            //    ComparisonCountryValue = (float)ComparisonValueList[0].Value;
-            //    Unit = resource2.Unit;
-            //}
-            //else
-            //{
-            //    ComparisonValueList.Add(new DataPoint { Date = date, Value = 1 });
-            //    ComparisonCountryValue = 1;
-            //}
+            
             // Text at the bottom of the cards
             ConsumptionText = "Consumption in " + Unit;
         }

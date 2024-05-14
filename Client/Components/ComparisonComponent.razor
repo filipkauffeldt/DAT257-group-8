@@ -9,9 +9,6 @@
             <RadzenBarSeries Fill="#e14177" Data="@ValueMap[country.Name]" CategoryProperty="Date" Title="@country.Name" LineType="LineType.Dashed" ValueProperty="Value">
                 <RadzenSeriesDataLabels Visible="true" />
             </RadzenBarSeries>
-            @* <RadzenBarSeries Fill="#1E3D58" Data="@ComparisonValueList" CategoryProperty="Date" Title="@CountryComparison.Name" LineType="LineType.Dashed" ValueProperty="Value">
-                <RadzenSeriesDataLabels Visible="true" />
-            </RadzenBarSeries> *@
         }
         <RadzenValueAxis Min="0" Max="@SetBarWidth()" Formatter=@(value => value == null ? "" : (Decimal.Parse( String.Format( "{0:n}",value) )/1.000000000000000000000000000000000m).ToString() )>
             <RadzenGridLines Visible="true" />
