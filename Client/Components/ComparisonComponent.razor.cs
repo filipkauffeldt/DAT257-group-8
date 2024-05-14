@@ -26,6 +26,8 @@ namespace Client.Components
 
         public string Unit { get; set; } = "NaN";
 
+        private string? _resourceDescription;
+
         public string ComparisonValueStyle = "width: 10rem;";
 
         private float Threshold = 0.0001f;
@@ -80,6 +82,7 @@ namespace Client.Components
             }
             // Text at the bottom of the cards
             ConsumptionText = "Consumption in " + Unit;
+            _resourceDescription = resource1?.Description ?? ResourceType;
         }
 
         public string GetComparisonPercentage(float comparisonValue, float originValue)
