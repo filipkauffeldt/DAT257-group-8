@@ -1,7 +1,4 @@
-﻿
-
-<div class="main">  
-    @* <h4>@CountryComparison.Name uses @GetComparisonPercentage(ComparisonCountryValue, OriginCountryValue) @ResourceType than @CountryOrigin.Name </h4> *@
+﻿<div class="main">  
     <h4>@GetComparisonText()</h4>
     <RadzenChart Style="@($"height: {150 + CountryList.Count * 40}px")">
         @if (ComparedCountry != null)

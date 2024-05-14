@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
 using API;
-using System.Linq;
-using Radzen.Blazor;
-using System.Drawing;
-using Microsoft.Extensions.Primitives;
 
 namespace Client.Components
 {
@@ -25,8 +21,7 @@ namespace Client.Components
         public required DateOnly Date {  get; set; }
 
         private IDictionary<string, IList<DataPoint>> ValueMap = new Dictionary<string, IList<DataPoint>>();
-        // "#1E3D58"
-        // "#E14177"
+
         private IList<string> _colors = new List<string>
         {
             "#1E3D58", // Them Dark Blue
