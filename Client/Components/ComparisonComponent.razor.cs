@@ -8,8 +8,6 @@ namespace Client.Components
     {
         [Parameter]
         public Country? ComparedCountry { get; set; }
-        [Parameter]
-        public required Country CountryComparison { get; set; }
 
         [Parameter]
         public required IList<Country> CountryList { get; set;}
@@ -113,7 +111,10 @@ namespace Client.Components
         {
             if (ComparedCountry != null)
             {
-                return SpeciallyComparedText();
+                var comparedCountryValue = ValueMap[ComparedCountry!.Name][0].Value;
+                var biggestDiffCountry = GetCountryWithBiggestDifference(comparedCountryValue);
+                var diffValue = biggestDiffCountry?.Data?.Select(d => d.Points.Where(dp => dp.Date == Date).FirstOrDefault()?.Value).FirstOrDefault() ?? 0;
+                return SpeciallyComparedText(ComparedCountry, biggestDiffCountry, comparedCountryValue, diffValue, ResourceType);
             }
             else
             {
@@ -121,7 +122,7 @@ namespace Client.Components
             }
         }
 
-        private string GeneralComparedText()
+        public string GeneralComparedText()
         {
             var maxUsageCountry = ValueMap.Aggregate((left, right) => left.Value[0].Value > right.Value[0].Value ? left : right).Key;
             var maxUseValue = ValueMap[maxUsageCountry][0].Value;
@@ -143,50 +144,49 @@ namespace Client.Components
             return comparisonText;
         }
 
-        private string SpeciallyComparedText()
+        public string SpeciallyComparedText(Country comparedCountry, Country biggestDiffCountry, double comparedCountryValue, double diffValue, string resource)
         {
-            float comparisonValue = (float)ValueMap[ComparedCountry!.Name][0].Value;
-            var biggestDiffCountry = GetCountryWithBiggestDifference(comparisonValue);
-            var diffValue = biggestDiffCountry?.Data?.Select(d => d.Points.Where(dp => dp.Date == Date).FirstOrDefault()?.Value).FirstOrDefault() ?? 0;
+            string comparisonText = $"{comparedCountry.Name} use ";
 
-
-            string comparisonText = $"{ComparedCountry.Name} uses ";
-
-            if ((Math.Abs(comparisonValue) < this.Threshold) && (Math.Abs(diffValue) < Threshold))
+            if ((Math.Abs(comparedCountryValue) < this.Threshold) && (Math.Abs(diffValue) < Threshold))
             {
-                comparisonText += "the same amount of " + Unit;
+                comparisonText += $"the same amount of {resource} as {biggestDiffCountry?.Name}";
+                return comparisonText;
             }
-            else if (Math.Abs(comparisonValue) < Threshold)
+            else if (Math.Abs(comparedCountryValue) < Threshold)
             {
-                comparisonText += (diffValue.ToString() + " " + Unit + " less ");
+                comparisonText += $"{Math.Round(diffValue, 2)} {Unit} less than {biggestDiffCountry}";
+                return comparisonText;
             }
             else if ((Math.Abs(diffValue) < Threshold))
             {
-                comparisonText += (comparisonValue.ToString() + " " + Unit + " more ");
+                comparisonText += $"{Math.Round(diffValue, 2)} {Unit} more than {biggestDiffCountry}";
+                return comparisonText;
             }
-            float relativeDifference = (comparisonValue / (float)diffValue) - 1;
+            var relativeDifference = (comparedCountryValue / diffValue) - 1;
 
-            if (comparisonValue > diffValue)
+            if (comparedCountryValue > diffValue)
             {
-                comparisonText += Math.Round((Math.Abs(relativeDifference) * 100)).ToString() + "% more";
+                comparisonText += Math.Round((Math.Abs(relativeDifference) * 100)).ToString() + "% more ";
             }
-            else if (comparisonValue < diffValue)
+            else if (comparedCountryValue < diffValue)
             {
-                comparisonText += (Math.Round((Math.Abs(relativeDifference) * 100))).ToString() + "% less";
+                comparisonText += (Math.Round((Math.Abs(relativeDifference) * 100))).ToString() + "% less ";
             }
             else
             {
-                comparisonText += "the same amount of " + Unit;
+                comparisonText += $"the same amount of {resource} as {biggestDiffCountry?.Name}";
+                return comparisonText;
             }
 
-            comparisonText += $"{ResourceType} than {biggestDiffCountry?.Name}";
+            comparisonText += $"{resource} than {biggestDiffCountry?.Name}";
             return comparisonText;
         }
 
-        public Country GetCountryWithBiggestDifference(float comparisonValue)
+        public Country GetCountryWithBiggestDifference(double comparisonValue)
         {
             Country countryWithBiggestDifference = null;
-            float biggestDifference = 0;
+            var biggestDifference = 0d;
 
             foreach (var kvp in ValueMap)
             {
@@ -197,7 +197,7 @@ namespace Client.Components
 
                 if (dataPoint != null)
                 {
-                    float difference = (float)Math.Abs(comparisonValue - dataPoint.Value);
+                    var difference = Math.Abs(comparisonValue - dataPoint.Value);
 
                     if (difference > biggestDifference)
                     {

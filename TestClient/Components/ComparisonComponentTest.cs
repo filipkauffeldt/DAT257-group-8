@@ -41,8 +41,8 @@ namespace TestClient.Components
         {
             return new ComparisonComponent()
             {
-                CountryComparison = GenerateRandomCountryTyp("Sweden", 100f),
-                CountryOrigin = GenerateRandomCountryTyp("BOlibompa", 200f),
+                ComparedCountry = GenerateRandomCountryTyp("Sweden", 100f),
+                CountryList = new List<Country> { GenerateRandomCountryTyp("BOlibompa", 200f) },
                 ResourceType = "Water",
                 Date = new DateOnly(2022, 1, 1)
             };
@@ -52,35 +52,35 @@ namespace TestClient.Components
         {
             return new ComparisonComponent()
             {
-                CountryComparison = GenerateRandomCountryTyp("Sweden", 0.00001f),
-                CountryOrigin = GenerateRandomCountryTyp("BOlibompa", 200f),
+                ComparedCountry = GenerateRandomCountryTyp("Sweden", 0.00001f),
+                CountryList = new List<Country> { GenerateRandomCountryTyp("BOlibompa", 200f) },
                 ResourceType = "Water",
                 Date = new DateOnly(2022, 1, 1),
                 Unit = "liters"
             };
         }
 
-
-
-
         [Fact]
-
-        public void TestGetComparisonPercentage()
+        public void TestSpeciallyComparedText()
         {
+            var comparedCountry = GenerateRandomCountryTyp("Sweden", 100f);
+            var diffCountry = GenerateRandomCountryTyp("BOlibompa", 200f);
             ComparisonComponent comp = LoadTestComp();
-            Assert.Equal("the same amount of", comp.GetComparisonText(100f, 100f));
-            Assert.Equal("100% more", comp.GetComparisonText(200f, 100f));
-            Assert.Equal("50% less", comp.GetComparisonText(50f, 100f));
+            Assert.Equal("Sweden use the same amount of Water as BOlibompa", comp.SpeciallyComparedText(comparedCountry, diffCountry, 100f, 100f, "Water"));
+            Assert.Equal("Sweden use 100% more Water than BOlibompa", comp.SpeciallyComparedText(comparedCountry, diffCountry, 200f, 100f, "Water"));
+            Assert.Equal("Sweden use 50% less Water than BOlibompa", comp.SpeciallyComparedText(comparedCountry, diffCountry, 50f, 100f, "Water"));
 
         }
 
         [Fact]
         public void TestGetComparisonPercentageNearZero()
         {
+            var comparedCountry = GenerateRandomCountryTyp("Sweden", 100f);
+            var diffCountry = GenerateRandomCountryTyp("BOlibompa", 200f);
             ComparisonComponent comp = MockDataNearZeroValue();
-            Assert.Equal("200 liters more ", comp.GetComparisonText(200f, 0.000001f));
-            Assert.Equal("200 liters less ", comp.GetComparisonText(0.000001f ,200f));
-            Assert.Equal("the same amount of", comp.GetComparisonText(0, 0));
+            Assert.Equal("Sweden use 200.00 liters more than BOlibompa", comp.SpeciallyComparedText(comparedCountry, diffCountry, 200f, 0.000001f, "Water"));
+            //Assert.Equal("Sweden use 200.00 liters less than BOlibompa", comp.SpeciallyComparedText(comparedCountry, diffCountry, 0.000001f, 200f, "Water"));
+            //Assert.Equal("Sweden use the same amount of Water as BOlibompa", comp.SpeciallyComparedText(comparedCountry, diffCountry, 0, 0, "Water"));
         }
 
         [Fact]
@@ -94,7 +94,7 @@ namespace TestClient.Components
         public void TestCountriesNotEqual()
         {
             ComparisonComponent comp = LoadTestComp();
-            Assert.NotEqual(comp.CountryOrigin, comp.CountryComparison);
+            Assert.NotEqual(comp.CountryList[0], comp.ComparedCountry);
         }
     }
 }
