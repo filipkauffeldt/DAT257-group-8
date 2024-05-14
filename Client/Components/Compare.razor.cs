@@ -146,14 +146,46 @@ namespace Client.Components
             UpdateShownMetrics(shownMetrics);
         }
 
+        // Remove before pushing
+        private string GenerateRandomString(int length)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            var stringChars = new char[length];
+            var random = new Random();
+
+            for (int i = 0; i < stringChars.Length; i++)
+            {
+                stringChars[i] = chars[random.Next(chars.Length)];
+            }
+
+            return new string(stringChars);
+        }
+
         // Trigger re-rendering of the ComparisonComponents
         private void UpdateCountryList()
         {
             var newCountryList = new List<Country>();
             newCountryList.Add(State.Value.OriginCountry);
             newCountryList.Add(State.Value.ComparedCountry);
+            for (int i = 0; i < 18; i++)
+            {
+                var country = new Country
+                {
+                    Code = GenerateRandomString(5),
+                    Name = GenerateRandomString(10),
+                    Data = State.Value.OriginCountry.Data.Select(d => new Data
+                    {
+                        Name = d.Name,
+                        Points = d.Points.Select(p => new DataPoint
+                        {
+                            Date = p.Date,
+                            Value = (float) new Random().NextDouble()
+                        }).ToList()
+                    }).ToList()
+                };
+                newCountryList.Add(country);
+            }
             _countries = newCountryList;
         }
     }
 }
-

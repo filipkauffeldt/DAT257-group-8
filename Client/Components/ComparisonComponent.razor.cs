@@ -3,6 +3,7 @@
 using API;
 using System.Linq;
 using Radzen.Blazor;
+using System.Drawing;
 
 namespace Client.Components
 {
@@ -22,12 +23,32 @@ namespace Client.Components
         [Parameter]
         public required DateOnly date {  get; set; }
 
-        public float OriginCountryValue { get; set; } = 1.0f;
-        public List<DataPoint> OriginValueList = new List<DataPoint>();//  = [new DataPoint() { Date = new DateOnly(2023, 1, 1), Value = 1.0 }];
-        
-        public float ComparisonCountryValue { get; set; } = 3.0f;
-        public List<DataPoint> ComparisonValueList = new List<DataPoint>(); //= [new DataPoint() { Date = new DateOnly(2023, 1, 1), Value = 2.0 }];
         private IDictionary<string, IList<DataPoint>> ValueMap = new Dictionary<string, IList<DataPoint>>();
+        // "#1E3D58"
+        // "#E14177"
+        private IList<string> _colors = new List<string>
+        {
+            "#1E3D58", // Them Dark Blue
+            "#E14177", // Them Red/Pink
+            "#006699", // Blue
+            "#FF9900", // Orange
+            "#3399CC", // Brighter Blue
+            "#FFCC00", // Yellow
+            "#336699", // Blue
+            "#FF6600", // Orange
+            "#003399", // Blue
+            "#993300", // Red
+            "#003366", // Dark Blue
+            "#FF0066", // Pink
+            "#006699", // Blue
+            "#FF9933", // Orange
+            "#336699", // Blue
+            "#FF6633", // Orange
+            "#003366", // Dark Blue
+            "#FF3300", // Red
+            "#009999", // Blue
+            "#FF6600"  // Orange
+        };
 
         public string Unit { get; set; } = "NaN";
 

@@ -1,10 +1,12 @@
 ﻿.main {
-    display: flex;
+    /*display: flex;
     align-content: flex-end;
     flex-direction: column;
-    justify-content: space-evenly;
+    justify-content: space-evenly;*/
+    display: block;
     padding: 40px;
     margin: 10px;
+    height: auto;
 }
 
 .Country {
