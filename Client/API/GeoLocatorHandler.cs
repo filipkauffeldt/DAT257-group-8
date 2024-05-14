@@ -1,4 +1,4 @@
-﻿namespace Client.API
+﻿namespace API
 {
     public class GeoLocatorHandler : IGeoLocator
     {
