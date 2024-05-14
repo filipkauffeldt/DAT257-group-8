@@ -3,9 +3,12 @@
 using API;
 using System.Linq;
 using Radzen.Blazor;
+using Radzen;
+
 
 namespace Client.Components
 {
+
     public partial class ComparisonComponent
     {
         [Parameter]
@@ -118,6 +121,13 @@ namespace Client.Components
                 return 1;
             }
             return MathF.Max(ComparisonCountryValue, OriginCountryValue) * 1.3f;
+        }
+
+        public async Task OpenBiggerViewOfGraph()
+        {
+            await DialogService.OpenAsync<CustomComparisonModal>("Graph",
+                new Dictionary<string, object>() { { "Country", CountryOrigin.Name } },
+                new DialogOptions() {Width = "700px", Height = "512px", CloseDialogOnOverlayClick = true });
         }
     }
 }
