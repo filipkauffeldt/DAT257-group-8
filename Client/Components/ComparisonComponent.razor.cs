@@ -10,7 +10,7 @@ namespace Client.Components
     public partial class ComparisonComponent
     {
         [Parameter]
-        public required Country CountryOrigin { get; set; }
+        public Country? ComparedCountry { get; set; }
         [Parameter]
         public required Country CountryComparison { get; set; }
 
@@ -84,7 +84,11 @@ namespace Client.Components
 
         public void LoadValues()
         {
-            foreach (var country in CountryList)
+            var countries = new List<Country>();
+            if (ComparedCountry != null) countries.Add(ComparedCountry);
+            countries.AddRange(CountryList);
+
+            foreach (var country in countries)
             {
                 var resource = GetCountryData(country);
                 ValueMap.Remove(country.Name);
@@ -137,6 +141,7 @@ namespace Client.Components
                 return "the same amount of";
             }
         }
+
         // Sets width of comparison value bar
         public float SetBarWidth()
         {

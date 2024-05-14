@@ -4,14 +4,20 @@
     @* <h4>@CountryComparison.Name uses @GetComparisonPercentage(ComparisonCountryValue, OriginCountryValue) @ResourceType than @CountryOrigin.Name </h4> *@
     <h4>Card Title</h4>
     <RadzenChart Style="@($"height: {150 + CountryList.Count * 40}px")">
-        @for (int i = 0; i < CountryList.Count; i++)
+        @if (ComparedCountry != null)
         {
-            <RadzenBarSeries Fill="@_colors[i%CountryList.Count]" Data="@ValueMap[CountryList[i].Name]" CategoryProperty="Date" Title="@CountryList[i].Name" LineType="LineType.Dashed" ValueProperty="Value">
+            <RadzenBarSeries Fill="@_colors[0]" Data="@ValueMap[ComparedCountry.Name]" CategoryProperty="Date" Title="@ComparedCountry.Name" LineType="LineType.Dashed" ValueProperty="Value">
                 <RadzenSeriesDataLabels Visible="true" />
             </RadzenBarSeries>
-            @* <RadzenBarSeries Fill="#1E3D58" Data="@ComparisonValueList" CategoryProperty="Date" Title="@CountryComparison.Name" LineType="LineType.Dashed" ValueProperty="Value">
-                <RadzenSeriesDataLabels Visible="true" />
-            </RadzenBarSeries> *@
+        }
+        @for (int i = 0; i < CountryList.Count; i++)
+        {
+            <RadzenBarSeries Fill="@_colors[(i + (ComparedCountry!=null?1:0)) % _colors.Count]" 
+                Data="@ValueMap[CountryList[i].Name]"
+                CategoryProperty="Date" Title="@CountryList[i].Name"
+                LineType="LineType.Dashed" ValueProperty="Value">
+                    <RadzenSeriesDataLabels Visible="true" />
+            </RadzenBarSeries>
         }
         <RadzenValueAxis Min="0" Max="@SetBarWidth()" Formatter=@(value => value == null ? "" : (Decimal.Parse( String.Format( "{0:n}",value) )/1.000000000000000000000000000000000m).ToString() )>
             <RadzenGridLines Visible="true" />

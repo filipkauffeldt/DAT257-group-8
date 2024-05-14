@@ -39,7 +39,6 @@ namespace Client.Components
             await InitCountryOfTheDayAsync();
             InitSharedMetrics();
             Countries.Add(State.Value.HomeCountry);
-            Countries.Add(State.Value.CountryOfTheDay);
             _initialized = true;
         }
 
