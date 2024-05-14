@@ -9,9 +9,13 @@ namespace Client.Components
     public partial class ComparisonComponent
     {
         [Parameter]
-        public required Country CountryOrigin { get; set; } 
+        public required Country CountryOrigin { get; set; }
         [Parameter]
-        public required Country CountryComparison{get; set;}
+        public required Country CountryComparison { get; set; }
+
+        [Parameter]
+        public required IList<Country> CountryList { get; set;}
+
         [Parameter]
         public string ResourceType { get; set; } = "NaN";
 
@@ -23,6 +27,7 @@ namespace Client.Components
         
         public float ComparisonCountryValue { get; set; } = 3.0f;
         public List<DataPoint> ComparisonValueList = new List<DataPoint>(); //= [new DataPoint() { Date = new DateOnly(2023, 1, 1), Value = 2.0 }];
+        private IDictionary<string, IList<DataPoint>> ValueMap = new Dictionary<string, IList<DataPoint>>();
 
         public string Unit { get; set; } = "NaN";
 
@@ -50,34 +55,53 @@ namespace Client.Components
         }
         public void LoadValues()
         {
-            var resource1 = GetCountryData(CountryOrigin);  
-            var resource2 = GetCountryData(CountryComparison);
-            OriginValueList.Clear();
-            ComparisonValueList.Clear();
-            if (resource1 != null)
+            foreach (var country in CountryList)
             {
-                OriginValueList.Add(resource1.Points.Where(dp => dp.Date.Year == date.Year).FirstOrDefault() ??
-                    new DataPoint { Date = date, Value = 1 });
-                OriginCountryValue = (float)OriginValueList[0].Value;
-                Unit = resource1.Unit;
+                var resource = GetCountryData(country);
+                if (resource != null)
+                {
+                    var valueList = new List<DataPoint> {
+                        new DataPoint { Date = date, Value = resource.Points.Where(dp => dp.Date.Year == date.Year).FirstOrDefault()?.Value ?? 1 }
+                    };
+                    ValueMap.Add(country.Name, valueList);
+                    Unit = resource.Unit;
+                }
+                else
+                {
+                    var valueList = new List<DataPoint> {
+                        new DataPoint { Date = date, Value = 1 }
+                    };
+                    ValueMap.Add(country.Name, valueList);
+                }
             }
-            else
-            {
-                OriginValueList.Add(new DataPoint { Date = date, Value = 1 });
-                OriginCountryValue = 1;
-            }
-            if (resource2 != null)
-            {
-                ComparisonValueList.Add(resource2.Points.Where(dp => dp.Date.Year == date.Year).FirstOrDefault() ??
-                    new DataPoint { Date = date, Value = 1 });
-                ComparisonCountryValue = (float)ComparisonValueList[0].Value;
-                Unit = resource2.Unit;
-            }
-            else
-            {
-                ComparisonValueList.Add(new DataPoint { Date = date, Value = 1 });
-                ComparisonCountryValue = 1;
-            }
+            //var resource1 = GetCountryData(CountryOrigin);  
+            //var resource2 = GetCountryData(CountryComparison);
+            //OriginValueList.Clear();
+            //ComparisonValueList.Clear();
+            //if (resource1 != null)
+            //{
+            //    OriginValueList.Add(resource1.Points.Where(dp => dp.Date.Year == date.Year).FirstOrDefault() ??
+            //        new DataPoint { Date = date, Value = 1 });
+            //    OriginCountryValue = (float)OriginValueList[0].Value;
+            //    Unit = resource1.Unit;
+            //}
+            //else
+            //{
+            //    OriginValueList.Add(new DataPoint { Date = date, Value = 1 });
+            //    OriginCountryValue = 1;
+            //}
+            //if (resource2 != null)
+            //{
+            //    ComparisonValueList.Add(resource2.Points.Where(dp => dp.Date.Year == date.Year).FirstOrDefault() ??
+            //        new DataPoint { Date = date, Value = 1 });
+            //    ComparisonCountryValue = (float)ComparisonValueList[0].Value;
+            //    Unit = resource2.Unit;
+            //}
+            //else
+            //{
+            //    ComparisonValueList.Add(new DataPoint { Date = date, Value = 1 });
+            //    ComparisonCountryValue = 1;
+            //}
             // Text at the bottom of the cards
             ConsumptionText = "Consumption in " + Unit;
         }
@@ -113,11 +137,8 @@ namespace Client.Components
         // Sets width of comparison value bar
         public float SetBarWidth()
         {
-            if(ComparisonCountryValue == 0 && OriginCountryValue == 0)
-            {
-                return 1;
-            }
-            return MathF.Max(ComparisonCountryValue, OriginCountryValue) * 1.3f;
+            float maxValue = ValueMap.Values.Max(valueList => (float)valueList.Max(dataPoint => dataPoint.Value));
+            return maxValue * 1.3f;
         }
     }
 }

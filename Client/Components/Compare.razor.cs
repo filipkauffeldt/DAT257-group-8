@@ -2,7 +2,6 @@
 using System.Reflection.Metadata.Ecma335;
 using System.Runtime.InteropServices;
 using API;
-using Client.API;
 using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Client.Store.Actions;
@@ -31,6 +30,8 @@ namespace Client.Components
         
         private DateOnly _date = new DateOnly(2022, 1, 1);
 
+        private IList<Country> _countries = new List<Country>();
+
         protected override async Task OnInitializedAsync()
         {
             await InitCompareCountryNamesAsync();
@@ -42,8 +43,8 @@ namespace Client.Components
             await InitComparedCountryAsync();
             InitSharedMetrics();
             InitShownMetrics();
-            var testShared = State.Value.SharedMetrics;
-            var testShown = State.Value.ShownMetrics;
+            _countries.Add(State.Value.OriginCountry);
+            _countries.Add(State.Value.ComparedCountry);
             _initialized = true;
         }
 

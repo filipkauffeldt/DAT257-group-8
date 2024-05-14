@@ -1,4 +1,4 @@
-﻿using Client.API;
+﻿using API;
 using Client.Store.Actions;
 using Client.Store.States;
 using Fluxor;
@@ -27,6 +27,8 @@ namespace Client.Components
         
         private DateOnly _date = new DateOnly(2022, 1, 1);
 
+        private IList<Country> Countries = new List<Country>();
+
         private bool _initialized = false;
         private bool _homeCountryError = false;
 
@@ -36,6 +38,8 @@ namespace Client.Components
             await InitHomeCountryAsync();
             await InitCountryOfTheDayAsync();
             InitSharedMetrics();
+            Countries.Add(State.Value.HomeCountry);
+            Countries.Add(State.Value.CountryOfTheDay);
             _initialized = true;
         }
 
