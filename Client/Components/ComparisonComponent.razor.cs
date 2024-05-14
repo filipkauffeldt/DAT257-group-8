@@ -126,8 +126,8 @@ namespace Client.Components
         public async Task OpenBiggerViewOfGraph()
         {
             await DialogService.OpenAsync<CustomComparisonModal>("Graph",
-                new Dictionary<string, object>() { { "Country", CountryOrigin.Name } },
-                new DialogOptions() {Width = "700px", Height = "512px", CloseDialogOnOverlayClick = true });
+                new Dictionary<string, object>() { { "ComparisonComponent", this } },
+                new DialogOptions() {Width = "1000px", Height = "700px", CloseDialogOnOverlayClick = true });
         }
     }
 }
