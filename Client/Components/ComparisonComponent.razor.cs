@@ -4,6 +4,7 @@ using API;
 using System.Linq;
 using Radzen.Blazor;
 using System.Drawing;
+using Microsoft.Extensions.Primitives;
 
 namespace Client.Components
 {
@@ -21,7 +22,7 @@ namespace Client.Components
         public string ResourceType { get; set; } = "NaN";
 
         [Parameter]
-        public required DateOnly date {  get; set; }
+        public required DateOnly Date {  get; set; }
 
         private IDictionary<string, IList<DataPoint>> ValueMap = new Dictionary<string, IList<DataPoint>>();
         // "#1E3D58"
@@ -95,7 +96,7 @@ namespace Client.Components
                 if (resource != null)
                 {
                     var valueList = new List<DataPoint> {
-                        new DataPoint { Date = date, Value = resource.Points.Where(dp => dp.Date.Year == date.Year).FirstOrDefault()?.Value ?? 1 }
+                        new DataPoint { Date = Date, Value = resource.Points.Where(dp => dp.Date.Year == Date.Year).FirstOrDefault()?.Value ?? 1 }
                     };
                     ValueMap.Add(country.Name, valueList);
                     Unit = resource.Unit;
@@ -103,7 +104,7 @@ namespace Client.Components
                 else
                 {
                     var valueList = new List<DataPoint> {
-                        new DataPoint { Date = date, Value = 1 }
+                        new DataPoint { Date = Date, Value = 1 }
                     };
                     ValueMap.Add(country.Name, valueList);
                 }
@@ -113,33 +114,105 @@ namespace Client.Components
             ConsumptionText = "Consumption in " + Unit;
         }
 
-        public string GetComparisonPercentage(float comparisonValue, float originValue)
-        {  // Threshold makes ut so that values near 0 do not cause a extremely large percentage value in the comparison text.
-            if( (Math.Abs(comparisonValue) < this.Threshold) && (Math.Abs(originValue) < Threshold))
+        public string GetComparisonText()
+        {
+            if (ComparedCountry != null)
             {
-                return "the same amount of";
-            } else if (Math.Abs(comparisonValue) < Threshold)
-            {
-                return (originValue.ToString() + " " + Unit + " less ");
-            }
-            else if((Math.Abs(originValue) < Threshold))
-            {
-                return (comparisonValue.ToString() + " " + Unit + " more ");
-            }
-            float relativeDifference = (comparisonValue / originValue) - 1;
-            
-            if (comparisonValue > originValue)
-            {
-                return ((int)(Math.Abs(relativeDifference) * 100)).ToString() + "% more";
-            }
-            else if (comparisonValue < originValue)
-            {
-                return ((int)(Math.Abs(relativeDifference) * 100)).ToString() + "% less";
+                return SpeciallyComparedText();
             }
             else
             {
-                return "the same amount of";
+                return GeneralComparedText();
             }
+        }
+
+        private string GeneralComparedText()
+        {
+            var maxUsageCountry = ValueMap.Aggregate((left, right) => left.Value[0].Value > right.Value[0].Value ? left : right).Key;
+            var maxUseValue = ValueMap[maxUsageCountry][0].Value;
+
+            var secondUsageCountry = ValueMap.OrderByDescending(kv => kv.Value[0].Value)
+                                  .Skip(1)
+                                  .FirstOrDefault()
+                                  .Key;
+
+            var secondUseValue = ValueMap[secondUsageCountry][0].Value;
+            if (maxUseValue < Threshold || secondUseValue < Threshold)
+            {
+                return $"{maxUsageCountry} uses {maxUseValue-secondUseValue} {Unit} more {ResourceType} than the second most consuming country";
+            }
+
+
+            var percentage = Math.Round((maxUseValue / secondUseValue - 1) * 100);
+            var comparisonText = $"{maxUsageCountry} use {percentage}% more {ResourceType} than the second most consuming country";
+            return comparisonText;
+        }
+
+        private string SpeciallyComparedText()
+        {
+            float comparisonValue = (float)ValueMap[ComparedCountry!.Name][0].Value;
+            var biggestDiffCountry = GetCountryWithBiggestDifference(comparisonValue);
+            var diffValue = biggestDiffCountry?.Data?.Select(d => d.Points.Where(dp => dp.Date == Date).FirstOrDefault()?.Value).FirstOrDefault() ?? 0;
+
+
+            string comparisonText = $"{ComparedCountry.Name} uses ";
+
+            if ((Math.Abs(comparisonValue) < this.Threshold) && (Math.Abs(diffValue) < Threshold))
+            {
+                comparisonText += "the same amount of " + Unit;
+            }
+            else if (Math.Abs(comparisonValue) < Threshold)
+            {
+                comparisonText += (diffValue.ToString() + " " + Unit + " less ");
+            }
+            else if ((Math.Abs(diffValue) < Threshold))
+            {
+                comparisonText += (comparisonValue.ToString() + " " + Unit + " more ");
+            }
+            float relativeDifference = (comparisonValue / (float)diffValue) - 1;
+
+            if (comparisonValue > diffValue)
+            {
+                comparisonText += Math.Round((Math.Abs(relativeDifference) * 100)).ToString() + "% more";
+            }
+            else if (comparisonValue < diffValue)
+            {
+                comparisonText += (Math.Round((Math.Abs(relativeDifference) * 100))).ToString() + "% less";
+            }
+            else
+            {
+                comparisonText += "the same amount of " + Unit;
+            }
+
+            comparisonText += $"{ResourceType} than {biggestDiffCountry?.Name}";
+            return comparisonText;
+        }
+
+        public Country GetCountryWithBiggestDifference(float comparisonValue)
+        {
+            Country countryWithBiggestDifference = null;
+            float biggestDifference = 0;
+
+            foreach (var kvp in ValueMap)
+            {
+                var countryName = kvp.Key;
+                var valueList = kvp.Value;
+
+                var dataPoint = valueList.FirstOrDefault(dp => dp.Date == Date);
+
+                if (dataPoint != null)
+                {
+                    float difference = (float)Math.Abs(comparisonValue - dataPoint.Value);
+
+                    if (difference > biggestDifference)
+                    {
+                        biggestDifference = difference;
+                        countryWithBiggestDifference = CountryList.FirstOrDefault(c => c.Name == countryName);
+                    }
+                }
+            }
+
+            return countryWithBiggestDifference;
         }
 
         // Sets width of comparison value bar
