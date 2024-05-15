@@ -21,6 +21,7 @@ namespace TestClient.Store.Reducers
             {
                 OriginCountry = null,
                 ComparedCountry = null,
+                ComparedCountries = null,
                 SharedMetrics = null,
                 ShownMetrics = null,
                 CountryIdentifiers = null
@@ -47,6 +48,7 @@ namespace TestClient.Store.Reducers
             {
                 OriginCountry = null,
                 ComparedCountry = null,
+                ComparedCountries = null,
                 SharedMetrics = null,
                 ShownMetrics = null,
                 CountryIdentifiers = null
@@ -75,6 +77,7 @@ namespace TestClient.Store.Reducers
             {
                 OriginCountry = null,
                 ComparedCountry = null,
+                ComparedCountries = null,
                 SharedMetrics = null,
                 ShownMetrics = null,
                 CountryIdentifiers = null
@@ -99,6 +102,7 @@ namespace TestClient.Store.Reducers
             {
                 OriginCountry = null,
                 ComparedCountry = null,
+                ComparedCountries = null,
                 SharedMetrics = null,
                 ShownMetrics = null,
                 CountryIdentifiers = null
@@ -123,6 +127,7 @@ namespace TestClient.Store.Reducers
             {
                 OriginCountry = null,
                 ComparedCountry = null,
+                ComparedCountries = null,
                 SharedMetrics = null,
                 ShownMetrics = null,
                 CountryIdentifiers = null
