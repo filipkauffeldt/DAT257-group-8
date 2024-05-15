@@ -147,7 +147,7 @@ namespace Client.Components
             {
                 if (originValue < Threshold || avrageValue < Threshold)
                 {
-                    comparisonText += $"{Math.Round(originValue - avrageValue, 2)} {unit} more than the average";
+                    comparisonText += $"{Math.Round(originValue - avrageValue, 5)} {unit} more than the average";
                 }
                 else
                 {
@@ -158,7 +158,7 @@ namespace Client.Components
             {
                 if (originValue < Threshold || avrageValue < Threshold)
                 {
-                    comparisonText += $"{Math.Round(originValue - avrageValue, 2)} {unit} less than the average";
+                    comparisonText += $"{Math.Round(originValue - avrageValue, 5)} {unit} less than the average";
                 }
                 else
                 {
@@ -174,30 +174,38 @@ namespace Client.Components
             string comparisonText = $"{originCountry.Name} use ";
 
             var diffValue = Math.Abs(originValue - comparedValue);
-            if ((Math.Abs(comparedValue) < Threshold) && (diffValue < Threshold))
+            var smallValueDetected = Math.Abs(originValue) < Threshold || Math.Abs(comparedValue) < Threshold;
+
+            if (diffValue < Threshold)
             {
                 comparisonText += $"the same amount of {resource} as {comparedCountry.Name}";
                 return comparisonText;
             }
-            else if (Math.Abs(originValue) < Threshold)
-            {
-                comparisonText += $"{diffValue, 2} {unit} less than {comparedCountry.Name}";
-                return comparisonText;
-            }
-            else if (diffValue < Threshold)
-            {
-                comparisonText += $"{Math.Round(diffValue, 2)} {unit} more than {comparedCountry.Name}";
-                return comparisonText;
-            }
-            var relativeDifference = Math.Abs((originValue / comparedValue) - 1);
+            
+            
+            var relativeDifference = Math.Abs((originValue / comparedValue));
 
-            if (comparedValue < diffValue)
+            if (relativeDifference > 1)
             {
-                comparisonText += Math.Round(relativeDifference * 100).ToString() + "% more ";
+                if (smallValueDetected)
+                {
+                    comparisonText += $"{Math.Round(diffValue, 2)} {unit} more ";
+                }
+                else
+                {
+                    comparisonText += Math.Round((relativeDifference - 1) * 100).ToString() + "% more ";
+                }
             }
-            else if (comparedValue > diffValue)
+            else if (relativeDifference < 1)
             {
-                comparisonText += Math.Round(relativeDifference * 100).ToString() + "% less ";
+                if (smallValueDetected)
+                {
+                    comparisonText += $"{Math.Round(diffValue, 2)} {unit} less ";
+                }
+                else
+                {
+                    comparisonText += Math.Round((1 - relativeDifference) * 100).ToString() + "% less ";
+                }
             }
             else
             {
