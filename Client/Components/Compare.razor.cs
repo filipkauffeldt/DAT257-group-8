@@ -175,7 +175,12 @@ namespace Client.Components
             var countries = State.Value.ComparedCountries;
             if(countries.Count > 1)
             {
-                countries.RemoveAt(countries.Count - 1);
+                var lastIndex = countries.Count - 1;
+                if(_comparisonChangedIndex == lastIndex)
+                {
+                    _comparisonChangedIndex = 0;
+                }
+                countries.RemoveAt(lastIndex);
                 Dispatcher.Dispatch(new ComparedCountriesChosenAction(countries));
                 var sharedMetrics = GetSharedMetrics();
                 UpdateShownMetrics(sharedMetrics);
