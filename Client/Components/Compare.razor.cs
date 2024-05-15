@@ -146,7 +146,6 @@ namespace Client.Components
         private void UpdateCountryList()
         {
             var newCountryList = new List<Country>();
-            newCountryList.Add(State.Value.OriginCountry);
             newCountryList.Add(State.Value.ComparedCountry);
             _countries = newCountryList;
         }

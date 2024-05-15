@@ -3,14 +3,17 @@
     <RadzenChart Style="@($"height: {150 + ComparedCountries.Count * 40}px")">
         @if (OriginCountry != null)
         {
-            <RadzenBarSeries Fill="@_colors[0]" Data="@ValueMap[OriginCountry.Name]" CategoryProperty="Date" Title="@OriginCountry.Name" LineType="LineType.Dashed" ValueProperty="Value">
+            <RadzenBarSeries Fill="@_colors[0]" Data="@ValueMap[OriginCountry]" 
+                CategoryProperty="Date" Title="@OriginCountry.Name" 
+                LineType="LineType.Dashed" 
+                ValueProperty="Value">
                 <RadzenSeriesDataLabels Visible="true" />
             </RadzenBarSeries>
         }
         @for (int i = 0; i < ComparedCountries.Count; i++)
         {
             <RadzenBarSeries Fill="@_colors[(i + (OriginCountry!=null?1:0)) % _colors.Count]" 
-                Data="@ValueMap[ComparedCountries[i].Name]"
+                Data="@ValueMap[ComparedCountries[i]]"
                 CategoryProperty="Date" Title="@ComparedCountries[i].Name"
                 LineType="LineType.Dashed" ValueProperty="Value">
                     <RadzenSeriesDataLabels Visible="true" />

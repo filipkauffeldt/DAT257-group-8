@@ -21,7 +21,7 @@ namespace Client.Components
         [Parameter]
         public required DateOnly Date {  get; set; }
 
-        private IDictionary<string, IList<DataPoint>> ValueMap = new Dictionary<string, IList<DataPoint>>();
+        private readonly IDictionary<Country, IList<DataPoint>> ValueMap = new Dictionary<Country, IList<DataPoint>>();
 
         private IList<string> _colors = new List<string>
         {
@@ -81,19 +81,20 @@ namespace Client.Components
 
         public void LoadValues()
         {
-            var countries = new List<Country>(ComparedCountries);
-            countries.Insert(0, OriginCountry);
+            var countries = new List<Country> { OriginCountry };
+            countries.AddRange(ComparedCountries);
+            //countries.Insert(0, OriginCountry);
 
             foreach (var country in countries)
             {
                 var resource = GetCountryData(country);
-                ValueMap.Remove(country.Name);
+                ValueMap.Remove(country);
                 if (resource != null)
                 {
                     var valueList = new List<DataPoint> {
                         new DataPoint { Date = Date, Value = resource.Points.Where(dp => dp.Date.Year == Date.Year).FirstOrDefault()?.Value ?? 1 }
                     };
-                    ValueMap.Add(country.Name, valueList);
+                    ValueMap.Add(country, valueList);
                     Unit = resource.Unit;
                 }
                 else
@@ -101,7 +102,7 @@ namespace Client.Components
                     var valueList = new List<DataPoint> {
                         new DataPoint { Date = Date, Value = 1 }
                     };
-                    ValueMap.Add(country.Name, valueList);
+                    ValueMap.Add(country, valueList);
                 }
             }
             
@@ -118,67 +119,74 @@ namespace Client.Components
             else if (ComparedCountries.Count == 1)
             {
                 var comparedCountry = ComparedCountries[0];
-                var comparedCountryValue = ValueMap[comparedCountry.Name][0].Value;
-                var originCountryValue = ValueMap[OriginCountry.Name][0].Value;
-                return SingleComparedText(OriginCountry, comparedCountry, originCountryValue, comparedCountryValue, ResourceType);
+                var comparedCountryValue = ValueMap[comparedCountry][0].Value;
+                var originCountryValue = ValueMap[OriginCountry][0].Value;
+                return SingleComparedText(OriginCountry, comparedCountry, originCountryValue, comparedCountryValue, ResourceType, Unit);
             }
             else
             {
-                return GeneralComparedText();
+                var singleValueMap = ValueMap.ToDictionary(kvp => kvp.Key, kvp => kvp.Value[0].Value);
+                return MultipleComparedText(OriginCountry, singleValueMap, ResourceType, Unit);
             }
-            //if (ComparedCountry != null)
-            //{
-            //    var comparedCountryValue = ValueMap[ComparedCountry!.Name][0].Value;
-            //    var biggestDiffCountry = GetCountryWithBiggestDifference(comparedCountryValue);
-            //    var diffValue = biggestDiffCountry?.Data?.Select(d => d.Points.Where(dp => dp.Date == Date).FirstOrDefault()?.Value).FirstOrDefault() ?? 0;
-            //    return SpeciallyComparedText(ComparedCountry, biggestDiffCountry, comparedCountryValue, diffValue, ResourceType);
-            //}
-            //else
-            //{
-            //    return GeneralComparedText();
-            //}
         }
 
-        public string GeneralComparedText()
+        public string MultipleComparedText(Country originCountry, IDictionary<Country, double> valueMap, string resource, string unit)
         {
-            var maxUsageCountry = ValueMap.Aggregate((left, right) => left.Value[0].Value > right.Value[0].Value ? left : right).Key;
-            var maxUseValue = ValueMap[maxUsageCountry][0].Value;
+            var comparisonText = $"{originCountry.Name} uses ";
+            var originValue = valueMap[originCountry];
+            var descendingValues = valueMap.OrderByDescending(kvp => kvp.Value).ToList();
+            var ascendingValues = valueMap.OrderBy(kvp => kvp.Value).ToList();
+            
+            var avrageValue = valueMap.Where(kvp => kvp.Key != originCountry).Average(kvp => kvp.Value);
 
-            var secondUsageCountry = ValueMap.OrderByDescending(kv => kv.Value[0].Value)
-                                  .Skip(1)
-                                  .FirstOrDefault()
-                                  .Key;
-
-            var secondUseValue = ValueMap[secondUsageCountry][0].Value;
-            if (maxUseValue < Threshold || secondUseValue < Threshold)
+            if (Math.Abs(originValue - avrageValue) < Threshold)
             {
-                return $"{maxUsageCountry} uses {maxUseValue-secondUseValue} {Unit} more {ResourceType} than the second most consuming country";
+                comparisonText += $"the same amount of {resource} as the average";
+            }
+            else if (originValue > avrageValue)
+            {
+                if (originValue < Threshold || avrageValue < Threshold)
+                {
+                    comparisonText += $"{Math.Round(originValue - avrageValue, 2)} {unit} more than the average";
+                }
+                else
+                {
+                    comparisonText += $"{Math.Round((originValue / avrageValue - 1) * 100)}% more {resource} than the average";
+                }
+            }
+            if (originValue < avrageValue)
+            {
+                if (originValue < Threshold || avrageValue < Threshold)
+                {
+                    comparisonText += $"{Math.Round(originValue - avrageValue, 2)} {unit} less than the average";
+                }
+                else
+                {
+                    comparisonText += $"{Math.Round((originValue / avrageValue - 1) * 100)}% less {resource} than the average";
+                }
             }
 
-
-            var percentage = Math.Round((maxUseValue / secondUseValue - 1) * 100);
-            var comparisonText = $"{maxUsageCountry} use {percentage}% more {ResourceType} than the second most consuming country";
             return comparisonText;
         }
 
-        public string SingleComparedText(Country originCountry, Country comparedCountry, double originValue, double comparedValue, string resource)
+        public string SingleComparedText(Country originCountry, Country comparedCountry, double originValue, double comparedValue, string resource, string unit)
         {
             string comparisonText = $"{originCountry.Name} use ";
 
             var diffValue = Math.Abs(originValue - comparedValue);
-            if ((Math.Abs(comparedValue) < this.Threshold) && (diffValue < Threshold))
+            if ((Math.Abs(comparedValue) < Threshold) && (diffValue < Threshold))
             {
                 comparisonText += $"the same amount of {resource} as {comparedCountry.Name}";
                 return comparisonText;
             }
             else if (Math.Abs(originValue) < Threshold)
             {
-                comparisonText += $"{diffValue, 2} {Unit} less than {comparedCountry.Name}";
+                comparisonText += $"{diffValue, 2} {unit} less than {comparedCountry.Name}";
                 return comparisonText;
             }
             else if (diffValue < Threshold)
             {
-                comparisonText += $"{Math.Round(diffValue, 2)} {Unit} more than {comparedCountry.Name}";
+                comparisonText += $"{Math.Round(diffValue, 2)} {unit} more than {comparedCountry.Name}";
                 return comparisonText;
             }
             var relativeDifference = Math.Abs((originValue / comparedValue) - 1);
@@ -208,7 +216,7 @@ namespace Client.Components
 
             foreach (var kvp in ValueMap)
             {
-                var countryName = kvp.Key;
+                var country = kvp.Key;
                 var valueList = kvp.Value;
 
                 var dataPoint = valueList.FirstOrDefault(dp => dp.Date == Date);
@@ -220,7 +228,7 @@ namespace Client.Components
                     if (difference > biggestDifference)
                     {
                         biggestDifference = difference;
-                        countryWithBiggestDifference = ComparedCountries.FirstOrDefault(c => c.Name == countryName);
+                        countryWithBiggestDifference = ComparedCountries.FirstOrDefault(c => c.Name == country.Name);
                     }
                 }
             }
