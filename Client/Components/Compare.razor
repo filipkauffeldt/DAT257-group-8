@@ -71,7 +71,7 @@
                 {
                     <div id="@FormatLabel(metric)" class="grid-item">
                         <ComparisonComponent @key="@($"{State.Value.OriginCountry}-{State.Value.ComparedCountry}-{metric}")" 
-                            CountryList="_countries" 
+                            ComparedCountries="_countries" 
                             Date="@_date" 
                             ResourceType="@metric">
                         </ComparisonComponent>

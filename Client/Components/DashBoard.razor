@@ -47,7 +47,7 @@
                 @foreach (var metric in State.Value.ShownMetrics)
                 {
                     <div id="@FormatLabel(metric)" class="grid-item">
-                            <ComparisonComponent @key=@metric @ref="@compComp[metric]" CountryList="@Countries" ComparedCountry="@State.Value.CountryOfTheDay" date="@_date" ResourceType="@metric"></ComparisonComponent>
+                            <ComparisonComponent @key=@metric @ref="@compComp[metric]" ComparedCountries="@Countries" OriginCountry="@State.Value.CountryOfTheDay" date="@_date" ResourceType="@metric"></ComparisonComponent>
                     </div>
                 }
                 </div>

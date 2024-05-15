@@ -6,11 +6,14 @@ namespace Client.Components
 {
     public partial class ComparisonComponent
     {
-        [Parameter]
-        public Country? ComparedCountry { get; set; }
+        //[Parameter]
+        //public Country? ComparedCountry { get; set; }
 
         [Parameter]
-        public required IList<Country> CountryList { get; set;}
+        public required Country OriginCountry { get; set; }
+
+        [Parameter]
+        public required IList<Country> ComparedCountries { get; set;}
 
         [Parameter]
         public string ResourceType { get; set; } = "NaN";
@@ -78,9 +81,8 @@ namespace Client.Components
 
         public void LoadValues()
         {
-            var countries = new List<Country>();
-            if (ComparedCountry != null) countries.Add(ComparedCountry);
-            countries.AddRange(CountryList);
+            var countries = new List<Country>(ComparedCountries);
+            countries.Insert(0, OriginCountry);
 
             foreach (var country in countries)
             {
@@ -109,17 +111,32 @@ namespace Client.Components
 
         public string GetComparisonText()
         {
-            if (ComparedCountry != null)
+            if (ComparedCountries.Count == 0)
             {
-                var comparedCountryValue = ValueMap[ComparedCountry!.Name][0].Value;
-                var biggestDiffCountry = GetCountryWithBiggestDifference(comparedCountryValue);
-                var diffValue = biggestDiffCountry?.Data?.Select(d => d.Points.Where(dp => dp.Date == Date).FirstOrDefault()?.Value).FirstOrDefault() ?? 0;
-                return SpeciallyComparedText(ComparedCountry, biggestDiffCountry, comparedCountryValue, diffValue, ResourceType);
+                return "No comparison data available";
+            }
+            else if (ComparedCountries.Count == 1)
+            {
+                var comparedCountry = ComparedCountries[0];
+                var comparedCountryValue = ValueMap[comparedCountry.Name][0].Value;
+                var originCountryValue = ValueMap[OriginCountry.Name][0].Value;
+                return SingleComparedText(OriginCountry, comparedCountry, originCountryValue, comparedCountryValue, ResourceType);
             }
             else
             {
                 return GeneralComparedText();
             }
+            //if (ComparedCountry != null)
+            //{
+            //    var comparedCountryValue = ValueMap[ComparedCountry!.Name][0].Value;
+            //    var biggestDiffCountry = GetCountryWithBiggestDifference(comparedCountryValue);
+            //    var diffValue = biggestDiffCountry?.Data?.Select(d => d.Points.Where(dp => dp.Date == Date).FirstOrDefault()?.Value).FirstOrDefault() ?? 0;
+            //    return SpeciallyComparedText(ComparedCountry, biggestDiffCountry, comparedCountryValue, diffValue, ResourceType);
+            //}
+            //else
+            //{
+            //    return GeneralComparedText();
+            //}
         }
 
         public string GeneralComparedText()
@@ -144,42 +161,43 @@ namespace Client.Components
             return comparisonText;
         }
 
-        public string SpeciallyComparedText(Country comparedCountry, Country biggestDiffCountry, double comparedCountryValue, double diffValue, string resource)
+        public string SingleComparedText(Country originCountry, Country comparedCountry, double originValue, double comparedValue, string resource)
         {
-            string comparisonText = $"{comparedCountry.Name} use ";
+            string comparisonText = $"{originCountry.Name} use ";
 
-            if ((Math.Abs(comparedCountryValue) < this.Threshold) && (Math.Abs(diffValue) < Threshold))
+            var diffValue = Math.Abs(originValue - comparedValue);
+            if ((Math.Abs(comparedValue) < this.Threshold) && (diffValue < Threshold))
             {
-                comparisonText += $"the same amount of {resource} as {biggestDiffCountry?.Name}";
+                comparisonText += $"the same amount of {resource} as {comparedCountry.Name}";
                 return comparisonText;
             }
-            else if (Math.Abs(comparedCountryValue) < Threshold)
+            else if (Math.Abs(originValue) < Threshold)
             {
-                comparisonText += $"{Math.Round(diffValue, 2)} {Unit} less than {biggestDiffCountry}";
+                comparisonText += $"{diffValue, 2} {Unit} less than {comparedCountry.Name}";
                 return comparisonText;
             }
-            else if ((Math.Abs(diffValue) < Threshold))
+            else if (diffValue < Threshold)
             {
-                comparisonText += $"{Math.Round(diffValue, 2)} {Unit} more than {biggestDiffCountry}";
+                comparisonText += $"{Math.Round(diffValue, 2)} {Unit} more than {comparedCountry.Name}";
                 return comparisonText;
             }
-            var relativeDifference = (comparedCountryValue / diffValue) - 1;
+            var relativeDifference = Math.Abs((originValue / comparedValue) - 1);
 
-            if (comparedCountryValue > diffValue)
+            if (comparedValue < diffValue)
             {
-                comparisonText += Math.Round((Math.Abs(relativeDifference) * 100)).ToString() + "% more ";
+                comparisonText += Math.Round(relativeDifference * 100).ToString() + "% more ";
             }
-            else if (comparedCountryValue < diffValue)
+            else if (comparedValue > diffValue)
             {
-                comparisonText += (Math.Round((Math.Abs(relativeDifference) * 100))).ToString() + "% less ";
+                comparisonText += Math.Round(relativeDifference * 100).ToString() + "% less ";
             }
             else
             {
-                comparisonText += $"the same amount of {resource} as {biggestDiffCountry?.Name}";
+                comparisonText += $"the same amount of {resource} as {comparedCountry.Name}";
                 return comparisonText;
             }
 
-            comparisonText += $"{resource} than {biggestDiffCountry?.Name}";
+            comparisonText += $"{resource} than {comparedCountry?.Name}";
             return comparisonText;
         }
 
@@ -202,7 +220,7 @@ namespace Client.Components
                     if (difference > biggestDifference)
                     {
                         biggestDifference = difference;
-                        countryWithBiggestDifference = CountryList.FirstOrDefault(c => c.Name == countryName);
+                        countryWithBiggestDifference = ComparedCountries.FirstOrDefault(c => c.Name == countryName);
                     }
                 }
             }

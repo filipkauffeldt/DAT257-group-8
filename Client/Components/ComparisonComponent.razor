@@ -1,17 +1,17 @@
 ﻿<div class="main">  
     <h4>@GetComparisonText()</h4>
-    <RadzenChart Style="@($"height: {150 + CountryList.Count * 40}px")">
-        @if (ComparedCountry != null)
+    <RadzenChart Style="@($"height: {150 + ComparedCountries.Count * 40}px")">
+        @if (OriginCountry != null)
         {
-            <RadzenBarSeries Fill="@_colors[0]" Data="@ValueMap[ComparedCountry.Name]" CategoryProperty="Date" Title="@ComparedCountry.Name" LineType="LineType.Dashed" ValueProperty="Value">
+            <RadzenBarSeries Fill="@_colors[0]" Data="@ValueMap[OriginCountry.Name]" CategoryProperty="Date" Title="@OriginCountry.Name" LineType="LineType.Dashed" ValueProperty="Value">
                 <RadzenSeriesDataLabels Visible="true" />
             </RadzenBarSeries>
         }
-        @for (int i = 0; i < CountryList.Count; i++)
+        @for (int i = 0; i < ComparedCountries.Count; i++)
         {
-            <RadzenBarSeries Fill="@_colors[(i + (ComparedCountry!=null?1:0)) % _colors.Count]" 
-                Data="@ValueMap[CountryList[i].Name]"
-                CategoryProperty="Date" Title="@CountryList[i].Name"
+            <RadzenBarSeries Fill="@_colors[(i + (OriginCountry!=null?1:0)) % _colors.Count]" 
+                Data="@ValueMap[ComparedCountries[i].Name]"
+                CategoryProperty="Date" Title="@ComparedCountries[i].Name"
                 LineType="LineType.Dashed" ValueProperty="Value">
                     <RadzenSeriesDataLabels Visible="true" />
             </RadzenBarSeries>
