@@ -37,4 +37,14 @@ namespace Client.Store.Actions
         public Country Country { get; }
         public UpdateComparedCountryAction(Country country) => Country = country;
     };
+
+    public class UpdateYearAction
+    {
+        public DateOnly Year { get; }
+
+        public UpdateYearAction(DateOnly year)
+        {
+            this.Year = year;
+        }
+    }
 }

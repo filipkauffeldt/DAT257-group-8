@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Components;
 using Client.Store.Actions;
 using Client.Store.States;
 using System.Reflection;
+using System.Linq.Dynamic.Core.Exceptions;
 
 namespace Client.Components
 {
@@ -31,8 +32,14 @@ namespace Client.Components
         
         private DateOnly _date = new DateOnly(2022, 1, 1);
 
+        private List<string> ListOfYears = new List<string>();
+
+        private string SelectedYear;
         protected override async Task OnInitializedAsync()
         {
+            _date = State.Value.Year;
+            SelectedYear = _date.Year.ToString();
+            PopulateListOfYears();
             await InitCompareCountryNamesAsync();
             foreach (Country country in State.Value.CountryIdentifiers)
             {
@@ -44,7 +51,33 @@ namespace Client.Components
             InitShownMetrics();
             var testShared = State.Value.SharedMetrics;
             var testShown = State.Value.ShownMetrics;
+            
             _initialized = true;
+            
+        }
+
+        private async void PopulateListOfYears()
+        {
+            for(int i = DateTime.Today.Year; i >= 1950; i--)
+            {
+                ListOfYears.Add(i.ToString());
+            }
+        }
+
+        private async void UpdateCountriesBasedOnYear(string year)
+        {
+            int _year;
+            if ( !int.TryParse(year, out _year)) { throw new ParseException("Could not parse string year to int", 1); }
+            SelectedYear = year;
+            DateOnly date = new DateOnly(_year,1,1);
+            _date = date;
+            //TODO update comparison countries with the new year
+            UpdateShownMetrics(new List<string>());
+            UpdateSharedMetrics(new List<string>());
+            InitSharedMetrics();
+            InitShownMetrics();
+            Dispatcher.Dispatch(new UpdateYearAction(date));
+            StateHasChanged();
         }
 
         private async Task InitCompareCountryNamesAsync() {
@@ -71,6 +104,7 @@ namespace Client.Components
             Dispatcher.Dispatch(new ComparedSharedMetricsChangedAction(metrics));	
         }
 
+       
         private void UpdateShownMetrics(IList<string> metrics)
         {
             Dispatcher.Dispatch(new ComparedMetricsSelectedAction(metrics));
@@ -129,7 +163,7 @@ namespace Client.Components
             UpdateSharedMetrics(sharedMetrics);
             StateHasChanged();
         }
-
+      
         private static string FormatLabel(string label)
         {
             return $"{label.Replace(" ", "-")}-statistic";

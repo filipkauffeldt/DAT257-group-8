@@ -11,5 +11,6 @@ namespace Client.Store.States
         public required IList<string> SharedMetrics { get; init; } = new List<string>();
         public required IList<string> ShownMetrics { get; init; } = new List<string>();
         public required IList<Country> CountryIdentifiers { get; init; }
+        public required DateOnly Year { get; init; }
     }
 }

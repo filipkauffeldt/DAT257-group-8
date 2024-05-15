@@ -41,8 +41,21 @@
                             FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                             FilterOperator="StringFilterOperator.Contains"
                             AllowFiltering=true>
-                        </RadzenDropDown>  
+                        </RadzenDropDown>
+                   
                 </menu>
+                <RadzenDropDown @bind-Value=@SelectedYear
+                                Data=@ListOfYears
+                                Name="DropDownBindValue"
+                                AllowClear=false
+                                Placeholder=@SelectedYear
+                                Chips=false
+                                MaxSelectedLabels="1"
+                                Change="@((e) => UpdateCountriesBasedOnYear((string)e))"
+                                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                FilterOperator="StringFilterOperator.Contains"
+                                AllowFiltering=true>
+                </RadzenDropDown>
                     <div class="data-filter">
                     <DataFilterer @key=@State.Value.SharedMetrics Data="@State.Value.SharedMetrics" DefaultSelectedValues="@State.Value.ShownMetrics" OnChange="HandleFilterChange"></DataFilterer>
                 </div>
