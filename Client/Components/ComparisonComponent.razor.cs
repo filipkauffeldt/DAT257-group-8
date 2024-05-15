@@ -83,7 +83,6 @@ namespace Client.Components
         {
             var countries = new List<Country> { OriginCountry };
             countries.AddRange(ComparedCountries);
-            //countries.Insert(0, OriginCountry);
 
             foreach (var country in countries)
             {
@@ -147,7 +146,7 @@ namespace Client.Components
             {
                 if (originValue < Threshold || avrageValue < Threshold)
                 {
-                    comparisonText += $"{Math.Round(originValue - avrageValue, 5)} {unit} more than the average";
+                    comparisonText += $"{Math.Abs(Math.Round(originValue - avrageValue, 5))} {unit} more {resource} than the average";
                 }
                 else
                 {
@@ -158,11 +157,11 @@ namespace Client.Components
             {
                 if (originValue < Threshold || avrageValue < Threshold)
                 {
-                    comparisonText += $"{Math.Round(originValue - avrageValue, 5)} {unit} less than the average";
+                    comparisonText += $"{Math.Abs(Math.Round(originValue - avrageValue, 5))} {unit} less {resource} than the average";
                 }
                 else
                 {
-                    comparisonText += $"{Math.Round((originValue / avrageValue - 1) * 100)}% less {resource} than the average";
+                    comparisonText += $"{Math.Round(Math.Abs(originValue / avrageValue - 1) * 100)}% less {resource} than the average";
                 }
             }
 
