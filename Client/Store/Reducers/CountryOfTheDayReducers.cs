@@ -44,5 +44,14 @@ namespace Client.Store.Reducers
                 ShownMetrics = action.Metrics
             };
         }
+
+        [ReducerMethod]
+        public static CountryOfTheDayState CountryIdentifiersFetchedReducer(CountryOfTheDayState state, CountryIdentifiersFetchedAction action)
+        {
+            return state with
+            {
+                CountryIdentifiers = action.CountryIdentifiers
+            };
+        }
     }
 }

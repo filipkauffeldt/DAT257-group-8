@@ -14,10 +14,10 @@ namespace Client.Components
         private List<string> countryNames;
 
         [Inject]
-        private HttpClient httpClient { get; set; }
+        private HttpClient _httpClient { get; set; }
 
         [Inject]
-        private IApiHandler apiHandler { get; set; }
+        private IApiHandler _apiHandler { get; set; }
 
         [Inject]
         private IDispatcher Dispatcher { get; set; }
@@ -26,32 +26,29 @@ namespace Client.Components
         private IState<CountryOfTheDayState> State { get; set; } 
         
         private DateOnly _date = new DateOnly(2022, 1, 1);
+
+        private bool _initialized = false;
         private bool _homeCountryError = false;
 
         protected override async Task OnInitializedAsync()
         {
+            await InitCountryIdentifiersAsync();
             await InitHomeCountryAsync();
             await InitCountryOfTheDayAsync();
-
             InitSharedMetrics();
-
-            var countryIdentifiers = await apiHandler.FetchAllCountryIdentifiersAsync(httpClient);
-            foreach(var country in countryIdentifiers)
-            {
-                countryCodeDict.Add(country.Name, country.Code);
-            }
-            countryNames = countryCodeDict.Keys.ToList();
+            _initialized = true;
         }
 
         private async void HomeCountryChange(string CountryCode)
         {
-            //_country = await apiHandler.FetchCountryByYearAsync(httpClient, CountryCode, _date);
-            //StateHasChanged();
-            //foreach (var cC in compComp.Values)
-            //{
-            //    cC.LoadValues();
-            //}
-            //StateHasChanged();
+            var country = await _apiHandler.FetchCountryByYearAsync(_httpClient, CountryCode, _date);
+            Dispatcher.Dispatch(new HomeCountryDetectedSuccessfullyAction(country));
+            StateHasChanged();
+            foreach (var cC in compComp.Values)
+            {
+               cC.LoadValues();
+            }
+            StateHasChanged();
         }
 
         private void InitSharedMetrics()
@@ -100,7 +97,7 @@ namespace Client.Components
 
             try
             {
-                var country = await apiHandler.FetchHomeCountryAsync(httpClient);
+                var country = await _apiHandler.FetchHomeCountryAsync(_httpClient);
                    
                 if (country != null)
                 {
@@ -108,10 +105,12 @@ namespace Client.Components
                 }
                 else
                 {
+                    _homeCountryError = true;
                     Dispatcher.Dispatch(new HomeCountryDetectedFailedAction());
                 }
             } catch (Exception ex)
             {
+                _homeCountryError = true;
                 Console.Out.WriteLineAsync(ex.Message);
                 Dispatcher.Dispatch(new HomeCountryDetectedFailedAction());
             }
@@ -122,7 +121,7 @@ namespace Client.Components
             if (State.Value.CountryOfTheDay != null) return;
             try
             {
-                var countryOfTheDay = await apiHandler.FetchCountryOfTheDayAsync(httpClient);
+                var countryOfTheDay = await _apiHandler.FetchCountryOfTheDayAsync(_httpClient);
 
                 if (countryOfTheDay != null)
                 {
@@ -136,6 +135,20 @@ namespace Client.Components
                 Console.Out.WriteLineAsync(ex.Message);
                 Dispatcher.Dispatch(new CountryOfTheDayDetectedFailedAction());
             }
+        }
+
+        private async Task InitCountryIdentifiersAsync()
+        {
+            if (State.Value.CountryIdentifiers == null) {
+                var countryIdentifiers = await _apiHandler.FetchAllCountryIdentifiersAsync(_httpClient);
+                Dispatcher.Dispatch(new CountryIdentifiersFetchedAction(countryIdentifiers.ToList()));
+            }
+            
+            foreach(var country in State.Value.CountryIdentifiers)
+            {
+                countryCodeDict.Add(country.Name, country.Code);
+            }
+            countryNames = countryCodeDict.Keys.ToList();
         }
     }
 }

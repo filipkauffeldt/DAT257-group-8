@@ -15,6 +15,9 @@ namespace Client.Components
         public required IEnumerable<string> Data { get; set; }
 
         [Parameter]
+        public IEnumerable<string> DefaultSelectedValues { get; set; }
+
+        [Parameter]
         public EventCallback<IEnumerable<string>> OnChange { get; set; }
 
         private IEnumerable<string> _data;
@@ -28,7 +31,7 @@ namespace Client.Components
             await base.OnInitializedAsync();
             if (!_initialized)
             {
-                _values = Data.ToList();
+                _values = DefaultSelectedValues?.ToList() ?? Data.ToList();
                 _data = Data;
                 _initialized = true;
             }
@@ -38,6 +41,5 @@ namespace Client.Components
         {
             await OnChange.InvokeAsync(selectedValues);
         }
-
     }
 }
