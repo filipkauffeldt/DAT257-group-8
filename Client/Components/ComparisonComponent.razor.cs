@@ -12,6 +12,8 @@ namespace Client.Components
     public partial class ComparisonComponent
     {
         [Parameter]
+        public EventCallback OnClick { get; set; }
+        [Parameter]
         public required Country CountryOrigin { get; set; } 
         [Parameter]
         public required Country CountryComparison{get; set;}
@@ -128,9 +130,11 @@ namespace Client.Components
 
         public async Task OpenBiggerViewOfGraph()
         {
-            await DialogService.OpenAsync<CustomComparisonModal>("Graph",
-                new Dictionary<string, object>() { { "ComparisonComponent", this } },
-                new DialogOptions() {Width = "1000px", Height = "700px", CloseDialogOnOverlayClick = true });
+            ComparisonComponent copy = this;
+
+			await DialogService.OpenAsync<CustomComparisonModal>("",
+                new Dictionary<string, object>() { { "ComparisonComponent", copy }, {"ResourceDescription" , _resourceDescription } },
+                new DialogOptions() {Width = "1000px", Height = "700px", CloseDialogOnOverlayClick = true});
         }
     }
 }

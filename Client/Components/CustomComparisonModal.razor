@@ -1,5 +1,25 @@
-﻿<h3>CustomComparisonModal</h3>
+﻿<h3>Comparison of @_resourceDescription between @_countryOrigin.Name and @_countryComparison.Name</h3>
 <RadzenCard Class="rz-my-12 rz-mx-auto" Style="max-width: 1000px">
-	<ComparisonComponent CountryComparison="@_countryComparison" CountryOrigin="@_countryOrigin" date="@_date" ResourceType="@_resourceType"></ComparisonComponent>
+    <h4>@_countryComparison.Name uses @ComparisonComponent.GetComparisonPercentage(ComparisonComponent.ComparisonCountryValue, ComparisonComponent.OriginCountryValue) @_resourceDescription than @_countryOrigin.Name </h4>
+    <RadzenChart>
+        <RadzenBarSeries Fill="#e14177" Data="@ComparisonComponent.OriginValueList" CategoryProperty="Date" Title="@_countryOrigin.Name" LineType="LineType.Dashed" ValueProperty="Value">
+            <RadzenSeriesDataLabels Visible="true" />
+        </RadzenBarSeries>
+        <RadzenBarSeries Fill="#1E3D58" Data="@ComparisonComponent.ComparisonValueList" CategoryProperty="Date" Title="@_countryComparison.Name" LineType="LineType.Dashed" ValueProperty="Value">
+            <RadzenSeriesDataLabels Visible="true" />
+        </RadzenBarSeries>
+        <RadzenValueAxis Min="0" Max="@ComparisonComponent.SetBarWidth()" Formatter=@(value => value == null ? "" : (Decimal.Parse( String.Format( "{0:n}",value) )/1.000000000000000000000000000000000m).ToString() )>
+            <RadzenGridLines Visible="true" />
+            <RadzenAxisTitle Text="@ComparisonComponent.ConsumptionText" />
+        </RadzenValueAxis>
+        <RadzenBarOptions Radius="10" Height="60" Margin="20" />
+        <RadzenCategoryAxis Formatter=@(value => value == null ? "" : DateOnly.Parse((value.ToString())).Year.ToString() ) />
+    </RadzenChart> 
 </RadzenCard>
+<p style=" font-size: 160%; "> 
+    @_countryComparison.Name uses @ComparisonComponent.ComparisonCountryValue @_unit.
+</p>
+<p style=" font-size: 160%; ">
+    @_countryOrigin.Name uses @ComparisonComponent.OriginCountryValue @_unit.
+</p>
 
