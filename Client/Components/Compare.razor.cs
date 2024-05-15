@@ -9,6 +9,7 @@ using Client.Store.Actions;
 using Client.Store.States;
 using System.Reflection;
 using System;
+using System.Collections.Generic;
 
 namespace Client.Components
 {
@@ -102,21 +103,31 @@ namespace Client.Components
         private IList<string> GetSharedMetrics()
         {
             var countryOrigin = State.Value.OriginCountry;
-            var countryCompared = State.Value.ComparedCountries[0];
-            
+            //var countryCompared = State.Value.ComparedCountries[0];
+            var countriesCompared = State.Value.ComparedCountries;
+
+
 
             if (countryOrigin == null || countryOrigin.Data == null ||
-                countryCompared == null || countryCompared.Data == null) {
+                countriesCompared == null || countriesCompared.Any(d => d == null) ||countriesCompared.Any(d => d.Data == null)) 
+            {
                 return new List<string>();
             }
 
             var sharedMetrics = new List<string>();
+            var countryCompDataList = new List<Boolean>(Enumerable.Repeat(false, countriesCompared.Count()));
             foreach (var metric in countryOrigin.Data.Select(d => d.Name).ToList())
             {
                 var countryCompDataExists = countryOrigin.Data?.Any(d => d.Name == metric && d.Points.Any(e => e.Date.Year == _date.Year)) ?? false;
-                var countryCompTwoDataExists = countryCompared.Data?.Any(d => d.Name == metric && d.Points.Any(e => e.Date.Year == _date.Year)) ?? false;
+                var i = 0;
+                foreach (var country in countriesCompared)
+                {
+                    countryCompDataList[i] = country.Data?.Any(d => d.Name == metric && d.Points.Any(e => e.Date.Year == _date.Year)) ?? false;
+                    i++;
+                }
+                //var countryCompTwoDataExists = countryCompared.Data?.Any(d => d.Name == metric && d.Points.Any(e => e.Date.Year == _date.Year)) ?? false;
 
-                if (countryCompDataExists && countryCompTwoDataExists)
+                if (countryCompDataExists && !countryCompDataList.Any(c => c == false))
                 {
                     sharedMetrics.Add(metric);
                 }
