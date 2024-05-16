@@ -51,7 +51,7 @@
                 @if (State.Value.SharedMetrics.Count == 0)
                 {
                     <div>
-                        <p>No shared data between Origin Country and Comparison Countries</p>
+                        <p>No shared data between @State.Value.OriginCountry.Name and the compared countries</p>
                     </div>
                 }
                 else if (State.Value.ShownMetrics.Count != 0)
@@ -71,7 +71,7 @@
                 else
                 {
                     <div>
-                        <p>No data selected between Origin Country and Comparison Countries</p>
+                        <p>No data selected</p>
                     </div>
                 }
             </div>
