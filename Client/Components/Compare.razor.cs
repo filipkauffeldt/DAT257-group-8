@@ -201,18 +201,32 @@ namespace Client.Components
             UpdateShownMetrics(shownMetrics);
         }
 
-        private void HandleCountryChange(IEnumerable<Country> selectedCountries)
+        private async Task HandleCountryChange(IEnumerable<string> selectedCountries)
         {
-            var shownCountries = selectedCountries.ToList();
-            //var shownCountries = new List<Country>();
-            /*foreach(var countryName in selectedCountries)
+            var newShownCountries = new List<Country>(State.Value.ComparedCountries);
+            // Get Added / Removed country
+            if (selectedCountries.Count() > State.Value.ComparedCountries.Count)
             {
-                Console.WriteLine(countryName);
-                shownCountries.Add(State.Value.CountryIdentifiers.FirstOrDefault(d => d.Name == countryName));
-            }*/
+                var addedCountryName = selectedCountries.Except(State.Value.ComparedCountries.Select(d => d.Name)).FirstOrDefault();
+                var addedCountry = await _apiHandler.FetchCountryByYearAsync(_httpClient, _availableCountries[addedCountryName], _date);
+                newShownCountries.Add(addedCountry);
+            }
+            else
+            {
+                var removedCountry = State.Value.ComparedCountries.Select(d => d.Name).Except(selectedCountries).FirstOrDefault();
+                newShownCountries = newShownCountries.Where(d => d.Name != removedCountry).ToList();
+            }
+            UpdateComparedCountries(newShownCountries);
+            // if added:
+                // Api.Fetch(country)
+            /*
+             else:
+                selctedCountries.Remove(removedCountry)
+             */ 
+            
 
-            shownCountries = shownCountries.OrderBy(d => State.Value.CountryIdentifiers.IndexOf(d)).ToList();
-            UpdateComparedCountries(shownCountries);
+            //shownCountries = shownCountries.OrderBy(d => State.Value.CountryIdentifiers.IndexOf(d)).ToList();
+            //UpdateComparedCountries(shownCountries);
         }
     }
 }

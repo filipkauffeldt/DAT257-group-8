@@ -44,13 +44,13 @@
                     </RadzenDropDown>
                 }*@
 
-                <div class="data-filter">
+                @* <div class="data-filter">
                     <CountryFilterer @key=@State.Value.ComparedCountries AllCountries="@State.Value.CountryIdentifiers" DefaultSelectedCountries="@State.Value.ComparedCountries" Date="_date" OnChange="HandleCountryChange"></CountryFilterer>
-                </div>
+                </div> *@
 
-                @*<div class="data-filter">
-                    <DataFilterer @key=@State.Value.ComparedCountries Data="@_availableCountries.Keys" DefaultSelectedValues="@_shownCountries" OnChange="HandleCountryChange"></DataFilterer>
-                </div>*@
+                <div class="data-filter">
+                    <DataFilterer Data="@_availableCountries.Keys" DefaultSelectedValues="State.Value.ComparedCountries.Select(c => c.Name)" OnChange="HandleCountryChange"></DataFilterer>
+                </div>
 
                @*<menu class="menu-row">
                         <Button Type="ButtonType.Submit" @onclick="AddComparedCountry"> Add Country </Button>
