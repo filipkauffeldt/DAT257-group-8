@@ -88,8 +88,6 @@ namespace Client.Components
             var countryOrigin = State.Value.OriginCountry;
             var countriesCompared = State.Value.ComparedCountries;
 
-
-
             if (countryOrigin == null || countryOrigin.Data == null ||
                 countriesCompared == null || countriesCompared.Any(d => d == null) ||countriesCompared.Any(d => d.Data == null)) 
             {
@@ -114,7 +112,7 @@ namespace Client.Components
             }
             return sharedMetrics;
         }
-        private async void UpdateOriginCountry(string name)
+        private async void UpdateOriginCountryAsync(string name)
         {
             var country = await _apiHandler.FetchCountryByYearAsync(_httpClient, _nameToCodeMap[name], _date);
             Dispatcher.Dispatch(new OriginCountryChosenAction(country));
@@ -124,7 +122,7 @@ namespace Client.Components
             StateHasChanged();
         }
 
-        private async void UpdateComparedCountries(IList<Country> countries)
+        private void UpdateComparedCountries(IList<Country> countries)
         {
             Dispatcher.Dispatch(new ComparedCountriesChosenAction(countries));
             var sharedMetrics = GetSharedMetrics();
