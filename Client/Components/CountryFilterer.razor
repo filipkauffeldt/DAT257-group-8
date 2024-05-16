@@ -1,0 +1,31 @@
+﻿@inject HttpClient httpClient
+@inject API.IApiHandler apiHandler
+
+<div class="rz-p-sm-12 rz-text-align-center">
+    <RadzenLabel Text="Filter Data" Component="DropDownMultipleChips" Style="margin-right: 8px; vertical-align: middle;" Visible=true></RadzenLabel>
+    @if(AllCountries == null)
+    {
+        <RadzenDropDown TValue=string
+                        Data=null
+                        Name="DropDownMultiple"
+                        Placeholder="Loading data...">
+        </RadzenDropDown>
+    }
+    else
+    {
+        <RadzenDropDown @bind-Value=@_selectedCountries
+                        Data=@_countryNames
+                        Name="DropDownMultiple"
+                        Multiple=true
+                        AllowClear=false
+                        Placeholder="Select data"
+                        SelectAllText="Select all data"
+                        Chips=false
+                        MaxSelectedLabels="1"
+                        Change="@((args) => OnValuesChanged((IEnumerable<string>)args))"
+                        FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                        FilterOperator="StringFilterOperator.Contains"
+                        AllowFiltering=true>
+        </RadzenDropDown>
+    }
+</div>
