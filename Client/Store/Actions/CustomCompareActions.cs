@@ -8,11 +8,12 @@ namespace Client.Store.Actions
         public OriginCountryChosenAction(Country country) => Country = country;
     };
 
-    public class ComparedCountryChosenAction
+
+    public class ComparedCountriesChosenAction
     {
-        public Country Country { get; }
-        public ComparedCountryChosenAction(Country country) => Country = country;
-    };
+        public IList<Country> Countries { get; }
+        public ComparedCountriesChosenAction(IList<Country> countries) => Countries = countries;
+    }
 
     public class ComparedSharedMetricsChangedAction
     {
@@ -32,9 +33,10 @@ namespace Client.Store.Actions
         public UpdateOriginCountryAction(Country country) => Country = country;
     };
 
-    public class UpdateComparedCountryAction
+    public class UpdateComparedCountriesAction
     {
-        public Country Country { get; }
-        public UpdateComparedCountryAction(Country country) => Country = country;
-    };
+        public IList<Country> Countries { get; }
+
+        public UpdateComparedCountriesAction(IList<Country> countries) => Countries = countries;
+    }
 }
