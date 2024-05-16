@@ -2,7 +2,7 @@
 @inject API.IApiHandler apiHandler;
 
 <div class="rz-p-sm-12 rz-text-align-center">
-    <RadzenLabel Text="Filter Data" Component="DropDownMultipleChips" Style="margin-right: 8px; vertical-align: middle;" Visible=true></RadzenLabel>
+    <RadzenLabel Text=@(Text ?? "Filter Data") Component="DropDownMultipleChips" Style="margin-right: 8px; vertical-align: middle;" Visible=true></RadzenLabel>
     @if(Data == null)
     {
         <RadzenDropDown TValue=string

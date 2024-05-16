@@ -19,6 +19,9 @@ namespace Client.Components
         [Parameter]
         public EventCallback<IEnumerable<string>> OnChange { get; set; }
 
+        [Parameter]
+        public string? Text { get; set; }
+
         private IEnumerable<string> _data;
 
         private bool _initialized = false;
