@@ -58,9 +58,6 @@ namespace Client.Components
                 ListOfYears.Add(i.ToString());
             }
         }
-
-        // This does not currently work as it should, it never makes a new database request,
-        // which means that it will not get any new data and there for will not be able to show it
         private async void UpdateCountriesBasedOnYear(string year)
         {
             int _year;
@@ -68,14 +65,20 @@ namespace Client.Components
             SelectedYear = year;
             DateOnly date = new DateOnly(_year,1,1);
             _date = date;
-            //Clears list of shown and shared metrics 
-            UpdateShownMetrics(new List<string>());
-            UpdateSharedMetrics(new List<string>());
-            //Gets new list of shown and shared metrics that will be based on the new date
-            InitSharedMetrics();
-            InitShownMetrics();
+
+            UpdateOriginCountryAsync(State.Value.OriginCountry.Name);
+            RefreshCompCountriesBasedOnYear(State.Value.ComparedCountries);
             Dispatcher.Dispatch(new UpdateYearAction(date));
             StateHasChanged();
+        }
+
+        private async void RefreshCompCountriesBasedOnYear(IList<Country> countries)
+        {
+            for (int i = 0; i < countries.Count; i++) 
+            {
+                countries[i] = await _apiHandler.FetchCountryByYearAsync(_httpClient, _nameToCodeMap[countries[i].Name], _date);
+            }
+            UpdateComparedCountries(countries);
         }
 
         private async Task InitCompareCountryNamesAsync() {

@@ -26,8 +26,18 @@
                     FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                     FilterOperator="StringFilterOperator.Contains"
                     AllowFiltering=true>
-                </RadzenDropDown>
-                <RadzenLabel Text="with" Component="DropDownBindValue" Style="margin-right: 8px; vertical-align: middle;" Visible=true></RadzenLabel>
+                </RadzenDropDown>                
+                    
+                <div class="data-filter">
+                    <DataFilterer Data="@_nameToCodeMap.Keys"
+                        Text="Choose Countries"
+                        AllowSelectAll=false
+                        DefaultSelectedValues="State.Value.ComparedCountries.Select(c => c.Name)" 
+                        OnChange="HandleCountryChange">
+                    </DataFilterer>
+                </div>
+                <RadzenLabel Text="Select year" Component="DropDownBindValue" Style="margin-right: 8px; vertical-align: middle;" Visible=true></RadzenLabel>
+
                 <RadzenDropDown @bind-Value=@SelectedYear
                                 Data=@ListOfYears
                                 Name="DropDownBindValue"
@@ -40,15 +50,6 @@
                                 FilterOperator="StringFilterOperator.Contains"
                                 AllowFiltering=true>
                 </RadzenDropDown>
-                    
-                <div class="data-filter">
-                    <DataFilterer Data="@_nameToCodeMap.Keys"
-                        Text="Choose Countries"
-                        AllowSelectAll=false
-                        DefaultSelectedValues="State.Value.ComparedCountries.Select(c => c.Name)" 
-                        OnChange="HandleCountryChange">
-                    </DataFilterer>
-                </div>
 
                 <div class="data-filter">
                     <DataFilterer @key=@State.Value.SharedMetrics
@@ -57,7 +58,7 @@
                         DefaultSelectedValues="@State.Value.ShownMetrics" 
                         OnChange="HandleFilterChange">
                     </DataFilterer>
-                
+                </div>
                
                 <nav class="table-of-contents">
                     <ul>
