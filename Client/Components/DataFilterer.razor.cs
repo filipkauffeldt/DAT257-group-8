@@ -22,6 +22,9 @@ namespace Client.Components
         [Parameter]
         public string? Text { get; set; }
 
+        [Parameter]
+        public bool AllowSelectAll { get; set; } = true;
+
         private IEnumerable<string> _data;
 
         private bool _initialized = false;

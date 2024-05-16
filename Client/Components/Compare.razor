@@ -29,11 +29,21 @@
                 </RadzenDropDown>
 
                 <div class="data-filter">
-                    <DataFilterer Data="@_nameToCodeMap.Keys" Text="Choose Countries" DefaultSelectedValues="State.Value.ComparedCountries.Select(c => c.Name)" OnChange="HandleCountryChange"></DataFilterer>
+                    <DataFilterer Data="@_nameToCodeMap.Keys"
+                        Text="Choose Countries"
+                        AllowSelectAll=false
+                        DefaultSelectedValues="State.Value.ComparedCountries.Select(c => c.Name)" 
+                        OnChange="HandleCountryChange">
+                    </DataFilterer>
                 </div>
 
                 <div class="data-filter">
-                    <DataFilterer @key=@State.Value.SharedMetrics Text="Filter Data" Data="@State.Value.SharedMetrics" DefaultSelectedValues="@State.Value.ShownMetrics" OnChange="HandleFilterChange"></DataFilterer>
+                    <DataFilterer @key=@State.Value.SharedMetrics
+                        Text="Filter Data" 
+                        Data="@State.Value.SharedMetrics"
+                        DefaultSelectedValues="@State.Value.ShownMetrics" 
+                        OnChange="HandleFilterChange">
+                    </DataFilterer>
                 </div>
                
                 <nav class="table-of-contents">
