@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Client.API;
 using Moq;
 using Moq.Protected;
+using API;
 
 namespace TestClient.API
 {

@@ -2,7 +2,7 @@
 using System.Net.Http.Json;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace Client.API
+namespace API
 {
     public class RequestWrapper<T>
     {

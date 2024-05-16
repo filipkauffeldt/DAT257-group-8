@@ -1,38 +1,57 @@
 ﻿using Microsoft.AspNetCore.Components;
 
 using API;
-using System.Linq;
-using Radzen.Blazor;
 
 namespace Client.Components
 {
     public partial class ComparisonComponent
     {
         [Parameter]
-        public required Country CountryOrigin { get; set; } 
+        public required Country OriginCountry { get; set; }
+
         [Parameter]
-        public required Country CountryComparison{get; set;}
+        public required IList<Country> ComparedCountries { get; set;}
+
         [Parameter]
         public string ResourceType { get; set; } = "NaN";
 
         [Parameter]
-        public required DateOnly date {  get; set; }
+        public required DateOnly Date {  get; set; }
 
-        public float OriginCountryValue { get; set; } = 1.0f;
-        public List<DataPoint> OriginValueList = new List<DataPoint>();//  = [new DataPoint() { Date = new DateOnly(2023, 1, 1), Value = 1.0 }];
-        
-        public float ComparisonCountryValue { get; set; } = 3.0f;
-        public List<DataPoint> ComparisonValueList = new List<DataPoint>(); //= [new DataPoint() { Date = new DateOnly(2023, 1, 1), Value = 2.0 }];
+        private readonly IDictionary<Country, IList<DataPoint>> ValueMap = new Dictionary<Country, IList<DataPoint>>();
+
+        private IList<string> _colors = new List<string>
+        {
+            "#1E3D58", // Them Dark Blue
+            "#E14177", // Them Red/Pink
+            "#006699", // Blue
+            "#FF9900", // Orange
+            "#3399CC", // Brighter Blue
+            "#FFCC00", // Yellow
+            "#336699", // Blue
+            "#FF6600", // Orange
+            "#003399", // Blue
+            "#993300", // Red
+            "#003366", // Dark Blue
+            "#FF0066", // Pink
+            "#006699", // Blue
+            "#FF9933", // Orange
+            "#336699", // Blue
+            "#FF6633", // Orange
+            "#003366", // Dark Blue
+            "#FF3300", // Red
+            "#009999", // Blue
+            "#FF6600"  // Orange
+        };
 
         public string Unit { get; set; } = "NaN";
-
-        private string? _resourceDescription;
 
         public string ComparisonValueStyle = "width: 10rem;";
 
         private float Threshold = 0.0001f;
 
         public string ConsumptionText = "Consumption";
+
         private Data? GetCountryData(Country country)
         {
             
@@ -48,79 +67,159 @@ namespace Client.Components
         {
             base.OnInitialized();
             LoadValues();
-
         }
+
+        // Update values on parameter change
+        protected override void OnParametersSet()
+        {
+            LoadValues();
+            StateHasChanged();
+        }
+
         public void LoadValues()
         {
-            var resource1 = GetCountryData(CountryOrigin);  
-            var resource2 = GetCountryData(CountryComparison);
-            OriginValueList.Clear();
-            ComparisonValueList.Clear();
-            if (resource1 != null)
+            var countries = new List<Country> { OriginCountry };
+            countries.AddRange(ComparedCountries);
+
+            foreach (var country in countries)
             {
-                OriginValueList.Add(resource1.Points.Where(dp => dp.Date.Year == date.Year).FirstOrDefault() ??
-                    new DataPoint { Date = date, Value = 1 });
-                OriginCountryValue = (float)OriginValueList[0].Value;
-                Unit = resource1.Unit;
+                var resource = GetCountryData(country);
+                ValueMap.Remove(country);
+                if (resource != null)
+                {
+                    var valueList = new List<DataPoint> {
+                        new DataPoint { Date = Date, Value = resource.Points.Where(dp => dp.Date.Year == Date.Year).FirstOrDefault()?.Value ?? 1 }
+                    };
+                    ValueMap.Add(country, valueList);
+                    Unit = resource.Unit;
+                }
+                else
+                {
+                    var valueList = new List<DataPoint> {
+                        new DataPoint { Date = Date, Value = 1 }
+                    };
+                    ValueMap.Add(country, valueList);
+                }
             }
-            else
-            {
-                OriginValueList.Add(new DataPoint { Date = date, Value = 1 });
-                OriginCountryValue = 1;
-            }
-            if (resource2 != null)
-            {
-                ComparisonValueList.Add(resource2.Points.Where(dp => dp.Date.Year == date.Year).FirstOrDefault() ??
-                    new DataPoint { Date = date, Value = 1 });
-                ComparisonCountryValue = (float)ComparisonValueList[0].Value;
-                Unit = resource2.Unit;
-            }
-            else
-            {
-                ComparisonValueList.Add(new DataPoint { Date = date, Value = 1 });
-                ComparisonCountryValue = 1;
-            }
+            
             // Text at the bottom of the cards
             ConsumptionText = "Consumption in " + Unit;
-            _resourceDescription = resource1?.Description ?? ResourceType;
         }
 
-        public string GetComparisonPercentage(float comparisonValue, float originValue)
-        {  // Threshold makes ut so that values near 0 do not cause a extremely large percentage value in the comparison text.
-            if( (Math.Abs(comparisonValue) < this.Threshold) && (Math.Abs(originValue) < Threshold))
+        public string GetComparisonText()
+        {
+            if (ComparedCountries.Count == 0)
             {
-                return "the same amount of";
-            } else if (Math.Abs(comparisonValue) < Threshold)
-            {
-                return (originValue.ToString() + " " + Unit + " less ");
+                return "No comparison data available";
             }
-            else if((Math.Abs(originValue) < Threshold))
+            else if (ComparedCountries.Count == 1)
             {
-                return (comparisonValue.ToString() + " " + Unit + " more ");
-            }
-            float relativeDifference = (comparisonValue / originValue) - 1;
-            
-            if (comparisonValue > originValue)
-            {
-                return ((int)(Math.Abs(relativeDifference) * 100)).ToString() + "% more";
-            }
-            else if (comparisonValue < originValue)
-            {
-                return ((int)(Math.Abs(relativeDifference) * 100)).ToString() + "% less";
+                var comparedCountry = ComparedCountries[0];
+                var comparedCountryValue = ValueMap[comparedCountry][0].Value;
+                var originCountryValue = ValueMap[OriginCountry][0].Value;
+                var resourceDescription = GetCountryData(OriginCountry)?.Description ?? ResourceType;
+                return SingleComparedText(OriginCountry, comparedCountry, originCountryValue, comparedCountryValue, resourceDescription, Unit);
             }
             else
             {
-                return "the same amount of";
+                var singleValueMap = ValueMap.ToDictionary(kvp => kvp.Key, kvp => kvp.Value[0].Value);
+                var resourceDescription = GetCountryData(OriginCountry)?.Description ?? ResourceType;
+                return MultipleComparedText(OriginCountry, singleValueMap, resourceDescription, Unit);
             }
         }
+
+        public string MultipleComparedText(Country originCountry, IDictionary<Country, double> valueMap, string resource, string unit)
+        {
+            var comparisonText = $"{originCountry.Name} uses ";
+            var originValue = valueMap[originCountry];
+            var descendingValues = valueMap.OrderByDescending(kvp => kvp.Value).ToList();
+            var ascendingValues = valueMap.OrderBy(kvp => kvp.Value).ToList();
+            
+            var avrageValue = valueMap.Where(kvp => kvp.Key != originCountry).Average(kvp => kvp.Value);
+
+            if (Math.Abs(originValue - avrageValue) < Threshold)
+            {
+                comparisonText += $"the same amount of {resource} as the average";
+            }
+            else if (originValue > avrageValue)
+            {
+                if (originValue < Threshold || avrageValue < Threshold)
+                {
+                    comparisonText += $"{Math.Abs(Math.Round(originValue - avrageValue, 5))} {unit} more {resource} than the average";
+                }
+                else
+                {
+                    comparisonText += $"{Math.Round((originValue / avrageValue - 1) * 100)}% more {resource} than the average";
+                }
+            }
+            if (originValue < avrageValue)
+            {
+                if (originValue < Threshold || avrageValue < Threshold)
+                {
+                    comparisonText += $"{Math.Abs(Math.Round(originValue - avrageValue, 5))} {unit} less {resource} than the average";
+                }
+                else
+                {
+                    comparisonText += $"{Math.Round(Math.Abs(originValue / avrageValue - 1) * 100)}% less {resource} than the average";
+                }
+            }
+
+            return comparisonText;
+        }
+
+        public string SingleComparedText(Country originCountry, Country comparedCountry, double originValue, double comparedValue, string resource, string unit)
+        {
+            string comparisonText = $"{originCountry.Name} use ";
+
+            var diffValue = Math.Abs(originValue - comparedValue);
+            var smallValueDetected = Math.Abs(originValue) < Threshold || Math.Abs(comparedValue) < Threshold;
+
+            if (diffValue < Threshold)
+            {
+                comparisonText += $"the same amount of {resource} as {comparedCountry.Name}";
+                return comparisonText;
+            }
+            
+            
+            var relativeDifference = Math.Abs((originValue / comparedValue));
+
+            if (relativeDifference > 1)
+            {
+                if (smallValueDetected)
+                {
+                    comparisonText += $"{Math.Round(diffValue, 2)} {unit} more ";
+                }
+                else
+                {
+                    comparisonText += Math.Round((relativeDifference - 1) * 100).ToString() + "% more ";
+                }
+            }
+            else if (relativeDifference < 1)
+            {
+                if (smallValueDetected)
+                {
+                    comparisonText += $"{Math.Round(diffValue, 2)} {unit} less ";
+                }
+                else
+                {
+                    comparisonText += Math.Round((1 - relativeDifference) * 100).ToString() + "% less ";
+                }
+            }
+            else
+            {
+                comparisonText += $"the same amount of {resource} as {comparedCountry.Name}";
+                return comparisonText;
+            }
+
+            comparisonText += $"{resource} than {comparedCountry?.Name}";
+            return comparisonText;
+        }
+
         // Sets width of comparison value bar
         public float SetBarWidth()
         {
-            if(ComparisonCountryValue == 0 && OriginCountryValue == 0)
-            {
-                return 1;
-            }
-            return MathF.Max(ComparisonCountryValue, OriginCountryValue) * 1.3f;
+            float maxValue = ValueMap.Values.Max(valueList => (float)valueList.Max(dataPoint => dataPoint.Value));
+            return maxValue * 1.3f;
         }
     }
 }

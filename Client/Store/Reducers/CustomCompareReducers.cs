@@ -16,11 +16,11 @@ namespace Client.Store.Reducers
         }
 
         [ReducerMethod]
-        public static CustomCompareState ComparedCountryChosenReducer(CustomCompareState state, ComparedCountryChosenAction action)
+        public static CustomCompareState ComparedCountriesChosenReducer(CustomCompareState state, ComparedCountriesChosenAction action)
         {
             return state with
             {
-                ComparedCountry = action.Country
+                ComparedCountries = action.Countries
             };
         }
 

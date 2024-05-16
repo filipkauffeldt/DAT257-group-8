@@ -1,7 +1,7 @@
 ﻿using API;
 using System.Net.Http;
 
-namespace Client.API
+namespace API
 {
     public interface IApiHandler
     {
