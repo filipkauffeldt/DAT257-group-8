@@ -29,7 +29,6 @@ namespace Client.Components
 
         private DateOnly _date = new DateOnly(2022, 1, 1);
 
-        private IList<Country> _countries = new List<Country>();
         private int _comparisonChangedIndex = 0;
 
         protected override async Task OnInitializedAsync()
@@ -40,11 +39,9 @@ namespace Client.Components
                 _availableCountries.Add(country.Name, country.Code);
             }
             await InitOriginCountryAsync();
-            //await InitComparedCountryAsync();
             await InitComparedCountriesAsync();
             InitSharedMetrics();
             InitShownMetrics();
-            UpdateCountryList();
             _initialized = true;
         }
 
@@ -61,19 +58,11 @@ namespace Client.Components
             Dispatcher.Dispatch(new OriginCountryChosenAction(country));
         }
 
-        private async Task InitComparedCountryAsync()
-        {
-            if (State.Value.ComparedCountries[0] != null) return;
-            var country = await _apiHandler.FetchCountryOfTheDayAsync(_httpClient);
-            Dispatcher.Dispatch(new ComparedCountryChosenAction(country));
-        }
-
         private async Task InitComparedCountriesAsync()
         {
             if (State.Value.ComparedCountries != null) return;
             var country = await _apiHandler.FetchCountryOfTheDayAsync(_httpClient);
-            Dispatcher.Dispatch(new InitComparedCountriesAction(country));
-            //Dispatcher.Dispatch(new ComparedCountriesChosenAction(country, 0));
+            Dispatcher.Dispatch(new ComparedCountriesChosenAction([country]));
         }
 
         private void UpdateSharedMetrics(IList<string> metrics) {
@@ -99,7 +88,6 @@ namespace Client.Components
         private IList<string> GetSharedMetrics()
         {
             var countryOrigin = State.Value.OriginCountry;
-            //var countryCompared = State.Value.ComparedCountries[0];
             var countriesCompared = State.Value.ComparedCountries;
 
 
@@ -121,8 +109,7 @@ namespace Client.Components
                     countryCompDataList[i] = country.Data?.Any(d => d.Name == metric && d.Points.Any(e => e.Date.Year == _date.Year)) ?? false;
                     i++;
                 }
-                //var countryCompTwoDataExists = countryCompared.Data?.Any(d => d.Name == metric && d.Points.Any(e => e.Date.Year == _date.Year)) ?? false;
-
+                
                 if (countryCompDataExists && !countryCompDataList.Any(c => c == false))
                 {
                     sharedMetrics.Add(metric);
@@ -137,11 +124,10 @@ namespace Client.Components
             var sharedMetrics = GetSharedMetrics();
             UpdateSharedMetrics(sharedMetrics);
             UpdateShownMetrics(sharedMetrics);
-            UpdateCountryList();
             StateHasChanged();
         }
 
-        private async void UpdateComparedCountry(string name, int index)
+        private async void UpdateComparedCountries(string name, int index)
         {
             var countries = State.Value.ComparedCountries;
             var country = await _apiHandler.FetchCountryByYearAsync(_httpClient, _availableCountries[name], _date);
@@ -151,7 +137,6 @@ namespace Client.Components
             var sharedMetrics = GetSharedMetrics();
             UpdateShownMetrics(sharedMetrics);
             UpdateSharedMetrics(sharedMetrics);
-            UpdateCountryList();
             StateHasChanged();
         }
 
@@ -201,14 +186,6 @@ namespace Client.Components
             // Makes sure that when you select unselected values, they end up in the same order as before
             shownMetrics = shownMetrics.OrderBy(d => State.Value.SharedMetrics.IndexOf(d)).ToList();
             UpdateShownMetrics(shownMetrics);
-        }
-
-        // Trigger re-rendering of the ComparisonComponents
-        private void UpdateCountryList()
-        {
-            var newCountryList = new List<Country>();
-            newCountryList.Add(State.Value.ComparedCountry);
-            _countries = newCountryList;
         }
     }
 }

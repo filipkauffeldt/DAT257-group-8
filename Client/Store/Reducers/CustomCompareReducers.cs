@@ -16,25 +16,7 @@ namespace Client.Store.Reducers
         }
 
         [ReducerMethod]
-        public static CustomCompareState ComparedCountryChosenReducer(CustomCompareState state, ComparedCountryChosenAction action)
-        {
-            return state with
-            {
-                ComparedCountry = action.Country
-            };
-        }
-
-        [ReducerMethod]
         public static CustomCompareState ComparedCountriesChosenReducer(CustomCompareState state, ComparedCountriesChosenAction action)
-        {
-            return state with
-            {
-                ComparedCountries = action.Countries
-            };
-        }
-
-        [ReducerMethod]
-        public static CustomCompareState InitComparedCountriesReducer(CustomCompareState state, InitComparedCountriesAction action)
         {
             return state with
             {

@@ -20,7 +20,6 @@ namespace TestClient.Store.Reducers
             var state = new CustomCompareState
             {
                 OriginCountry = null,
-                ComparedCountry = null,
                 ComparedCountries = null,
                 SharedMetrics = null,
                 ShownMetrics = null,
@@ -41,13 +40,12 @@ namespace TestClient.Store.Reducers
         }
 
         [Fact]
-        public void ComparedCountryChosenReducer_ShouldUpdateComparedCountry()
+        public void ComparedCountriesChosenReducer_ShouldUpdateComparedCountries()
         {
             // Arrange
             var state = new CustomCompareState
             {
                 OriginCountry = null,
-                ComparedCountry = null,
                 ComparedCountries = null,
                 SharedMetrics = null,
                 ShownMetrics = null,
@@ -60,13 +58,21 @@ namespace TestClient.Store.Reducers
                 Name = "CountryName"
             };
 
-            var action = new ComparedCountryChosenAction(country);
+            var country2 = new Country
+            {
+                Code = "CountryCode2",
+                Name = "CountryName2"
+            };
+
+            var countries = new List<Country> { country, country2 };
+
+            var action = new ComparedCountriesChosenAction(countries);
 
             // Act
-            var newState = CustomCompareReducers.ComparedCountryChosenReducer(state, action);
+            var newState = CustomCompareReducers.ComparedCountriesChosenReducer(state, action);
 
             // Assert
-            Assert.Equal(country, newState.ComparedCountry);
+            Assert.Equal(countries, newState.ComparedCountries);
         }
 
         [Fact]
@@ -76,7 +82,6 @@ namespace TestClient.Store.Reducers
             var state = new CustomCompareState
             {
                 OriginCountry = null,
-                ComparedCountry = null,
                 ComparedCountries = null,
                 SharedMetrics = null,
                 ShownMetrics = null,
@@ -101,7 +106,6 @@ namespace TestClient.Store.Reducers
             var state = new CustomCompareState
             {
                 OriginCountry = null,
-                ComparedCountry = null,
                 ComparedCountries = null,
                 SharedMetrics = null,
                 ShownMetrics = null,
@@ -126,7 +130,6 @@ namespace TestClient.Store.Reducers
             var state = new CustomCompareState
             {
                 OriginCountry = null,
-                ComparedCountry = null,
                 ComparedCountries = null,
                 SharedMetrics = null,
                 ShownMetrics = null,

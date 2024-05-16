@@ -14,43 +14,39 @@
         </div>
         <div class="container"> 
             <div class="header"> 
-                @*<menu class="menu-row">*@
-                        <RadzenLabel Text="Compare" Component="DropDownBindValue" Style="margin-right: 8px; vertical-align: middle;" Visible=true></RadzenLabel>
-                        <RadzenDropDown @bind-Value=@State.Value.OriginCountry.Name
-                            Data=@_availableCountries.Keys
-                            Name="DropDownBindValue"
-                            AllowClear=false
-                            Placeholder="Select country"
-                            Chips=false
-                            MaxSelectedLabels="1"
-                            Change="@((e) => UpdateOriginCountry((string)e))"
-                            FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                            FilterOperator="StringFilterOperator.Contains"
-                            AllowFiltering=true>
-                        </RadzenDropDown>
-                        <RadzenLabel Text="with" Component="DropDownBindValue" Style="margin-right: 8px; vertical-align: middle;" Visible=true></RadzenLabel>
-                        @for (int i = 0; i < State.Value.ComparedCountries.Count; i++){
-                            int index = i;
-                            <RadzenDropDown @key=@State.Value.ComparedCountries[index] @bind-Value=@State.Value.ComparedCountries[index].Name
-                                Data=@_availableCountries.Keys
-                                Name="DropDownBindValue"
-                                AllowClear=false
-                                Placeholder="Select country"
-                                Chips=false
-                                MaxSelectedLabels="1"
-                                Change="@((e) => UpdateComparedCountry((string)e, index))" 
-                                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                                FilterOperator="StringFilterOperator.Contains"
-                                AllowFiltering=true>
-                            </RadzenDropDown>
-                        }
-                @*</menu>*@
-                <nav class="table-of-contents">
-                    <ul>
-                        <Button Type="ButtonType.Submit" To="#" @onclick="AddComparedCountry"> Add Country </Button>
-                        <Button Type="ButtonType.Submit" To="#" @onclick="RemoveComparedCountry"> Remove Country </Button>
-                    </ul>
-                </nav>
+                <RadzenLabel Text="Compare" Component="DropDownBindValue" Style="margin-right: 8px; vertical-align: middle;" Visible=true></RadzenLabel>
+                <RadzenDropDown @bind-Value=@State.Value.OriginCountry.Name
+                    Data=@_availableCountries.Keys
+                    Name="DropDownBindValue"
+                    AllowClear=false
+                    Placeholder="Select country"
+                    Chips=false
+                    MaxSelectedLabels="1"
+                    Change="@((e) => UpdateOriginCountry((string)e))"
+                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                    FilterOperator="StringFilterOperator.Contains"
+                    AllowFiltering=true>
+                </RadzenDropDown>
+                <RadzenLabel Text="with" Component="DropDownBindValue" Style="margin-right: 8px; vertical-align: middle;" Visible=true></RadzenLabel>
+                @for (int i = 0; i < State.Value.ComparedCountries.Count; i++){
+                    int index = i;
+                    <RadzenDropDown @key=@State.Value.ComparedCountries[index] @bind-Value=@State.Value.ComparedCountries[index].Name
+                        Data=@_availableCountries.Keys
+                        Name="DropDownBindValue"
+                        AllowClear=false
+                        Placeholder="Select country"
+                        Chips=false
+                        MaxSelectedLabels="1"
+                        Change="@((e) => UpdateComparedCountries((string)e, index))" 
+                        FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                        FilterOperator="StringFilterOperator.Contains"
+                        AllowFiltering=true>
+                    </RadzenDropDown>
+                }
+                <menu class="menu-row">
+                        <Button Type="ButtonType.Submit" @onclick="AddComparedCountry"> Add Country </Button>
+                        <Button Type="ButtonType.Submit" @onclick="RemoveComparedCountry"> Remove Country </Button>
+                </menu>
                 
                     <div class="data-filter">
                     <DataFilterer @key=@State.Value.SharedMetrics Data="@State.Value.SharedMetrics" DefaultSelectedValues="@State.Value.ShownMetrics" OnChange="HandleFilterChange"></DataFilterer>
