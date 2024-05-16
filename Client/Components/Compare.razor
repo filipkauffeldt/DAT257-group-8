@@ -27,36 +27,11 @@
                     FilterOperator="StringFilterOperator.Contains"
                     AllowFiltering=true>
                 </RadzenDropDown>
-                @*<RadzenLabel Text="with" Component="DropDownBindValue" Style="margin-right: 8px; vertical-align: middle;" Visible=true></RadzenLabel>
-                @for (int i = 0; i < State.Value.ComparedCountries.Count; i++){
-                    int index = i;
-                    <RadzenDropDown @key=@State.Value.ComparedCountries[index] @bind-Value=@State.Value.ComparedCountries[index].Name
-                        Data=@_availableCountries.Keys
-                        Name="DropDownBindValue"
-                        AllowClear=false
-                        Placeholder="Select country"
-                        Chips=false
-                        MaxSelectedLabels="1"
-                        Change="@((e) => UpdateComparedCountries((string)e, index))" 
-                        FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                        FilterOperator="StringFilterOperator.Contains"
-                        AllowFiltering=true>
-                    </RadzenDropDown>
-                }*@
-
-                @* <div class="data-filter">
-                    <CountryFilterer @key=@State.Value.ComparedCountries AllCountries="@State.Value.CountryIdentifiers" DefaultSelectedCountries="@State.Value.ComparedCountries" Date="_date" OnChange="HandleCountryChange"></CountryFilterer>
-                </div> *@
 
                 <div class="data-filter">
                     <DataFilterer Data="@_nameToCodeMap.Keys" DefaultSelectedValues="State.Value.ComparedCountries.Select(c => c.Name)" OnChange="HandleCountryChange"></DataFilterer>
                 </div>
 
-               @*<menu class="menu-row">
-                        <Button Type="ButtonType.Submit" @onclick="AddComparedCountry"> Add Country </Button>
-                        <Button Type="ButtonType.Submit" @onclick="RemoveComparedCountry"> Remove Country </Button>
-                </menu>*@
-                
                 <div class="data-filter">
                     <DataFilterer @key=@State.Value.SharedMetrics Data="@State.Value.SharedMetrics" DefaultSelectedValues="@State.Value.ShownMetrics" OnChange="HandleFilterChange"></DataFilterer>
                 </div>
@@ -76,7 +51,6 @@
                 @if (State.Value.SharedMetrics.Count == 0)
                 {
                     <div>
-                        @*<p>No shared data between @State.Value.OriginCountry.Name and @State.Value.ComparedCountries[0].Name</p>*@
                         <p>No shared data between Origin Country and Comparison Countries</p>
                     </div>
                 }
@@ -97,7 +71,6 @@
                 else
                 {
                     <div>
-                        @*<p>No data selected between @State.Value.OriginCountry.Name and @State.Value.ComparedCountries[0].Name</p>*@
                         <p>No data selected between Origin Country and Comparison Countries</p>
                     </div>
                 }
