@@ -16,7 +16,7 @@
             <div class="header"> 
                 <RadzenLabel Text="Compare" Component="DropDownBindValue" Style="margin-right: 8px; vertical-align: middle;" Visible=true></RadzenLabel>
                 <RadzenDropDown @bind-Value=@State.Value.OriginCountry.Name
-                    Data=@_availableCountries.Keys
+                    Data=@_nameToCodeMap.Keys
                     Name="DropDownBindValue"
                     AllowClear=false
                     Placeholder="Select country"
@@ -49,7 +49,7 @@
                 </div> *@
 
                 <div class="data-filter">
-                    <DataFilterer Data="@_availableCountries.Keys" DefaultSelectedValues="State.Value.ComparedCountries.Select(c => c.Name)" OnChange="HandleCountryChange"></DataFilterer>
+                    <DataFilterer Data="@_nameToCodeMap.Keys" DefaultSelectedValues="State.Value.ComparedCountries.Select(c => c.Name)" OnChange="HandleCountryChange"></DataFilterer>
                 </div>
 
                @*<menu class="menu-row">

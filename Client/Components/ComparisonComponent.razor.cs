@@ -6,9 +6,6 @@ namespace Client.Components
 {
     public partial class ComparisonComponent
     {
-        //[Parameter]
-        //public Country? ComparedCountry { get; set; }
-
         [Parameter]
         public required Country OriginCountry { get; set; }
 
@@ -48,8 +45,6 @@ namespace Client.Components
         };
 
         public string Unit { get; set; } = "NaN";
-
-        private string? _resourceDescription;
 
         public string ComparisonValueStyle = "width: 10rem;";
 
@@ -109,7 +104,6 @@ namespace Client.Components
             
             // Text at the bottom of the cards
             ConsumptionText = "Consumption in " + Unit;
-            _resourceDescription = resource1?.Description ?? ResourceType;
         }
 
         public string GetComparisonText()
@@ -123,12 +117,14 @@ namespace Client.Components
                 var comparedCountry = ComparedCountries[0];
                 var comparedCountryValue = ValueMap[comparedCountry][0].Value;
                 var originCountryValue = ValueMap[OriginCountry][0].Value;
-                return SingleComparedText(OriginCountry, comparedCountry, originCountryValue, comparedCountryValue, ResourceType, Unit);
+                var resourceDescription = GetCountryData(OriginCountry)?.Description ?? ResourceType;
+                return SingleComparedText(OriginCountry, comparedCountry, originCountryValue, comparedCountryValue, resourceDescription, Unit);
             }
             else
             {
                 var singleValueMap = ValueMap.ToDictionary(kvp => kvp.Key, kvp => kvp.Value[0].Value);
-                return MultipleComparedText(OriginCountry, singleValueMap, ResourceType, Unit);
+                var resourceDescription = GetCountryData(OriginCountry)?.Description ?? ResourceType;
+                return MultipleComparedText(OriginCountry, singleValueMap, resourceDescription, Unit);
             }
         }
 
@@ -217,33 +213,6 @@ namespace Client.Components
 
             comparisonText += $"{resource} than {comparedCountry?.Name}";
             return comparisonText;
-        }
-
-        public Country GetCountryWithBiggestDifference(double comparisonValue)
-        {
-            Country countryWithBiggestDifference = null;
-            var biggestDifference = 0d;
-
-            foreach (var kvp in ValueMap)
-            {
-                var country = kvp.Key;
-                var valueList = kvp.Value;
-
-                var dataPoint = valueList.FirstOrDefault(dp => dp.Date == Date);
-
-                if (dataPoint != null)
-                {
-                    var difference = Math.Abs(comparisonValue - dataPoint.Value);
-
-                    if (difference > biggestDifference)
-                    {
-                        biggestDifference = difference;
-                        countryWithBiggestDifference = ComparedCountries.FirstOrDefault(c => c.Name == country.Name);
-                    }
-                }
-            }
-
-            return countryWithBiggestDifference;
         }
 
         // Sets width of comparison value bar

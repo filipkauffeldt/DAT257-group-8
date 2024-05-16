@@ -25,23 +25,21 @@ namespace Client.Components
 
         private bool _initialized = false;
 
-        private IDictionary<string, string> _availableCountries = new Dictionary<string, string>();
+        private IDictionary<string, string> _nameToCodeMap = new Dictionary<string, string>();
 
         private DateOnly _date = new DateOnly(2022, 1, 1);
-        private IEnumerable<string> _shownCountries { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
             await InitCompareCountryNamesAsync();
             foreach (Country country in State.Value.CountryIdentifiers)
             {
-                _availableCountries.Add(country.Name, country.Code);
+                _nameToCodeMap.Add(country.Name, country.Code);
             }
             await InitOriginCountryAsync();
             await InitComparedCountriesAsync();
             InitSharedMetrics();
             InitShownMetrics();
-            _shownCountries = [State.Value.ComparedCountries[0].Name];
             _initialized = true;
         }
 
@@ -95,13 +93,11 @@ namespace Client.Components
             if (countryOrigin == null || countryOrigin.Data == null ||
                 countriesCompared == null || countriesCompared.Any(d => d == null) ||countriesCompared.Any(d => d.Data == null)) 
             {
-                Console.WriteLine("Faulty");
                 return new List<string>();
             }
 
             var sharedMetrics = new List<string>();
-            var countryCompDataList = new List<Boolean>(Enumerable.Repeat(false, countriesCompared.Count()));
-            Console.WriteLine("------------------------------------");
+            var countryCompDataList = new List<bool>(Enumerable.Repeat(false, countriesCompared.Count()));
             foreach (var metric in countryOrigin.Data.Select(d => d.Name).ToList())
             {
                 var countryCompDataExists = countryOrigin.Data?.Any(d => d.Name == metric && d.Points.Any(e => e.Date.Year == _date.Year)) ?? false;
@@ -109,40 +105,24 @@ namespace Client.Components
                 foreach (var country in countriesCompared)
                 {
                     countryCompDataList[i] = country.Data?.Any(d => d.Name == metric && d.Points.Any(e => e.Date.Year == _date.Year)) ?? false;
-                    Console.WriteLine(country.Data?.Any(d => d.Name == metric && d.Points.Any(e => e.Date.Year == _date.Year)) ?? false);
-                    //Console.WriteLine(country.Data?.Select(d => d.Name).FirstOrDefault());
                     i++;
                 }
                 if (countryCompDataExists && !countryCompDataList.Any(c => c == false))
                 {
                     sharedMetrics.Add(metric);
-                    Console.WriteLine("Success");
                 }
             }
             return sharedMetrics;
         }
         private async void UpdateOriginCountry(string name)
         {
-            var country = await _apiHandler.FetchCountryByYearAsync(_httpClient, _availableCountries[name], _date);
+            var country = await _apiHandler.FetchCountryByYearAsync(_httpClient, _nameToCodeMap[name], _date);
             Dispatcher.Dispatch(new OriginCountryChosenAction(country));
             var sharedMetrics = GetSharedMetrics();
             UpdateSharedMetrics(sharedMetrics);
             UpdateShownMetrics(sharedMetrics);
             StateHasChanged();
         }
-
-        /*private async void UpdateComparedCountries(string name, int index)
-        {
-            var countries = State.Value.ComparedCountries;
-            var country = await _apiHandler.FetchCountryByYearAsync(_httpClient, _availableCountries[name], _date);
-            countries[index] = country;
-            _comparisonChangedIndex = index;
-            Dispatcher.Dispatch(new ComparedCountriesChosenAction(countries));
-            var sharedMetrics = GetSharedMetrics();
-            UpdateShownMetrics(sharedMetrics);
-            UpdateSharedMetrics(sharedMetrics);
-            StateHasChanged();
-        }*/
 
         private async void UpdateComparedCountries(IList<Country> countries)
         {
@@ -152,40 +132,6 @@ namespace Client.Components
             UpdateSharedMetrics(sharedMetrics);
             StateHasChanged();
         }
-
-        /*private async void AddComparedCountry()
-        {
-            var countries = State.Value.ComparedCountries;
-            if(countries.Count < 3)
-            {
-                var country = await _apiHandler.FetchCountryOfTheDayAsync(_httpClient);
-                countries.Add(country);
-                Dispatcher.Dispatch(new ComparedCountriesChosenAction(countries));
-                var sharedMetrics = GetSharedMetrics();
-                UpdateShownMetrics(sharedMetrics);
-                UpdateSharedMetrics(sharedMetrics);
-                StateHasChanged();
-            }
-        }*/
-
-        /*private void RemoveComparedCountry()
-        {
-            var countries = State.Value.ComparedCountries;
-            if(countries.Count > 1)
-            {
-                var lastIndex = countries.Count - 1;
-                if(_comparisonChangedIndex == lastIndex)
-                {
-                    _comparisonChangedIndex = 0;
-                }
-                countries.RemoveAt(lastIndex);
-                Dispatcher.Dispatch(new ComparedCountriesChosenAction(countries));
-                var sharedMetrics = GetSharedMetrics();
-                UpdateShownMetrics(sharedMetrics);
-                UpdateSharedMetrics(sharedMetrics);
-                StateHasChanged();
-            }
-        }*/
 
         private static string FormatLabel(string label)
         {
@@ -204,29 +150,21 @@ namespace Client.Components
         private async Task HandleCountryChange(IEnumerable<string> selectedCountries)
         {
             var newShownCountries = new List<Country>(State.Value.ComparedCountries);
-            // Get Added / Removed country
+
+            // If country is added, fetch it and add it to the list
             if (selectedCountries.Count() > State.Value.ComparedCountries.Count)
             {
                 var addedCountryName = selectedCountries.Except(State.Value.ComparedCountries.Select(d => d.Name)).FirstOrDefault();
-                var addedCountry = await _apiHandler.FetchCountryByYearAsync(_httpClient, _availableCountries[addedCountryName], _date);
+                var addedCountry = await _apiHandler.FetchCountryByYearAsync(_httpClient, _nameToCodeMap[addedCountryName], _date);
                 newShownCountries.Add(addedCountry);
             }
+            // If country is removed, remove it from the list
             else
             {
                 var removedCountry = State.Value.ComparedCountries.Select(d => d.Name).Except(selectedCountries).FirstOrDefault();
                 newShownCountries = newShownCountries.Where(d => d.Name != removedCountry).ToList();
             }
             UpdateComparedCountries(newShownCountries);
-            // if added:
-                // Api.Fetch(country)
-            /*
-             else:
-                selctedCountries.Remove(removedCountry)
-             */ 
-            
-
-            //shownCountries = shownCountries.OrderBy(d => State.Value.CountryIdentifiers.IndexOf(d)).ToList();
-            //UpdateComparedCountries(shownCountries);
         }
     }
 }
