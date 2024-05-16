@@ -117,8 +117,8 @@ namespace Client.Components
             var country = await _apiHandler.FetchCountryByYearAsync(_httpClient, _nameToCodeMap[name], _date);
             Dispatcher.Dispatch(new OriginCountryChosenAction(country));
             var sharedMetrics = GetSharedMetrics();
-            UpdateSharedMetrics(sharedMetrics);
             UpdateShownMetrics(sharedMetrics);
+            UpdateSharedMetrics(sharedMetrics);
             StateHasChanged();
         }
 
