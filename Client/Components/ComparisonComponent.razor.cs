@@ -219,6 +219,10 @@ namespace Client.Components
         public float SetBarWidth()
         {
             float maxValue = ValueMap.Values.Max(valueList => (float)valueList.Max(dataPoint => dataPoint.Value));
+            if(maxValue == 0)
+            {
+                return 1;
+            }
             return maxValue * 1.3f;
         }
     }
