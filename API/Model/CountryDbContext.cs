@@ -8,7 +8,7 @@ namespace API.Model
 {
     public class CountryDbContext : DbContext
     {
-        public DbSet<Country> Countries { get; set; }
+        public virtual DbSet<Country> Countries { get; set; }
         public DbSet<Data> Data { get; set; }
         public DbSet<DataPoint> DataPoints { get; set; }
 
