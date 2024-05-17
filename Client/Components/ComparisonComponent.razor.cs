@@ -1,11 +1,18 @@
 ﻿using Microsoft.AspNetCore.Components;
 
 using API;
+using System.Linq;
+using Radzen.Blazor;
+using Radzen;
+
 
 namespace Client.Components
 {
+
     public partial class ComparisonComponent
     {
+        [Parameter]
+        public EventCallback OnClick { get; set;  }
         [Parameter]
         public required Country OriginCountry { get; set; }
 
@@ -67,6 +74,10 @@ namespace Client.Components
         {
             base.OnInitialized();
             LoadValues();
+            if (OnClick.HasDelegate == false)
+            {
+                OnClick = EventCallback.Factory.Create(this, OpenBiggerViewOfGraph);
+            }
         }
 
         // Update values on parameter change
@@ -220,6 +231,16 @@ namespace Client.Components
         {
             float maxValue = ValueMap.Values.Max(valueList => (float)valueList.Max(dataPoint => dataPoint.Value));
             return maxValue * 1.3f;
+        }
+
+        public async Task OpenBiggerViewOfGraph()
+        {
+			await DialogService.OpenAsync<CustomComparisonModal>("",
+                new Dictionary<string, object>() { { "ComparedCountries", ComparedCountries },
+                                                   { "OriginCountry", OriginCountry },
+                                                   { "ResourceType", ResourceType },
+                                                   { "Date", Date }},
+                new DialogOptions() {Width = "1000px", Height = "700px", CloseDialogOnOverlayClick = true});
         }
     }
 }
