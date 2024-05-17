@@ -48,7 +48,7 @@ namespace Client.Components
             await InitComparedCountriesAsync();
             InitSharedMetrics();
             InitShownMetrics();
-            UpdateCountriesBasedOnYear(SelectedYear);
+            await UpdateCountriesBasedOnYear(SelectedYear);
             _initialized = true;
 
             
@@ -76,7 +76,7 @@ namespace Client.Components
                 ListOfYears.Add(i.ToString());
             }
         }
-        private void UpdateCountriesBasedOnYear(string year)
+        private async Task UpdateCountriesBasedOnYear(string year)
         {
             int _year;
             if ( !int.TryParse(year, out _year)) { throw new ParseException("Could not parse string year to int", 1); }
@@ -84,7 +84,7 @@ namespace Client.Components
             DateOnly date = new DateOnly(_year,1,1);
             _date = date;
 
-            UpdateOriginCountryAsync(State.Value.OriginCountry.Name);
+            await UpdateOriginCountryAsync(State.Value.OriginCountry.Name);
             RefreshCompCountriesBasedOnYear(State.Value.ComparedCountries);
             Dispatcher.Dispatch(new UpdateYearAction(date));
             StateHasChanged();
@@ -169,7 +169,7 @@ namespace Client.Components
             }
             return sharedMetrics;
         }
-        private async void UpdateOriginCountryAsync(string name)
+        private async Task UpdateOriginCountryAsync(string name)
         {
             var country = await _apiHandler.FetchCountryByYearAsync(_httpClient, _nameToCodeMap[name], _date);
             Dispatcher.Dispatch(new OriginCountryChosenAction(country));
