@@ -12,7 +12,7 @@ namespace Client.Components
     public partial class ComparisonComponent
     {
         [Parameter]
-        public EventCallback OnClick {  get; set; }
+        public EventCallback OnClick { get; set;  }
         [Parameter]
         public required Country OriginCountry { get; set; }
 
@@ -74,7 +74,10 @@ namespace Client.Components
         {
             base.OnInitialized();
             LoadValues();
-            OnClick = EventCallback.Factory.Create(this, OpenBiggerViewOfGraph);
+            if (OnClick.HasDelegate == false)
+            {
+                OnClick = EventCallback.Factory.Create(this, OpenBiggerViewOfGraph);
+            }
         }
 
         // Update values on parameter change
