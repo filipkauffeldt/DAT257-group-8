@@ -33,10 +33,11 @@ namespace Client.Components
         private List<string> ListOfYears = new List<string>();
 
         private string SelectedYear;
+
         protected override async Task OnInitializedAsync()
         {
-            _date = State.Value.Year;
-            SelectedYear = _date.Year.ToString();
+            await SetSelectedYear();
+            
             PopulateListOfYears();
             await InitCompareCountryNamesAsync();
             foreach (Country country in State.Value.CountryIdentifiers)
@@ -47,18 +48,35 @@ namespace Client.Components
             await InitComparedCountriesAsync();
             InitSharedMetrics();
             InitShownMetrics();
+            UpdateCountriesBasedOnYear(SelectedYear);
             _initialized = true;
+
             
         }
 
-        private async void PopulateListOfYears()
+        private async Task SetSelectedYear()
+        {
+            _date = State.Value.Year;
+            if (_date.Year < 1950 || _date.Year > DateTime.Today.Year)
+            {
+                // The same value in SelectedYear and _date
+                SelectedYear = "2022";
+                _date = new DateOnly(2022, 1, 1);
+            }
+            else
+            {
+                SelectedYear = _date.Year.ToString();
+            }
+        }
+
+        private void PopulateListOfYears()
         {
             for(int i = DateTime.Today.Year; i >= 1950; i--)
             {
                 ListOfYears.Add(i.ToString());
             }
         }
-        private async void UpdateCountriesBasedOnYear(string year)
+        private void UpdateCountriesBasedOnYear(string year)
         {
             int _year;
             if ( !int.TryParse(year, out _year)) { throw new ParseException("Could not parse string year to int", 1); }
