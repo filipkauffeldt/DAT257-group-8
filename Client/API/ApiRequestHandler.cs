@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 
 
-namespace Client.API
+namespace API
 {
     public class ApiRequestHandler : IApiHandler
     {

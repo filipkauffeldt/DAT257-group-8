@@ -2,7 +2,6 @@
 using API;
 using System.Linq;
 using Radzen.Blazor;
-using Client.API;
 using System.Net.Http;
 using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
@@ -19,6 +18,12 @@ namespace Client.Components
 
         [Parameter]
         public EventCallback<IEnumerable<string>> OnChange { get; set; }
+
+        [Parameter]
+        public string? Text { get; set; }
+
+        [Parameter]
+        public bool AllowSelectAll { get; set; } = true;
 
         private IEnumerable<string> _data;
 

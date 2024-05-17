@@ -23,7 +23,7 @@
 
             <div class="header"> 
                 <div class="data-filter">
-                    <DataFilterer Data="@State.Value.SharedMetrics" DefaultSelectedValues="@State.Value.ShownMetrics" OnChange="HandleFilterChange"></DataFilterer>
+                    <DataFilterer Text="Filter data" Data="@State.Value.SharedMetrics" DefaultSelectedValues="@State.Value.ShownMetrics" OnChange="HandleFilterChange"></DataFilterer>
                 </div>
                 
                 <nav class="table-of-contents">
@@ -47,7 +47,7 @@
                 @foreach (var metric in State.Value.ShownMetrics)
                 {
                     <div id="@FormatLabel(metric)" class="grid-item">
-                            <ComparisonComponent @key=@metric @ref="@compComp[metric]" CountryComparison="@State.Value.CountryOfTheDay" CountryOrigin="@State.Value.HomeCountry" date="@_date" ResourceType="@metric"></ComparisonComponent>
+                            <ComparisonComponent @key=@metric @ref="@compComp[metric]" ComparedCountries="@Countries" OriginCountry="@State.Value.CountryOfTheDay" date="@_date" ResourceType="@metric"></ComparisonComponent>
                     </div>
                 }
                 </div>
