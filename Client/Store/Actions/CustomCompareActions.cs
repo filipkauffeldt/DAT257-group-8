@@ -38,5 +38,15 @@ namespace Client.Store.Actions
         public IList<Country> Countries { get; }
 
         public UpdateComparedCountriesAction(IList<Country> countries) => Countries = countries;
+    };
+
+    public class UpdateYearAction
+    {
+        public DateOnly Year { get; }
+
+        public UpdateYearAction(DateOnly year)
+        {
+            this.Year = year;
+        }
     }
 }

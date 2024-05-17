@@ -26,8 +26,8 @@
                     FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                     FilterOperator="StringFilterOperator.Contains"
                     AllowFiltering=true>
-                </RadzenDropDown>
-
+                </RadzenDropDown>                
+                    
                 <div class="data-filter">
                     <DataFilterer Data="@_nameToCodeMap.Keys"
                         Text="Choose Countries"
@@ -36,6 +36,20 @@
                         OnChange="HandleCountryChange">
                     </DataFilterer>
                 </div>
+                <RadzenLabel Text="Select year" Component="DropDownBindValue" Style="margin-right: 8px; vertical-align: middle;" Visible=true></RadzenLabel>
+
+                <RadzenDropDown @bind-Value=@SelectedYear
+                                Data=@ListOfYears
+                                Name="DropDownBindValue"
+                                AllowClear=false
+                                Placeholder=@SelectedYear
+                                Chips=false
+                                MaxSelectedLabels="1"
+                                Change="@((e) => UpdateCountriesBasedOnYear((string)e))"
+                                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                FilterOperator="StringFilterOperator.Contains"
+                                AllowFiltering=true>
+                </RadzenDropDown>
 
                 <div class="data-filter">
                     <DataFilterer @key=@State.Value.SharedMetrics

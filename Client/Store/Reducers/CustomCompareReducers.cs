@@ -50,5 +50,13 @@ namespace Client.Store.Reducers
                 CountryIdentifiers = action.CountryIdentifiers
             };
         }
+        [ReducerMethod]
+        public static CustomCompareState CountryIdentifiersDetectedSuccessfullyReducer(CustomCompareState state, UpdateYearAction action)
+        {
+            return state with
+            {
+                Year = action.Year
+            };
+        }
     }
 }
