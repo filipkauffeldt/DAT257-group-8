@@ -63,6 +63,7 @@ namespace TestApi.Model {
         {
             var country = new Country { Code = "BR", Name = "Brazil", Data = new List<Data> {} };
             var addedCountry = await _mockRepo.AddCountryAsync(country);
+            // TODO: Make verify work
             // _mockSet.Verify(m => m.Add(It.IsAny<Country>()), Times.Once());
             // _mockContext.Verify(m => m.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once());
             Assert.Equal(country, addedCountry);
@@ -73,6 +74,7 @@ namespace TestApi.Model {
         {
             var country = new Country { Code = "BR", Name = "Brazil", Data = new List<Data> {} };
             var updatedCountry = await _mockRepo.UpdateCountryAsync(country);
+            // TODO: Make verify work
             // _mockSet.Verify(m => m.Update(It.IsAny<Country>()), Times.Once());
             // _mockContext.Verify(m => m.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once());
             Assert.Equal(country, updatedCountry);
@@ -83,6 +85,7 @@ namespace TestApi.Model {
         {
             var code = "US";
             var deletedCode = await _mockRepo.DeleteCountryAsync(code);
+            // TODO: Make verify work
             // _mockSet.Verify(m => m.Remove(It.IsAny<Country>()), Times.Once());
             // _mockContext.Verify(m => m.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once());
             Assert.Equal(code, deletedCode);
