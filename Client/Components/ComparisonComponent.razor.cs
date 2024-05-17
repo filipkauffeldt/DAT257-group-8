@@ -235,10 +235,11 @@ namespace Client.Components
 
         public async Task OpenBiggerViewOfGraph()
         {
-            ComparisonComponent copy = this;
-
 			await DialogService.OpenAsync<CustomComparisonModal>("",
-                new Dictionary<string, object>() { { "ComparisonComponent", copy }},
+                new Dictionary<string, object>() { { "ComparedCountries", ComparedCountries },
+                                                   { "OriginCountry", OriginCountry },
+                                                   { "ResourceType", ResourceType },
+                                                   { "Date", Date }},
                 new DialogOptions() {Width = "1000px", Height = "700px", CloseDialogOnOverlayClick = true});
         }
     }
