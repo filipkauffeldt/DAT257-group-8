@@ -91,6 +91,7 @@
 
 .grid-container :hover {
     box-shadow: 0 0 15px 1px #057dcd;
+    cursor:pointer;
 }
 
 .header {
