@@ -1,28 +1,16 @@
-﻿<h1>Comparison of @_resourceDescription between @_countryOrigin.Name and @_countryComparison.Name</h1>
-<h3>Description</h3>
+﻿<h3>Description</h3>
 <p>
     Input description here of the resource here. Resource is @_resourceDescription
 </p>
 <ul style=" font-size: 100%; ">
-    <li>@_countryComparison.Name uses @ComparisonComponent.ComparisonCountryValue @_unit.</li>
-    <li>@_countryOrigin.Name uses @ComparisonComponent.OriginCountryValue @_unit.</li>
 </ul>
 <RadzenCard Class="rz-my-12 rz-mx-auto" Style="max-width: 1000px">
-    <h4>@_countryComparison.Name uses @ComparisonComponent.GetComparisonPercentage(ComparisonComponent.ComparisonCountryValue, ComparisonComponent.OriginCountryValue) @_resourceDescription than @_countryOrigin.Name </h4>
-    <RadzenChart>
-        <RadzenBarSeries Fill="#e14177" Data="@ComparisonComponent.OriginValueList" CategoryProperty="Date" Title="@_countryOrigin.Name" LineType="LineType.Dashed" ValueProperty="Value">
-            <RadzenSeriesDataLabels Visible="true" />
-        </RadzenBarSeries>
-        <RadzenBarSeries Fill="#1E3D58" Data="@ComparisonComponent.ComparisonValueList" CategoryProperty="Date" Title="@_countryComparison.Name" LineType="LineType.Dashed" ValueProperty="Value">
-            <RadzenSeriesDataLabels Visible="true" />
-        </RadzenBarSeries>
-        <RadzenValueAxis Min="0" Max="@ComparisonComponent.SetBarWidth()" Formatter=@(value => value == null ? "" : (Decimal.Parse( String.Format( "{0:n}",value) )/1.000000000000000000000000000000000m).ToString() )>
-            <RadzenGridLines Visible="true" />
-            <RadzenAxisTitle Text="@ComparisonComponent.ConsumptionText"/>
-        </RadzenValueAxis>
-        <RadzenBarOptions Radius="10" Height="60" Margin="20" />
-        <RadzenCategoryAxis Formatter=@(value => value == null ? "" : DateOnly.Parse((value.ToString())).Year.ToString() )/>
-    </RadzenChart> 
+    <ComparisonComponent ComparedCountries="@_countryComparison"
+                         OriginCountry="@_countryOrigin"
+                         ResourceType="@_resourceDescription"
+                         Date="@_date"
+                        OnClick="@(async () => { })">
+   </ComparisonComponent>
 </RadzenCard>
 
 

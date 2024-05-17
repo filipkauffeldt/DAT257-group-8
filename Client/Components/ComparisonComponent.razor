@@ -2,7 +2,7 @@
 
 <div class="main">  
     <h4>@GetComparisonText()</h4>
-    <RadzenChart Style="@($"height: {150 + ComparedCountries.Count * 40}px")">
+    <RadzenChart Style="@($"height: {150 + ComparedCountries.Count * 40}px")" @onclick = "@OnClick">
         @if (OriginCountry != null)
         {
             <RadzenBarSeries Fill="@_colors[0]" Data="@ValueMap[OriginCountry]" 

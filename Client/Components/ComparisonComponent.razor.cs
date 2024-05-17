@@ -12,6 +12,8 @@ namespace Client.Components
     public partial class ComparisonComponent
     {
         [Parameter]
+        public EventCallback OnClick {  get; set; }
+        [Parameter]
         public required Country OriginCountry { get; set; }
 
         [Parameter]
@@ -72,6 +74,7 @@ namespace Client.Components
         {
             base.OnInitialized();
             LoadValues();
+            OnClick = EventCallback.Factory.Create(this, OpenBiggerViewOfGraph);
         }
 
         // Update values on parameter change
@@ -232,7 +235,7 @@ namespace Client.Components
             ComparisonComponent copy = this;
 
 			await DialogService.OpenAsync<CustomComparisonModal>("",
-                new Dictionary<string, object>() { { "ComparisonComponent", copy }, {"ResourceDescription" , _resourceDescription } },
+                new Dictionary<string, object>() { { "ComparisonComponent", copy }},
                 new DialogOptions() {Width = "1000px", Height = "700px", CloseDialogOnOverlayClick = true});
         }
     }
