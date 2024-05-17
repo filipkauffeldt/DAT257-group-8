@@ -37,7 +37,7 @@ namespace Client.Components
         protected override async Task OnInitializedAsync()
         {
             await SetSelectedYear();
-            
+            InitYear();
             PopulateListOfYears();
             await InitCompareCountryNamesAsync();
             foreach (Country country in State.Value.CountryIdentifiers)
@@ -48,7 +48,6 @@ namespace Client.Components
             await InitComparedCountriesAsync();
             InitSharedMetrics();
             InitShownMetrics();
-            await UpdateCountriesBasedOnYear(SelectedYear);
             _initialized = true;
 
             
@@ -57,7 +56,7 @@ namespace Client.Components
         private async Task SetSelectedYear()
         {
             _date = State.Value.Year;
-            if (_date.Year < 1950 || _date.Year > DateTime.Today.Year)
+            if (_date.Year < 1950 || _date.Year > 2022)
             {
                 // The same value in SelectedYear and _date
                 SelectedYear = "2022";
@@ -69,9 +68,14 @@ namespace Client.Components
             }
         }
 
+        private void InitYear()
+        {
+            Dispatcher.Dispatch(new UpdateYearAction(_date));
+        }
+
         private void PopulateListOfYears()
         {
-            for(int i = DateTime.Today.Year; i >= 1950; i--)
+            for(int i = 2022; i >= 1950; i--)
             {
                 ListOfYears.Add(i.ToString());
             }
@@ -84,9 +88,9 @@ namespace Client.Components
             DateOnly date = new DateOnly(_year,1,1);
             _date = date;
 
+            Dispatcher.Dispatch(new UpdateYearAction(date));
             await UpdateOriginCountryAsync(State.Value.OriginCountry.Name);
             RefreshCompCountriesBasedOnYear(State.Value.ComparedCountries);
-            Dispatcher.Dispatch(new UpdateYearAction(date));
             StateHasChanged();
         }
 
@@ -94,7 +98,7 @@ namespace Client.Components
         {
             for (int i = 0; i < countries.Count; i++) 
             {
-                countries[i] = await _apiHandler.FetchCountryByYearAsync(_httpClient, _nameToCodeMap[countries[i].Name], _date);
+                countries[i] = await _apiHandler.FetchCountryByYearAsync(_httpClient, _nameToCodeMap[countries[i].Name], State.Value.Year);
             }
             UpdateComparedCountries(countries);
         }
@@ -155,11 +159,11 @@ namespace Client.Components
             var countryCompDataList = new List<bool>(Enumerable.Repeat(false, countriesCompared.Count()));
             foreach (var metric in countryOrigin.Data.Select(d => d.Name).ToList())
             {
-                var countryCompDataExists = countryOrigin.Data?.Any(d => d.Name == metric && d.Points.Any(e => e.Date.Year == _date.Year)) ?? false;
+                var countryCompDataExists = countryOrigin.Data?.Any(d => d.Name == metric && d.Points.Any(e => e.Date.Year == State.Value.Year.Year)) ?? false;
                 var i = 0;
                 foreach (var country in countriesCompared)
                 {
-                    countryCompDataList[i] = country.Data?.Any(d => d.Name == metric && d.Points.Any(e => e.Date.Year == _date.Year)) ?? false;
+                    countryCompDataList[i] = country.Data?.Any(d => d.Name == metric && d.Points.Any(e => e.Date.Year == State.Value.Year.Year)) ?? false;
                     i++;
                 }
                 if (countryCompDataExists && !countryCompDataList.Any(c => c == false))
@@ -171,7 +175,7 @@ namespace Client.Components
         }
         private async Task UpdateOriginCountryAsync(string name)
         {
-            var country = await _apiHandler.FetchCountryByYearAsync(_httpClient, _nameToCodeMap[name], _date);
+            var country = await _apiHandler.FetchCountryByYearAsync(_httpClient, _nameToCodeMap[name], State.Value.Year);
             Dispatcher.Dispatch(new OriginCountryChosenAction(country));
             var sharedMetrics = GetSharedMetrics();
             UpdateShownMetrics(sharedMetrics);
